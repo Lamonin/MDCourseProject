@@ -1,0 +1,16 @@
+C:\Development\MDCourseProject\MDCourseProject\bin\Debug\MDCourseProject.exe.config
+C:\Development\MDCourseProject\MDCourseProject\bin\Debug\MDCourseProject.exe
+C:\Development\MDCourseProject\MDCourseProject\bin\Debug\MDCourseProject.pdb
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\MDCourseProject.csproj.AssemblyReference.cache
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\MDCourseProject.csproj.SuggestedBindingRedirects.cache
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\MainWindow.g.cs
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\App.g.cs
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\MDCourseProject_MarkupCompile.cache
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\MDCourseProject_MarkupCompile.lref
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\MainWindow.baml
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\MDCourseProject.g.resources
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\MDCourseProject.Properties.Resources.resources
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\MDCourseProject.csproj.GenerateResource.cache
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\MDCourseProject.csproj.CoreCompileInputs.cache
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\MDCourseProject.exe
+C:\Development\MDCourseProject\MDCourseProject\obj\Debug\MDCourseProject.pdb
