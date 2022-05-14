@@ -6,7 +6,6 @@ namespace MDCourseProject
     {
         public MainWindow()
         {
-            Console.WriteLine("Hello world!");
             InitializeComponent();
         }
     }
