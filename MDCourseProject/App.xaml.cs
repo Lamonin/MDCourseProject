@@ -1,4 +1,6 @@
-﻿namespace MDCourseProject
+﻿using System;
+
+namespace MDCourseProject
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -1,4 +1,6 @@
-﻿namespace MDCourseProject
+﻿using System;
+
+namespace MDCourseProject
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -7,6 +9,7 @@
     {
         public MainWindow()
         {
+            Console.WriteLine("Hello world!");
             InitializeComponent();
         }
     }
