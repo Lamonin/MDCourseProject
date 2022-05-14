@@ -1,4 +1,4 @@
-﻿namespace MDCourseProject.FundamentalStructures
+﻿namespace FundamentalStructures
 {
     public class LRBTree
     {
