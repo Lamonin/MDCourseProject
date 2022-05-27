@@ -7,7 +7,7 @@ namespace FundamentalStructures
        /// Значения хранятся в двусвязном кольцевом списке.
        /// </summary>
        /// <typeparam name="TKey">Тип ключа дерева</typeparam>
-       /// <typeparam name="TValue">Тип значений узлов списка дерева</typeparam>
+       /// <typeparam name="TValue">Тип значения узла списка дерева</typeparam>
        public class RRBTree<TKey, TValue> where TKey : IComparable where TValue : IComparable
        {
            /// <summary>
@@ -82,6 +82,7 @@ namespace FundamentalStructures
    
                public void Add(TValue value)
                {
+                   if (!IsEmpty(Find(value))) return;
                    var elem = new ListNode(value);
                    if (IsEmpty(_head)) _head = elem;
                    else
@@ -111,11 +112,23 @@ namespace FundamentalStructures
    
                public void Remove(TValue elem)
                {
-                   if (IsEmpty(_head)) throw new Exception("List is empty");
+                   if (IsEmpty(_head)) return;
                    var dElem = Find(elem);
-                   if(IsEmpty(dElem)) throw new Exception("Element don't exist");
-                   dElem.Prev.Next = dElem.Next;
-                   dElem.Next.Prev = dElem.Prev;
+                   if(IsEmpty(dElem)) return;
+                   if(dElem == _head)
+                       if (_head.Next == _head)
+                           _head = null;
+                       else
+                       {
+                           _head.Prev.Next = _head.Next;
+                           _head.Next.Prev = _head.Prev;
+                           _head = _head.Next;
+                       }
+                   else
+                   {
+                       dElem.Prev.Next = dElem.Next;
+                       dElem.Next.Prev = dElem.Prev;
+                   }
                }
    
                public void ChangeHead(ListNode node)
@@ -199,8 +212,12 @@ namespace FundamentalStructures
                    if(values.Find(value) != null)
                        return values.Find(value).GetValue();
                    throw new Exception("Doesn't exist");
-               } 
-   
+               }
+
+               public bool Find(TValue value)
+               {
+                   return values.Find(value) != null;
+               }
                public bool IsRed() => Color == RED;
    
                public ListNode GetHead() => values.GetHead();
@@ -498,6 +515,7 @@ namespace FundamentalStructures
    
            public void Add(TKey key, TValue value)
            {
+               if (FindKeyHelper(_root, key).Find(value)) return;
                if(FindKeyHelper(_root, key) != null) FindKeyHelper(_root, key).AddNodeToList(value);
                else
                {
@@ -510,7 +528,7 @@ namespace FundamentalStructures
            public void Delete(TKey key, TValue value)
            {
                var deleteNode = FindKeyHelper(_root, key);
-               if (deleteNode != null && FindElem(key, value).Equals(value))
+               if (deleteNode != null && deleteNode.Find(value))
                    if (deleteNode.CountValues() > 1)
                        deleteNode.Remove(value);
                    else
@@ -518,16 +536,14 @@ namespace FundamentalStructures
                        var flag = true;
                        DeleteAndBalance( ref _root, ref deleteNode, ref flag);
                    }
-               else throw new Exception("Such key or value doesn't exist");
+               else throw new Exception($"Such key {key} or value {value} doesn't exist");
                if (!IsEmpty(_root)) _root.Color = BLACK;
            }
            
-           public TValue FindElem(TKey key, TValue value)
+           public bool FindElem(TKey key)
            {
                var node = FindKeyHelper(_root, key);
-               if (!IsEmpty(node))
-                   return node.FindElem(value);
-               throw new Exception("Such key or doesn't exist");
+               return !IsEmpty(node);
            }
    
            private void Print(TreeNode root, int height)
