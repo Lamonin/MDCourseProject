@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace testForTree
+namespace FundamentalStructures
 {
     public class RB_Tree<TKey,TValue> where TKey:IComparable where TValue:IComparable
     {
