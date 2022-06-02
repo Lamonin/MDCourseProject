@@ -1,5 +1,6 @@
 ﻿using System;
 
+//TODO Выделить реализацию списка в отдельный файл
 namespace FundamentalStructures
 {
        /// <summary>
@@ -94,7 +95,7 @@ namespace FundamentalStructures
    
                public ListNode Find(TValue key)
                {
-                   if (IsEmpty(_head)) throw new Exception("List is empty");
+                   if (IsEmpty(_head)) return null;
                    _head.Prev.Next = null;
                    var curr = _head;
                    while (!IsEmpty(curr))
@@ -515,7 +516,6 @@ namespace FundamentalStructures
    
            public void Add(TKey key, TValue value)
            {
-               if (FindKeyHelper(_root, key).Find(value)) return;
                if(FindKeyHelper(_root, key) != null) FindKeyHelper(_root, key).AddNodeToList(value);
                else
                {
