@@ -24,7 +24,15 @@ namespace FundamentalStructures
         /// </summary>
         bool TryGetValue(TKey key, out TValue value);
 
+        TValue this[TKey key] { get; set; }
+
         /// <summary> Количество элементов в таблице </summary>
         int Count { get; }
+        
+        /// <summary> Первичная хэш-функция </summary>
+        Func<int, int> FirstHashFunc { get; set; }
+        
+        /// <summary> Вторичная хэш-функция </summary>
+        Func<int, int> SecondHashFunc { get; set; }
     }
 }
