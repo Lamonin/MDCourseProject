@@ -2,7 +2,7 @@
 
 namespace FundamentalStructures
 {
-    public class KeyValuePair<TKey, TValue> where TKey:IComparable where TValue:IComparable
+    public readonly struct KeyValuePair<TKey, TValue>:IComparable where TKey:IComparable where TValue:IComparable
     {
         public KeyValuePair(TKey key, TValue value)
         {
@@ -10,12 +10,23 @@ namespace FundamentalStructures
             Value = value;
         }
         
-        public int CompareTo(KeyValuePair<TKey, TValue> pair)
+        public int CompareTo(object obj)
         {
-            var res = Key.CompareTo(pair.Key);
-            if (res == 0) res = Value.CompareTo(pair.Value);
-            return res;
+            if (obj is KeyValuePair<TKey, TValue> pair)
+            {
+                var res = Key.CompareTo(pair.Key);
+                if (res == 0) res = Value.CompareTo(pair.Value);
+                return res;
+            }
+            
+            throw new Exception($"Try to compare KeyValuePair type with {obj.GetType()} type!");
         }
+
+        public override string ToString()
+        {
+            return $"Key: {Key.ToString()}; Value: {Value.ToString()}";
+        }
+
         public TKey Key { get; }
         public TValue Value { get; }
     }
