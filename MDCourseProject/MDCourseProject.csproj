@@ -51,6 +51,7 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
+        <Page Include="AppWindows\DebugWindow.xaml" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
@@ -58,6 +59,9 @@
         <Compile Include="App.xaml.cs">
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
+        </Compile>
+        <Compile Include="AppWindows\DebugWindow.xaml.cs">
+          <DependentUpon>DebugWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="FundamentalStructures\DynamicHashTable.cs" />
         <Compile Include="FundamentalStructures\HashEnumerator.cs" />
@@ -88,6 +92,9 @@
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="Notes.txt" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,29 @@
+﻿int hashCode = key.GetHashCode();
+            
+        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
+        foreach (int index in _hashEnumerator)
+        {
+            
+        }
+        
+-Стартовое окно        
+-Окно загрузки
+-Главное окно
+-3 окна отчета
+-6 окон добавления
+-6 окон удаления
+-2 окна найти
+-Окно отладки
+
+Суммарно: 21
+
+Подсистема + справочник => Содержимое отладки
+
+Finder
+{
+    Find(param)
+    Find(param, param)
+    GetFindDataType()
+}
+
+В отладке просто вывести структуры данных
