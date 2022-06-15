@@ -5,25 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MDCourseProject"
         mc:Ignorable="d"
-        Title="MDCourseProject" Height="720" Width="1080" MinWidth="480" MinHeight="360">
+        Title="MDCourseProject" Height="720" Width="1080" MinWidth="480" MinHeight="360" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="8 0 8 8">
         <Grid.RowDefinitions>
-            <RowDefinition Height="24"></RowDefinition>
-            <RowDefinition Height="24"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             
         </Grid.ColumnDefinitions>
-        <Label>Выбор подсистемы</Label>
+        <Label Grid.Row="0">Выбор подсистемы</Label>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition Width="128"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             
-            <ComboBox Grid.Column="0" SelectedIndex="0">
+            <ComboBox Grid.Column="0" x:Name="ComboBox_Subsystem" SelectionChanged="Selector_OnSubsystemChanged">
                 <ComboBoxItem>Клиенты</ComboBoxItem>
                 <ComboBoxItem>Сотрудники</ComboBoxItem>
                 <ComboBoxItem>Подразделения</ComboBoxItem>
@@ -32,19 +32,16 @@
         </Grid>
         
         <Border Grid.Row="2" Margin="0 4 0 0" Padding="8 4 8 8" BorderThickness="1" BorderBrush="Black">
-            <Grid Grid.Row="2" >
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="24"></RowDefinition>
-                    <RowDefinition Height="24"></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition Height="24"></RowDefinition>
+                    <RowDefinition Height="24"/>
+                    <RowDefinition Height="24"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="24"/>
                 </Grid.RowDefinitions>
             
-                <Label>Выбор справочника</Label>
-                <ComboBox Grid.Row="1" SelectedIndex="0">
-                    <ComboBoxItem>Таблица 1</ComboBoxItem>
-                    <ComboBoxItem>Таблица 2</ComboBoxItem>
-                </ComboBox>
+                <Label Grid.Row="0">Выбор справочника</Label>
+                <ComboBox Grid.Row="1" x:Name="ComboBox_Catalogue" SelectionChanged="Selector_OnCatalogueChanged"/>
                 
                 <Grid Grid.Row="2" Margin="0 0 0 4">
                     <Grid.RowDefinitions>
@@ -71,15 +68,13 @@
                 
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Margin="0 0 1 0">Сделать отчет</Button>
                     <Button Grid.Column="1" Margin="1 0 0 0">Сохранить файл</Button>
                 </Grid>
-                
             </Grid>
         </Border>
-        
     </Grid>
 </Window>
