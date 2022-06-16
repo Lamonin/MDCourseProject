@@ -11,163 +11,6 @@ namespace FundamentalStructures
        public class RRBTree<TKey, TValue> where TKey : IComparable where TValue : IComparable
        {
            /// <summary>
-           /// Узел двухсвязного кольцевого списка
-           /// </summary>
-          protected class ListNode {
-               /// <summary>
-               /// Ссылка на предыдущий элемент
-               /// </summary>
-               public ListNode Prev;
-               /// <summary>
-               /// Ссылка на последующий элемент
-               /// </summary>
-               public ListNode Next;
-               /// <summary>
-               /// Хранит значения узла
-               /// </summary>
-               private TValue _value;
-   
-               /// <summary>
-               /// Создает пустой узел
-               /// </summary>
-               public ListNode()
-               {
-                   (Prev, Next) = (null, null);
-               }
-               /// <summary>
-               /// Создает узел со значением value
-               /// </summary>
-               /// <param name="value"></param>
-               public ListNode(TValue value)
-               {
-                   (Prev, Next) = (this, this);
-                   _value = value;
-               }
-   
-               /// <summary>
-               /// Возвращает значения узла
-               /// </summary>
-               /// <returns></returns>
-               public TValue GetValue()
-               {
-                   return _value;
-               }
-   
-               /// <summary>
-               /// Перегрузка метода ToString()
-               /// </summary>
-               /// <returns>Возвращает строковый тип значения узла</returns>
-               public override string ToString()
-               {
-                   return _value.ToString();
-               }
-           } 
-       
-           /// <summary>
-           /// Двухсвязный список
-           /// </summary>
-           protected class List
-           {
-               /// <summary>
-               /// Голова списка
-               /// </summary>
-               private ListNode _head;
-   
-               private static bool IsEmpty(ListNode node)
-               {
-                   return node == null;
-               }
-   
-               public List() => _head = null;
-   
-               public void Add(TValue value)
-               {
-                   if (!IsEmpty(Find(value))) return;
-                   var elem = new ListNode(value);
-                   if (IsEmpty(_head)) _head = elem;
-                   else
-                   {
-                       (elem.Prev, elem.Next) = (_head.Prev, _head);
-                       (_head.Prev, _head.Prev.Next) = (elem, elem);
-                   }
-               }
-   
-               public ListNode Find(TValue key)
-               {
-                   if (IsEmpty(_head)) throw new Exception("List is empty");
-                   _head.Prev.Next = null;
-                   var curr = _head;
-                   while (!IsEmpty(curr))
-                   {
-                       if (curr.GetValue().CompareTo(key) == 0)
-                       {
-                           _head.Prev.Next = _head;
-                           return curr;
-                       }
-                       curr = curr.Next;
-                   }
-                   _head.Prev.Next = _head;
-                   return null;
-               }
-   
-               public void Remove(TValue elem)
-               {
-                   if (IsEmpty(_head)) return;
-                   var dElem = Find(elem);
-                   if(IsEmpty(dElem)) return;
-                   if(dElem == _head)
-                       if (_head.Next == _head)
-                           _head = null;
-                       else
-                       {
-                           _head.Prev.Next = _head.Next;
-                           _head.Next.Prev = _head.Prev;
-                           _head = _head.Next;
-                       }
-                   else
-                   {
-                       dElem.Prev.Next = dElem.Next;
-                       dElem.Next.Prev = dElem.Prev;
-                   }
-               }
-   
-               public void ChangeHead(ListNode node)
-               {
-                   _head = null;
-                   _head = node;
-               }
-   
-               public ListNode GetHead() => _head;
-   
-               public int Count()
-               {
-                   var count = 0;
-                   _head.Prev.Next = null;
-                   var tmp = _head;
-                   while (!IsEmpty(tmp))
-                   {
-                       ++count;
-                       tmp = tmp.Next;
-                   }
-                   _head.Prev.Next = _head;
-                   return count;
-               }
-   
-               public override string ToString()
-               {
-                   var str = "";
-                   _head.Prev.Next = null;
-                   var tmp = _head;
-                   while (!IsEmpty(tmp))
-                   {
-                       str += tmp + " ";
-                       tmp = tmp.Next;
-                   }
-                   return str;
-               }
-           }
-   
-           /// <summary>
            /// Черный узел
            /// </summary>
            private static bool BLACK = false;
@@ -185,7 +28,7 @@ namespace FundamentalStructures
                public TreeNode LBranch;
                public TreeNode RBranch;
                public TKey Key;
-               private List values;
+               private DoubleLinkedList<TValue> values;
                public bool Color;
    
                public TreeNode()
@@ -197,7 +40,7 @@ namespace FundamentalStructures
                public TreeNode(TKey key, TValue value)
                {
                    Color = RED;
-                   values = new List();
+                   values = new DoubleLinkedList<TValue>();
                    values.Add(value);
                    Key = key;
                    (LBranch, RBranch) = (null, null);
@@ -206,25 +49,18 @@ namespace FundamentalStructures
                public void AddNodeToList(TValue value) => values.Add(value);
    
                public void Remove(TValue value) => values.Remove(value);
-   
-               public TValue FindElem(TValue value)
-               {
-                   if(values.Find(value) != null)
-                       return values.Find(value).GetValue();
-                   throw new Exception("Doesn't exist");
-               }
 
                public bool Find(TValue value)
                {
-                   return values.Find(value) != null;
+                   return values.Find(value);
                }
                public bool IsRed() => Color == RED;
    
-               public ListNode GetHead() => values.GetHead();
+               public DoubleLinkedList<TValue>.ListNode GetHead() => values.GetHead();
    
-               public List GetList() => values;
+               public DoubleLinkedList<TValue> GetList() => values;
    
-               public void Change(ListNode node) => values.ChangeHead(node);
+               public void Change(DoubleLinkedList<TValue>.ListNode node) => values.ChangeHead(node);
    
                public int CountValues() => values.Count();
            }
@@ -515,7 +351,7 @@ namespace FundamentalStructures
    
            public void Add(TKey key, TValue value)
            {
-               if (FindKeyHelper(_root, key).Find(value)) return;
+               if (FindKeyHelper(_root, key) != null && FindKeyHelper(_root, key).Find(value)) return;
                if(FindKeyHelper(_root, key) != null) FindKeyHelper(_root, key).AddNodeToList(value);
                else
                {
@@ -551,7 +387,7 @@ namespace FundamentalStructures
                if (!IsEmpty(root))
                {
                    Print(root.RBranch, height+4);
-                   for(int i = 1; i<height; i++) Console.Write("   ");
+                   for(var i = 1; i<height; i++) Console.Write("   ");
                    Console.WriteLine(string.Join("-", root.Color, root.Key, root.GetList().ToString()));
                    Print(root.LBranch, height+4);
                }

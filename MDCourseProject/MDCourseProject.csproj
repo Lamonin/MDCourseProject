@@ -68,6 +68,7 @@
         <Compile Include="FundamentalStructures\IHashTable.cs" />
         <Compile Include="FundamentalStructures\KeyValuePair.cs" />
         <Compile Include="FundamentalStructures\KRB-Tree.cs" />
+        <Compile Include="FundamentalStructures\DoubleLinkedList.cs" />
         <Compile Include="FundamentalStructures\LRBTree.cs" />
         <Compile Include="FundamentalStructures\RRBTree.cs" />
         <Compile Include="FundamentalStructures\StaticHashTable.cs" />
