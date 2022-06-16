@@ -33,8 +33,10 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         object IEnumerator.Current => Current;
     }
     
+    private const int STATUS_EMPTY = 0;
     private const int STATUS_PLACED = 1;
     private const int STATUS_REMOVED = 2;
+    
     private const int INITIAL_CAPACITY = 16;
     
     private int _capacity;
@@ -126,6 +128,11 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
 
     public void Add(TKey key, TValue value)
     {
+        if (ContainsKey(key))
+        {
+            throw new Exception($"The value by key {key} is already exist!");
+        }
+        
         int hashCode = key.GetHashCode();
             
         _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
@@ -136,11 +143,6 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
                 _valuesTable[i] = new KeyValuePair<TKey, TValue>(key, value);
                 _statusesTable[i] = STATUS_PLACED;
                 break;
-            }
-            
-            if (_valuesTable[i].Key.CompareTo(key) == 0)
-            {
-                throw new Exception($"The value by key {key} is already exist!");
             }
         }
 
@@ -155,9 +157,9 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
         foreach (int i in _hashEnumerator)
         {
-            if (_statusesTable[i] != STATUS_PLACED) break; 
+            if (_statusesTable[i] == STATUS_EMPTY) return; 
             
-            if (_valuesTable[i].Key.CompareTo(key) == 0 && _valuesTable[i].Value.CompareTo(value) == 0)
+            if (_statusesTable[i] == STATUS_PLACED && _valuesTable[i].Key.CompareTo(key) == 0 && _valuesTable[i].Value.CompareTo(value) == 0)
             {
                 _statusesTable[i] = STATUS_REMOVED;
                 Count -= 1;
@@ -186,9 +188,9 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
         foreach (int i in _hashEnumerator)
         {
-            if (_statusesTable[i] != STATUS_PLACED) break; 
+            if (_statusesTable[i] == STATUS_EMPTY) break; 
             
-            if (_valuesTable[i].Key.CompareTo(key) == 0 && _valuesTable[i].Value.CompareTo(value) == 0)
+            if (_statusesTable[i] == STATUS_PLACED && _valuesTable[i].Key.CompareTo(key) == 0 && _valuesTable[i].Value.CompareTo(value) == 0)
             {
                 return true;
             }
@@ -204,9 +206,12 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
         foreach (int i in _hashEnumerator)
         {
-            if (_statusesTable[i] != STATUS_PLACED) break; 
+            if (_statusesTable[i] == STATUS_EMPTY) break; 
             
-            if (_valuesTable[i].Key.CompareTo(key) == 0) return true;
+            if (_statusesTable[i] == STATUS_PLACED && _valuesTable[i].Key.CompareTo(key) == 0)
+            {
+                return true;
+            }
         }
         
         return false;
@@ -219,9 +224,9 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
         foreach (int i in _hashEnumerator)
         {
-            if (_statusesTable[i] != STATUS_PLACED) break; 
+            if (_statusesTable[i] == STATUS_EMPTY) break; 
             
-            if (_valuesTable[i].Key.CompareTo(key) == 0)
+            if (_statusesTable[i] == STATUS_PLACED && _valuesTable[i].Key.CompareTo(key) == 0)
             {
                 value = _valuesTable[i].Value;
                 return true;
@@ -281,34 +286,37 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
             int hashCode = key.GetHashCode();
             
             _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
-            foreach (int i in _hashEnumerator)
+            
+            if (ContainsKey(key))
             {
-                if (_statusesTable[i] != STATUS_PLACED)
+                foreach (int i in _hashEnumerator)
                 {
-                    //Такого ключа нет в таблице, добавляем
-                    Add(key, value);
-                    break;
+                    if (_statusesTable[i] == STATUS_PLACED && _valuesTable[i].Key.CompareTo(key) == 0)
+                    {
+                        _valuesTable[i] = new KeyValuePair<TKey, TValue>(key, value);
+                        break;
+                    }
                 }
-                
-                if (_valuesTable[i].Key.CompareTo(key) == 0)
+            }
+            else
+            {
+                foreach (int i in _hashEnumerator)
                 {
-                    _valuesTable[i] = new KeyValuePair<TKey, TValue>(key, value);
-                    break;
+                    if (_statusesTable[i] != STATUS_PLACED)
+                    {
+                        //Значения нет в таблице, добавляем новое
+                        Add(key, value);
+                        break;
+                    }
                 }
             }
         }
     }
 
     private readonly HashTableEnumerator _hashTableEnumerator;
-    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-    {
-        return _hashTableEnumerator;
-    }
+    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() { return _hashTableEnumerator; }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
 
     public int Count { get; private set; }
 
