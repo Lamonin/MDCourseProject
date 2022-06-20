@@ -283,13 +283,13 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
     public Func<int, int> FirstHashFunc
     {
         get => _firstHashFunc;
-        set => _firstHashFunc = value ?? throw new Exception("Сan't set first hash function to null!");
+        set => _firstHashFunc = value ?? throw new Exception("Unable to set first hash function to null!");
     }
 
     private Func<int, int> _secondHashFunc;
     public Func<int, int> SecondHashFunc
     {
         get => _secondHashFunc;
-        set => _secondHashFunc = value ?? throw new Exception("Сan't set second hash function to null!");
+        set => _secondHashFunc = value ?? throw new Exception("Unable to set second hash function to null!");
     }
 }

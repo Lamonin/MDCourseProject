@@ -16,9 +16,10 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
 
         public bool MoveNext()
         {
-            _index++;
-            while (_index < _hashTable._statusesTable.Length && _hashTable._statusesTable[_index] != STATUS_PLACED)
-                _index++;
+            do
+            {
+                _index++;    
+            } while (_index < _hashTable._statusesTable.Length && _hashTable._statusesTable[_index] != STATUS_PLACED);
 
             if (_index == _hashTable._statusesTable.Length)
                 return false;
@@ -101,11 +102,9 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
 
         for (int i = 0; i < tempStatusesTable.Length; i++)
         {
-            //Если ячейка свободна, или её значение удалено, то игнорируем её
-            if (tempStatusesTable[i] != STATUS_PLACED) continue;  
-                
             //Вставляем значение по новому хэшу
-            Add(tempValuesTable[i].Key, tempValuesTable[i].Value);
+            if (tempStatusesTable[i] == STATUS_PLACED)
+                Add(tempValuesTable[i].Key, tempValuesTable[i].Value);
         }
     }
     
@@ -284,7 +283,6 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
                 throw new Exception("Try to set value by null key!");
             
             int hashCode = key.GetHashCode();
-            
             _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
             
             if (ContainsKey(key))
@@ -304,8 +302,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
                 {
                     if (_statusesTable[i] != STATUS_PLACED)
                     {
-                        //Значения нет в таблице, добавляем новое
-                        Add(key, value);
+                        Add(key, value); //Значения нет в таблице, добавляем новое
                         break;
                     }
                 }
@@ -324,13 +321,13 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
     public Func<int, int> FirstHashFunc
     {
         get => _firstHashFunc;
-        set => _firstHashFunc = value ?? throw new Exception("Сan't set first hash function to null!");
+        set => _firstHashFunc = value ?? throw new Exception("Unable to set first hash function to null!");
     }
 
     private Func<int, int> _secondHashFunc;
     public Func<int, int> SecondHashFunc
     {
         get => _secondHashFunc;
-        set => _secondHashFunc = value ?? throw new Exception("Сan't set second hash function to null!");
+        set => _secondHashFunc = value ?? throw new Exception("Unable to set second hash function to null!");
     }
 }
