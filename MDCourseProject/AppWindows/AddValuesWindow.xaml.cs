@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.MDCourseSystem;
 using MDCourseProject.AppWindows.WindowsInitializers;
 
@@ -7,6 +8,8 @@ namespace MDCourseProject.AppWindows;
 
 public partial class AddValuesWindow : Window
 {
+    private DataAnalyser _dataAnalyser;
+    
     public AddValuesWindow()
     {
         InitializeComponent();
@@ -17,6 +20,8 @@ public partial class AddValuesWindow : Window
     {
         AddValuesGrid.ColumnDefinitions.Clear();
         AddValuesGrid.RowDefinitions.Clear();
+
+        _dataAnalyser = null;
         
         //Создаем основную разметку окна
         switch (MDSystem.currentSubsystem)
@@ -25,36 +30,36 @@ public partial class AddValuesWindow : Window
                 if (MDSystem.currentCatalogue == CatalogueTypeEnum.Clients)
                 {
                     Console.Out.WriteLine("Открыто окно добавления в справочник Клиенты");
-                    ClientsWindowInitializer.InitializeAddValuesClientsWindow(AddValuesGrid);
+                    _dataAnalyser = ClientsWindowInitializer.InitializeAddValuesClientsWindow(AddValuesGrid);
                 }
                 else //Обращения
                 {
                     Console.Out.WriteLine("Открыто окно добавления в справочник Обращения");
-                    ClientsWindowInitializer.InitializeAddValuesAppealsWindow(AddValuesGrid);
+                    _dataAnalyser = ClientsWindowInitializer.InitializeAddValuesAppealsWindow(AddValuesGrid);
                 }
                 break;
             case SubsystemTypeEnum.Stuff:
                 if (MDSystem.currentCatalogue == CatalogueTypeEnum.Staff)
                 {
                     Console.Out.WriteLine("Открыто окно добавления в справочник Сотрудники");
-                    StaffWindowInitializer.InitializeAddValuesStaffWindow(AddValuesGrid);
+                    _dataAnalyser = StaffWindowInitializer.InitializeAddValuesStaffWindow(AddValuesGrid);
                 }
                 else //Документы
                 {
                     Console.Out.WriteLine("Открыто окно добавления в справочник Документы");
-                    StaffWindowInitializer.InitializeAddValuesDocumentsWindow(AddValuesGrid);
+                    _dataAnalyser = StaffWindowInitializer.InitializeAddValuesDocumentsWindow(AddValuesGrid);
                 }
                 break;
             case SubsystemTypeEnum.Divisions:
                 if (MDSystem.currentCatalogue == CatalogueTypeEnum.Divisions)
                 {
                     Console.Out.WriteLine("Открыто окно добавления в справочник Подразделения");
-                    DivisionWindowInitializer.InitializeAddValuesDivisionWindow(AddValuesGrid);
+                    _dataAnalyser = DivisionWindowInitializer.InitializeAddValuesDivisionWindow(AddValuesGrid);
                 }
                 else //Отправленные заявки
                 {
                     Console.Out.WriteLine("Открыто окно добавления в справочник Отправленные Заявки");
-                    DivisionWindowInitializer.InitializeAddValuesSendRequestsWindow(AddValuesGrid);
+                    _dataAnalyser = DivisionWindowInitializer.InitializeAddValuesSendRequestsWindow(AddValuesGrid);
                 }
                 break;
         }
@@ -68,7 +73,13 @@ public partial class AddValuesWindow : Window
 
     private void Button_AcceptAddValuesWindow(object sender, RoutedEventArgs e)
     {
-        //Логика обработки добавления
-        Close();
+        //На всякий случай
+        if (_dataAnalyser is null) return;
+
+        if (_dataAnalyser.IsCorrectInputData())
+        {
+            //Логика успешного добавления элементов
+            Close();
+        }
     }
 }

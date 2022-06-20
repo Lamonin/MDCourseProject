@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Добавить значение"
         Height="480" Width="540"
-
+        WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize">
     
         <Grid Margin="0 0 0 4">
@@ -22,8 +22,8 @@
             </Border>
             
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="4 0 4 0">
-                <Button Width="128" Margin="0 0 4 0" Click="Button_CancelAddValuesWindow">Отмена</Button>
-                <Button Width="128" Click="Button_AcceptAddValuesWindow">Добавить</Button>
+                <Button Width="128" Margin="0 0 4 0" Click="Button_AcceptAddValuesWindow">Добавить</Button>
+                <Button Width="128" Click="Button_CancelAddValuesWindow">Отмена</Button>
             </StackPanel>
         </Grid>
 </Window>

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using MDCourseProject.AppWindows.DataAnalysers;
 
 namespace MDCourseProject.AppWindows.WindowsInitializers;
 
@@ -7,16 +8,16 @@ public static class StaffWindowInitializer
     /// <summary>
     /// Инициализирует окна добавления сотрудника
     /// </summary>
-    public static void InitializeAddValuesStaffWindow(Grid mainGrid)
+    public static DataAnalyser InitializeAddValuesStaffWindow(Grid mainGrid)
     {
-        CommonWindowGenerator.CreateWindow(mainGrid, "ФИО:", "Должность: ", "Район:");
+        return new AddValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО:", "Должность: ", "Район:"));
     }
     
     /// <summary>
     /// Инициализирует окна добавления документов
     /// </summary>
-    public static void InitializeAddValuesDocumentsWindow(Grid mainGrid)
+    public static DataAnalyser InitializeAddValuesDocumentsWindow(Grid mainGrid)
     {
-        CommonWindowGenerator.CreateWindow(mainGrid, "Тип документа:", "Должность: ", "Подразделение:");
+        return new AddValuesDocumentsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Тип документа:", "Должность: ", "Подразделение:"));
     }
 }

@@ -87,6 +87,11 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="MDCourseSystem\Catalogues.cs" />
+        <Compile Include="MDCourseSystem\DataAnalysers\ClientsDataAnalyser.cs" />
+        <Compile Include="MDCourseSystem\DataAnalysers\DataAnalyser.cs" />
+        <Compile Include="MDCourseSystem\DataAnalysers\DivisionDataAnalyser.cs" />
+        <Compile Include="MDCourseSystem\DataAnalysers\IDataAnalyser.cs" />
+        <Compile Include="MDCourseSystem\DataAnalysers\StaffDataAnalyser.cs" />
         <Compile Include="MDCourseSystem\MDSystem.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>
