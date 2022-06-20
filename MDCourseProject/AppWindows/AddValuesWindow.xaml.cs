@@ -15,6 +15,9 @@ public partial class AddValuesWindow : Window
 
     private void AddValuesInitialize()
     {
+        AddValuesGrid.ColumnDefinitions.Clear();
+        AddValuesGrid.RowDefinitions.Clear();
+        
         //Создаем основную разметку окна
         switch (MDSystem.currentSubsystem)
         {
@@ -22,20 +25,24 @@ public partial class AddValuesWindow : Window
                 if (MDSystem.currentCatalogue == CatalogueTypeEnum.Clients)
                 {
                     Console.Out.WriteLine("Открыто окно добавления в справочник Клиенты");
+                    ClientsWindowInitializer.InitializeAddValuesClientsWindow(AddValuesGrid);
                 }
                 else //Обращения
                 {
                     Console.Out.WriteLine("Открыто окно добавления в справочник Обращения");
+                    ClientsWindowInitializer.InitializeAddValuesAppealsWindow(AddValuesGrid);
                 }
                 break;
             case SubsystemTypeEnum.Stuff:
                 if (MDSystem.currentCatalogue == CatalogueTypeEnum.Staff)
                 {
                     Console.Out.WriteLine("Открыто окно добавления в справочник Сотрудники");
+                    StaffWindowInitializer.InitializeAddValuesStaffWindow(AddValuesGrid);
                 }
                 else //Документы
                 {
                     Console.Out.WriteLine("Открыто окно добавления в справочник Документы");
+                    StaffWindowInitializer.InitializeAddValuesDocumentsWindow(AddValuesGrid);
                 }
                 break;
             case SubsystemTypeEnum.Divisions:

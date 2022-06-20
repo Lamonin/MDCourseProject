@@ -68,6 +68,7 @@
           <DependentUpon>DebugWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="AppWindows\WindowsInitializers\ClientsWindowInitializer.cs" />
+        <Compile Include="AppWindows\WindowsInitializers\CommonWindowGenerator.cs" />
         <Compile Include="AppWindows\WindowsInitializers\DivisionWindowInitializer.cs" />
         <Compile Include="AppWindows\WindowsInitializers\StaffWindowInitializer.cs" />
         <Compile Include="FundamentalStructures\DynamicHashTable.cs" />
