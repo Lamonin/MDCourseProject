@@ -51,6 +51,8 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
+        <Page Include="AppWindows\AddValuesWindow.xaml" />
+        <Page Include="AppWindows\DebugWindow.xaml" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
@@ -59,18 +61,32 @@
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Include="AppWindows\AddValuesWindow.xaml.cs">
+          <DependentUpon>AddValuesWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="AppWindows\DebugWindow.xaml.cs">
+          <DependentUpon>DebugWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="AppWindows\WindowsInitializers\ClientsWindowInitializer.cs" />
+        <Compile Include="AppWindows\WindowsInitializers\DivisionWindowInitializer.cs" />
+        <Compile Include="AppWindows\WindowsInitializers\StaffWindowInitializer.cs" />
+        <Compile Include="FundamentalStructures\DynamicHashTable.cs" />
+        <Compile Include="FundamentalStructures\HashEnumerator.cs" />
         <Compile Include="FundamentalStructures\IHashTable.cs" />
         <Compile Include="FundamentalStructures\KeyValuePair.cs" />
         <Compile Include="FundamentalStructures\KRB-Tree.cs" />
+        <Compile Include="FundamentalStructures\DoubleLinkedList.cs" />
         <Compile Include="FundamentalStructures\LRBTree.cs" />
         <Compile Include="FundamentalStructures\RRBTree.cs" />
-        <Compile Include="FundamentalStructures\TempHashTable.cs" />
+        <Compile Include="FundamentalStructures\StaticHashTable.cs" />
         <Compile Include="MainWindow.xaml.cs">
             <DependentUpon>MainWindow.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="MDCourseSystem\Catalogues.cs" />
+        <Compile Include="MDCourseSystem\MDSystem.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>
         </Compile>
@@ -86,6 +102,9 @@
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="Notes.txt" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
