@@ -56,7 +56,7 @@
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         
-                        <Button Grid.Column="0"  Margin="0 0 1 0"> Добавить </Button>
+                        <Button Grid.Column="0"  Margin="0 0 1 0" Click="Button_OpenAddValuesWindow"> Добавить </Button>
                         <Button Grid.Column="1"  Margin="1 0 1 0"> Удалить </Button>
                         <Button Grid.Column="2"  Margin="1 0 0 0"> Найти </Button>
                     </Grid>

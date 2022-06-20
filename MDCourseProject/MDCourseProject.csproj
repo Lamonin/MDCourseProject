@@ -51,6 +51,7 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
+        <Page Include="AppWindows\AddValuesWindow.xaml" />
         <Page Include="AppWindows\DebugWindow.xaml" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
@@ -60,9 +61,15 @@
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Include="AppWindows\AddValuesWindow.xaml.cs">
+          <DependentUpon>AddValuesWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="AppWindows\DebugWindow.xaml.cs">
           <DependentUpon>DebugWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="AppWindows\WindowsInitializers\ClientsWindowInitializer.cs" />
+        <Compile Include="AppWindows\WindowsInitializers\DivisionWindowInitializer.cs" />
+        <Compile Include="AppWindows\WindowsInitializers\StaffWindowInitializer.cs" />
         <Compile Include="FundamentalStructures\DynamicHashTable.cs" />
         <Compile Include="FundamentalStructures\HashEnumerator.cs" />
         <Compile Include="FundamentalStructures\IHashTable.cs" />
@@ -78,6 +85,8 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="MDCourseSystem\Catalogues.cs" />
+        <Compile Include="MDCourseSystem\MDSystem.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>
         </Compile>

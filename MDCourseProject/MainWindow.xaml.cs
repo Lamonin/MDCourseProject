@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using MDCourseProject.AppWindows;
+using MDCourseProject.MDCourseSystem;
 
 namespace MDCourseProject
 {
@@ -41,18 +41,21 @@ namespace MDCourseProject
                 case 0:
                 {
                     Console.Out.WriteLine("Активирована подсистема Клиенты");
+                    MDSystem.currentSubsystem = SubsystemTypeEnum.Clients;
                     currentCatalogue = new ClientsCatalogue();
                     break;
                 }
                 case 1:
                 {
                     Console.Out.WriteLine("Активирована подсистема Сотрудники");
+                    MDSystem.currentSubsystem = SubsystemTypeEnum.Stuff;
                     currentCatalogue = new StaffCatalogue();
                     break;
                 }
                 case 2:
                 {
                     Console.Out.WriteLine("Активирована подсистема Подразделения");
+                    MDSystem.currentSubsystem = SubsystemTypeEnum.Divisions;
                     currentCatalogue = new DivisionsCatalogue();
                     break;
                 }
@@ -76,31 +79,16 @@ namespace MDCourseProject
             //Эта проверка нужна, т.к. индекс бывает отрицательный,
             //потому что кол-во элементов не успело обновиться
             if (comboBox.SelectedIndex < 0) return;
+            
+            currentCatalogue.SetCatalogue(comboBox.SelectedIndex);
             Console.Out.WriteLine($"Выбран каталог {currentCatalogue.catalogues[comboBox.SelectedIndex]}");
         }
-    }
 
-    #region Каталоги
-    
-    interface ICatalogue
-    {
-        public List<string> catalogues { get; }
+        private void Button_OpenAddValuesWindow(object sender, RoutedEventArgs e)
+        {
+            var window = new AddValuesWindow();
+            window.ShowDialog();
+            
+        }
     }
-    
-    class ClientsCatalogue:ICatalogue
-    {
-        public List<string> catalogues => new(){"Клиенты", "Обращения"};
-    }
-    
-    class StaffCatalogue:ICatalogue
-    {
-        public List<string> catalogues => new(){"Сотрудники", "Документы"};
-    }
-    
-    class DivisionsCatalogue:ICatalogue
-    {
-        public List<string> catalogues => new(){"Подразделения", "Отправленные заявки"};
-    }
-    
-    #endregion
 }
