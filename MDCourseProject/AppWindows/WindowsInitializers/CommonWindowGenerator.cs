@@ -31,4 +31,25 @@ public static class CommonWindowGenerator
 
         return tBox;
     }
+
+    public static TextBox[] CreateWindow(Grid mainGrid, params string[] titles)
+    {
+        var tBoxes = new TextBox[titles.Length];
+        mainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto});
+        mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
+        
+        mainGrid.RowDefinitions.Add(new RowDefinition{Height = new GridLength(28)});
+        
+        for (var _ = 0; _ < titles.Length; ++_)
+        {
+            mainGrid.RowDefinitions.Add(new RowDefinition{Height = new GridLength(8)}); //SPACE
+            mainGrid.RowDefinitions.Add(new RowDefinition{Height = new GridLength(28)});
+        }
+
+        for (var i = 0; i < titles.Length; i++)
+        {
+            tBoxes[i] = CreateInputField(mainGrid,titles[i], 2*i);
+        }
+        return tBoxes;
+    }
 }
