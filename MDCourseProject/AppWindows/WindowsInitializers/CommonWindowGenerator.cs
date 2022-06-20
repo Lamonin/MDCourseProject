@@ -6,8 +6,7 @@ namespace MDCourseProject.AppWindows.WindowsInitializers;
 
 public static class CommonWindowGenerator
 {
-
-    public static TextBox CreateInputField(Grid mainGrid, string title, int row)
+    private static TextBox CreateInputField(Grid mainGrid, string title, int row)
     {
         //Поле ввода названия подразделения
         var label = new Label { Content = title };

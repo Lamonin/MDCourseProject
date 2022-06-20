@@ -14,6 +14,6 @@ public static class DivisionWindowInitializer
     /// <summary> Инициализирует-интерфейс окна добавления отправленных заявок </summary>
     public static DataAnalyser InitializeAddValuesSendRequestsWindow(Grid mainGrid)
     {
-        return new AddValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Подразделение:", "Клиент:", "Название услуги:", "Дата:"));
+        return new AddValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Подразделение:", "Клиент:", "Телефон клиента:", "Название услуги:", "Дата:"));
     }
 }
