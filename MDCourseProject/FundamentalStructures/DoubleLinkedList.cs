@@ -2,7 +2,7 @@
 
 namespace FundamentalStructures
 {
-    public class DoubleLinkedList<TValue> where TValue: IComparable
+    public class DoubleLinkedList<TValue> where TValue: IComparable<TValue>
     {
        /// <summary>
        /// Узел двухсвязного кольцевого списка

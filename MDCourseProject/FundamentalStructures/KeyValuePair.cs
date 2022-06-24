@@ -2,7 +2,7 @@
 
 namespace FundamentalStructures
 {
-    public readonly struct KeyValuePair<TKey, TValue>:IComparable where TKey:IComparable where TValue:IComparable
+    public readonly struct KeyValuePair<TKey, TValue>:IComparable where TKey:IComparable<TKey> where TValue:IComparable<TValue>
     {
         public KeyValuePair(TKey key, TValue value)
         {

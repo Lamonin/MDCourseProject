@@ -2,7 +2,7 @@
 
 namespace FundamentalStructures
 {
-    public interface IHashTable<TKey, TValue> where TKey:IComparable where TValue:IComparable
+    public interface IHashTable<TKey, TValue> where TKey:IComparable<TKey> where TValue:IComparable<TValue>
     { 
         /// <summary> Добавляет значение value по ключу key в таблицу </summary>
         void Add(TKey key, TValue value);

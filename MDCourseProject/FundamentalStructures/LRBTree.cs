@@ -2,7 +2,7 @@
 
 namespace FundamentalStructures
 {
-    public class LRBTree<TKey, TValue> where TKey:IComparable where TValue:IComparable
+    public class LRBTree<TKey, TValue> where TKey:IComparable<TKey> where TValue:IComparable<TValue>
     {
         
         protected class ListNode

@@ -1,9 +1,10 @@
 ﻿using System;
 
 //TODO Возможно, переделать все это
+//TODO Как по мне, надо в первую очередь нейминг привести в порядок
 namespace FundamentalStructures
 {
-    public class RB_Tree<TKey,TValue> where TKey:IComparable where TValue:IComparable
+    public class RB_Tree<TKey,TValue> where TKey:IComparable<TKey> where TValue:IComparable<TValue>
     {
         public class leaf
         {

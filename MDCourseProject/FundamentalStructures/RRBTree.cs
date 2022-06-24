@@ -8,7 +8,7 @@ namespace FundamentalStructures
        /// </summary>
        /// <typeparam name="TKey">Тип ключа дерева</typeparam>
        /// <typeparam name="TValue">Тип значения узла списка дерева</typeparam>
-       public class RRBTree<TKey, TValue> where TKey : IComparable where TValue : IComparable
+       public class RRBTree<TKey, TValue> where TKey : IComparable<TKey> where TValue : IComparable<TValue>
        {
            /// <summary>
            /// Черный узел

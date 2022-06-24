@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FundamentalStructures;
 
-public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : IComparable where TValue : IComparable
+public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : IComparable<TKey> where TValue : IComparable<TValue>
 {
     //HASH_TABLE_ENUMERATOR
     private struct HashTableEnumerator: IEnumerator<KeyValuePair<TKey, TValue>>
@@ -54,8 +54,12 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
     private int FirstHashFunction(int key)
     {
         key = Math.Abs(key);
+        
         int mod = 10;
-        while (mod < _capacity) mod *= 10;
+        while (mod*10 < _capacity)
+        {
+            mod *= 10;
+        }
 
         int temp = 0;
         while (key != 0)
