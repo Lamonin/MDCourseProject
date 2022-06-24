@@ -13,9 +13,7 @@
             <RowDefinition Height="24"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            
-        </Grid.ColumnDefinitions>
+        
         <Label Grid.Row="0">Выбор подсистемы</Label>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -61,7 +59,7 @@
                         <Button Grid.Column="2"  Margin="1 0 0 0"> Найти </Button>
                     </Grid>
                     <Border Grid.Row="1" Margin="0 4 0 0" BorderThickness="1" BorderBrush="DarkGray">
-                        <Grid ></Grid>
+                        <Grid Background="#F6F6F6"></Grid>
                     </Border>
                 </Grid>
                 

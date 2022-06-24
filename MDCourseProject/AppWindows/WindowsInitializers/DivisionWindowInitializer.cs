@@ -8,7 +8,7 @@ public static class DivisionWindowInitializer
     /// <summary> Инициализирует-интерфейс окна добавления подразделений </summary>
     public static DataAnalyser InitializeAddValuesDivisionWindow(Grid mainGrid)
     {
-        return new AddValuesDivisionAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Название подразделения:", "Район:","Тип подразделения:"));
+        return new AddValuesDivisionAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Название подразделения:", "Район:", "Тип подразделения:"));
     }
     
     /// <summary> Инициализирует-интерфейс окна добавления отправленных заявок </summary>

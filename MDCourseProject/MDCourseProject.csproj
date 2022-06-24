@@ -53,6 +53,8 @@
         </ApplicationDefinition>
         <Page Include="AppWindows\AddValuesWindow.xaml" />
         <Page Include="AppWindows\DebugWindow.xaml" />
+        <Page Include="AppWindows\LoadDataWindow.xaml" />
+        <Page Include="AppWindows\SelectLoadDataWindow.xaml" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
@@ -66,6 +68,12 @@
         </Compile>
         <Compile Include="AppWindows\DebugWindow.xaml.cs">
           <DependentUpon>DebugWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="AppWindows\LoadDataWindow.xaml.cs">
+          <DependentUpon>LoadDataWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="AppWindows\SelectLoadDataWindow.xaml.cs">
+          <DependentUpon>SelectLoadDataWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="AppWindows\WindowsInitializers\ClientsWindowInitializer.cs" />
         <Compile Include="AppWindows\WindowsInitializers\CommonWindowGenerator.cs" />

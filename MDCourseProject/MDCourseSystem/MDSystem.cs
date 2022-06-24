@@ -21,10 +21,10 @@ public enum CatalogueTypeEnum
 
 public static class MDSystem
 {
-    /// <summary> Текущая подсистема /// </summary>
+    /// <summary> Текущая подсистема </summary>
     public static SubsystemTypeEnum currentSubsystem = SubsystemTypeEnum.Clients;
     
-    /// <summary> Текущий справочник /// </summary>
+    /// <summary> Текущий справочник </summary>
     public static CatalogueTypeEnum currentCatalogue = CatalogueTypeEnum.Clients;
 
     public static DivisionsCatalogueHandler divisionsCatalogueHandler;

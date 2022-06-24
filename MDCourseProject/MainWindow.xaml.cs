@@ -21,6 +21,9 @@ namespace MDCourseProject
             cataloguesNames = new ObservableCollection<string>();
             ComboBox_Catalogue.ItemsSource = cataloguesNames;
             ComboBox_Subsystem.SelectedIndex = 0;
+
+            var loadDataWindow = new LoadDataWindow();
+            loadDataWindow.ShowDialog();
         }
         
         private void DebugButtonClick(object sender, RoutedEventArgs e)
@@ -87,8 +90,13 @@ namespace MDCourseProject
 
         private void Button_OpenAddValuesWindow(object sender, RoutedEventArgs e)
         {
-            var window = new AddValuesWindow();
+            var window = new AddValuesWindow{ Owner = this };
             window.ShowDialog();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

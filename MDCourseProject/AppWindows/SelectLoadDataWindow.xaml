@@ -1,0 +1,70 @@
+﻿<Window x:Class="MDCourseProject.AppWindows.SelectLoadDataWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:MDCourseProject.AppWindows"
+        mc:Ignorable="d"
+        Title="Выбор файлов для загрузки" Height="380" Width="640" ResizeMode="CanMinimize"
+        >
+    <Grid Margin="16 8 16 16">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="128"/>
+            <ColumnDefinition Width="128"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <Separator Grid.ColumnSpan="3" Grid.Row="1" Background="LightGray" Margin="4 0 4 0"/>
+        <Separator Grid.ColumnSpan="3" Grid.Row="3" Background="LightGray" Margin="4 0 4 0"/>
+        <Separator Grid.ColumnSpan="3" Grid.Row="5" Background="LightGray" Margin="4 0 4 0"/>
+        <Separator Grid.ColumnSpan="3" Grid.Row="7" Background="LightGray" Margin="4 0 4 0"/>
+        <Separator Grid.ColumnSpan="3" Grid.Row="9" Background="LightGray" Margin="4 0 4 0"/>
+        
+        <Border Grid.Row="0" Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="DarkGray" Margin="0 0 8 0">
+            <TextBlock x:Name="TextBlock_FilePathClients" Foreground="DarkGray" Padding="8 0 0 0" VerticalAlignment="Center" Text="Выберите путь к файлу справочника Клиенты"/>
+        </Border>
+        <Button Grid.Row="0" Grid.Column="2" Width="128" Click="Button_SelectClientDataFile"> Открыть... </Button>
+        
+        <Border Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="DarkGray" Margin="0 0 8 0">
+            <TextBlock x:Name="TextBlock_FilePathAppeals" Foreground="DarkGray" Padding="8 0 0 0" VerticalAlignment="Center" Text="Выберите путь к файлу справочника Услуги"/>
+        </Border>
+        <Button Grid.Row="2" Grid.Column="2" Width="128" Click="Button_SelectAppealDataFile"> Открыть... </Button>
+        
+        <Border Grid.Row="4" Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="DarkGray" Margin="0 0 8 0">
+            <TextBlock x:Name="TextBlock_FilePathStaff" Foreground="DarkGray" Padding="8 0 0 0" VerticalAlignment="Center" Text="Выберите путь к файлу справочника Сотрудники"/>
+        </Border>
+        <Button Grid.Row="4" Grid.Column="2" Width="128" Click="Button_SelectStaffDataFile"> Открыть... </Button>
+        
+        <Border Grid.Row="6" Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="DarkGray" Margin="0 0 8 0">
+            <TextBlock x:Name="TextBlock_FilePathDocuments" Foreground="DarkGray" Padding="8 0 0 0" VerticalAlignment="Center" Text="Выберите путь к файлу справочника Документы"/>
+        </Border>
+        <Button Grid.Row="6" Grid.Column="2" Width="128" Click="Button_SelectDocumentsDataFile"> Открыть... </Button>
+        
+        <Border Grid.Row="8" Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="DarkGray" Margin="0 0 8 0">
+            <TextBlock x:Name="TextBlock_FilePathDivisions" Foreground="DarkGray" Padding="8 0 0 0" VerticalAlignment="Center" Text="Выберите путь к файлу справочника Подразделения"/>
+        </Border>
+        <Button Grid.Row="8" Grid.Column="2" Width="128" Click="Button_SelectDivisionsDataFile"> Открыть... </Button>
+        
+        <Border Grid.Row="10" Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="DarkGray" Margin="0 0 8 0">
+            <TextBlock x:Name="TextBlock_FilePathSendRequests" Foreground="DarkGray" Padding="8 0 0 0" VerticalAlignment="Center" Text="Выберите путь к файлу справочника Отправленные заявки"/>
+        </Border>
+        <Button Grid.Row="10" Grid.Column="2" Width="128" Click="Button_SelectSendRequestsDataFile"> Открыть... </Button>
+        
+        <Button Grid.Column="1" Grid.Row="11" Height="28" VerticalAlignment="Bottom" Margin="0 0 4 0" Click="Button_Continue">Продолжить</Button>
+        <Button Grid.Column="2" Grid.Row="11" Height="28" VerticalAlignment="Bottom" Margin="4 0 0 0" Click="Button_Back">Назад</Button>
+    </Grid>
+</Window>

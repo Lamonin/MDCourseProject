@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MDCourseProject.AppWindows"
         mc:Ignorable="d"
         Title="Добавить значение"
-        Height="400" Width="500"
+        Height="360" Width="480"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize">
     
@@ -18,7 +18,7 @@
                 <RowDefinition Height="16"/>
             </Grid.RowDefinitions>
             
-            <Border BorderThickness="1"  Margin="4" Padding="16 20 16 16">
+            <Border BorderThickness="1"  Margin="4" Padding="16 16 16 16">
                 <Grid x:Name="AddValuesGrid">
                 </Grid>
             </Border>
