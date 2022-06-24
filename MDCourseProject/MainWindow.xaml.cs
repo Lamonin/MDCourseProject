@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using MDCourseProject.AppWindows;
 using MDCourseProject.MDCourseSystem;
+using MDCourseProject.MDCourseSystem.MDDebugConsole;
 
 namespace MDCourseProject
 {
@@ -24,8 +25,8 @@ namespace MDCourseProject
         
         private void DebugButtonClick(object sender, RoutedEventArgs e)
         {
-            var window = new DebugWindow { Owner = this };
-            window.ShowDialog();
+            MDDebugConsole.WriteLine("Открыта консоль!");
+            MDDebugConsole.ShowWindow();
         }
 
         private void Selector_OnSubsystemChanged(object sender, SelectionChangedEventArgs e)
@@ -40,21 +41,21 @@ namespace MDCourseProject
             {
                 case 0:
                 {
-                    Console.Out.WriteLine("Активирована подсистема Клиенты");
+                    MDDebugConsole.WriteLine("Активирована подсистема Клиенты");
                     MDSystem.currentSubsystem = SubsystemTypeEnum.Clients;
                     currentCatalogue = new ClientsCatalogue();
                     break;
                 }
                 case 1:
                 {
-                    Console.Out.WriteLine("Активирована подсистема Сотрудники");
+                    MDDebugConsole.WriteLine("Активирована подсистема Сотрудники");
                     MDSystem.currentSubsystem = SubsystemTypeEnum.Stuff;
                     currentCatalogue = new StaffCatalogue();
                     break;
                 }
                 case 2:
                 {
-                    Console.Out.WriteLine("Активирована подсистема Подразделения");
+                    MDDebugConsole.WriteLine("Активирована подсистема Подразделения");
                     MDSystem.currentSubsystem = SubsystemTypeEnum.Divisions;
                     currentCatalogue = new DivisionsCatalogue();
                     break;

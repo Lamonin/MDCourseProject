@@ -9,7 +9,12 @@ public static class CommonWindowGenerator
     private static TextBox CreateInputField(Grid mainGrid, string title, int row)
     {
         //Поле ввода названия подразделения
-        var label = new Label { Content = title, HorizontalAlignment = HorizontalAlignment.Right};
+        var label = new Label
+        {
+            Content = title,
+            HorizontalContentAlignment = HorizontalAlignment.Right,
+            VerticalContentAlignment = VerticalAlignment.Center
+        };
         var tBox = new TextBox
         {
             TextWrapping = TextWrapping.Wrap,
@@ -33,7 +38,7 @@ public static class CommonWindowGenerator
 
     public static TextBox[] CreateWindow(Grid mainGrid, params string[] titles)
     {
-        mainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto});
+        mainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
         
         mainGrid.RowDefinitions.Add(new RowDefinition{Height = new GridLength(28)});
