@@ -13,55 +13,62 @@ public partial class AddValuesWindow : Window
     public AddValuesWindow()
     {
         InitializeComponent();
-        AddValuesInitialize();
+        AddValuesInitialize(MDSystem.currentCatalogue);
     }
 
-    private void AddValuesInitialize()
+    public AddValuesWindow(CatalogueTypeEnum catalogueType) : this()
+    {
+        AddValuesInitialize(catalogueType);
+    }
+
+    private void AddValuesInitialize(CatalogueTypeEnum catalogueType)
     {
         AddValuesGrid.ColumnDefinitions.Clear();
         AddValuesGrid.RowDefinitions.Clear();
 
         _dataAnalyser = null;
-        
-        //Создаем основную разметку окна
-        switch (MDSystem.currentSubsystem)
+
+        //Создаем основную разметку окна добавления для указанного каталога
+        switch (catalogueType)
         {
-            case SubsystemTypeEnum.Clients:
-                if (MDSystem.currentCatalogue == CatalogueTypeEnum.Clients)
-                {
-                    Console.Out.WriteLine("Открыто окно добавления в справочник Клиенты");
-                    _dataAnalyser = ClientsWindowInitializer.InitializeAddValuesClientsWindow(AddValuesGrid);
-                }
-                else //Обращения
-                {
-                    Console.Out.WriteLine("Открыто окно добавления в справочник Обращения");
-                    _dataAnalyser = ClientsWindowInitializer.InitializeAddValuesAppealsWindow(AddValuesGrid);
-                }
+            case CatalogueTypeEnum.Clients:
+            {
+                Console.Out.WriteLine("Открыто окно добавления в справочник Клиенты");
+                _dataAnalyser = ClientsWindowInitializer.InitializeAddValuesClientsWindow(AddValuesGrid);
                 break;
-            case SubsystemTypeEnum.Stuff:
-                if (MDSystem.currentCatalogue == CatalogueTypeEnum.Staff)
-                {
-                    Console.Out.WriteLine("Открыто окно добавления в справочник Сотрудники");
-                    _dataAnalyser = StaffWindowInitializer.InitializeAddValuesStaffWindow(AddValuesGrid);
-                }
-                else //Документы
-                {
-                    Console.Out.WriteLine("Открыто окно добавления в справочник Документы");
-                    _dataAnalyser = StaffWindowInitializer.InitializeAddValuesDocumentsWindow(AddValuesGrid);
-                }
+            }
+            case CatalogueTypeEnum.Appeals:
+            {
+                Console.Out.WriteLine("Открыто окно добавления в справочник Обращения");
+                _dataAnalyser = ClientsWindowInitializer.InitializeAddValuesAppealsWindow(AddValuesGrid);
                 break;
-            case SubsystemTypeEnum.Divisions:
-                if (MDSystem.currentCatalogue == CatalogueTypeEnum.Divisions)
-                {
-                    Console.Out.WriteLine("Открыто окно добавления в справочник Подразделения");
-                    _dataAnalyser = DivisionWindowInitializer.InitializeAddValuesDivisionWindow(AddValuesGrid);
-                }
-                else //Отправленные заявки
-                {
-                    Console.Out.WriteLine("Открыто окно добавления в справочник Отправленные Заявки");
-                    _dataAnalyser = DivisionWindowInitializer.InitializeAddValuesSendRequestsWindow(AddValuesGrid);
-                }
+            }
+            case CatalogueTypeEnum.Staff:
+            {
+                Console.Out.WriteLine("Открыто окно добавления в справочник Сотрудники");
+                _dataAnalyser = StaffWindowInitializer.InitializeAddValuesStaffWindow(AddValuesGrid);
                 break;
+            }
+            case CatalogueTypeEnum.Documents:
+            {
+                Console.Out.WriteLine("Открыто окно добавления в справочник Документы");
+                _dataAnalyser = StaffWindowInitializer.InitializeAddValuesDocumentsWindow(AddValuesGrid);
+                break;
+            }
+            case CatalogueTypeEnum.Divisions:
+            {
+                Console.Out.WriteLine("Открыто окно добавления в справочник Подразделения");
+                _dataAnalyser = DivisionWindowInitializer.InitializeAddValuesDivisionWindow(AddValuesGrid);
+                break;
+            }
+            case CatalogueTypeEnum.SendRequests:
+            {
+                Console.Out.WriteLine("Открыто окно добавления в справочник Отправленные Заявки");
+                _dataAnalyser = DivisionWindowInitializer.InitializeAddValuesSendRequestsWindow(AddValuesGrid);
+                break;
+            }
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 

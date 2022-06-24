@@ -1,4 +1,6 @@
-﻿namespace MDCourseProject.MDCourseSystem;
+﻿using MDCourseProject.MDCourseSystem.MDCatalogues.Divisions;
+
+namespace MDCourseProject.MDCourseSystem;
 
 public enum SubsystemTypeEnum
 {
@@ -17,11 +19,19 @@ public enum CatalogueTypeEnum
     SendRequests
 }
 
-public class MDSystem
+public static class MDSystem
 {
     /// <summary> Текущая подсистема /// </summary>
     public static SubsystemTypeEnum currentSubsystem = SubsystemTypeEnum.Clients;
     
     /// <summary> Текущий справочник /// </summary>
     public static CatalogueTypeEnum currentCatalogue = CatalogueTypeEnum.Clients;
+
+    public static DivisionsCatalogueHandler divisionsCatalogueHandler;
+    
+    static MDSystem()
+    {
+        divisionsCatalogueHandler = new DivisionsCatalogueHandler();
+    }
+    
 }

@@ -88,7 +88,6 @@ namespace MDCourseProject
         {
             var window = new AddValuesWindow();
             window.ShowDialog();
-            
         }
     }
 }

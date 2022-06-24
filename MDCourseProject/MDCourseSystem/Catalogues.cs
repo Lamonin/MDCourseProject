@@ -51,7 +51,7 @@ class StaffCatalogue:ICatalogue
 
     public List<string> catalogues => new(){"Сотрудники", "Документы"};
 }
-    
+
 class DivisionsCatalogue:ICatalogue
 {
     public DivisionsCatalogue()
