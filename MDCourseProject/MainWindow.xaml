@@ -31,7 +31,7 @@
             <Button Grid.Column="1" Margin="4 0 0 0" Click="DebugButtonClick">Отладка</Button>
         </Grid>
         
-        <Border Grid.Row="2" Margin="0 4 0 0" Padding="8 4 8 8" BorderThickness="1" BorderBrush="Black">
+        <Border Grid.Row="2" Margin="0 4 0 0" Padding="8 4 8 8" BorderThickness="1" BorderBrush="DarkGray">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="24"/>
@@ -60,10 +60,9 @@
                         <Button Grid.Column="1"  Margin="1 0 1 0"> Удалить </Button>
                         <Button Grid.Column="2"  Margin="1 0 0 0"> Найти </Button>
                     </Grid>
-                    
-                    <DataGrid Grid.Row="1" Margin="0 4 0 0">
-                        
-                    </DataGrid>
+                    <Border Grid.Row="1" Margin="0 4 0 0" BorderThickness="1" BorderBrush="DarkGray">
+                        <Grid ></Grid>
+                    </Border>
                 </Grid>
                 
                 <Grid Grid.Row="3">
