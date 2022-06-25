@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace MDCourseProject.AppWindows.WindowsInitializers;
+namespace MDCourseProject.AppWindows.WindowsBuilder;
 
 public static class CommonWindowGenerator
 {

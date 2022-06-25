@@ -38,3 +38,31 @@ public class AddValuesSendRequestsAnalyser: DataAnalyser
         return !isHasErrorInInputData;
     }
 }
+
+public class RemoveValuesDivisionsAnalyser: DataAnalyser
+{
+    public RemoveValuesDivisionsAnalyser(TextBox[] textBoxes) : base(textBoxes)
+    {
+    }
+}
+
+public class RemoveValuesSendRequestsAnalyser : DataAnalyser
+{
+    public RemoveValuesSendRequestsAnalyser(TextBox[] textBoxes) : base(textBoxes)
+    {
+    }
+}
+
+public class SearchValuesDivisionsAnalyser : DataAnalyser
+{
+    public SearchValuesDivisionsAnalyser(TextBox[] textBoxes) : base(textBoxes)
+    {
+    }
+}
+
+public class SearchValuesSendRequestsAnalyser : DataAnalyser
+{
+    public SearchValuesSendRequestsAnalyser(TextBox[] textBoxes) : base(textBoxes)
+    {
+    }
+}

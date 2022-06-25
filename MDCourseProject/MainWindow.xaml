@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MDCourseProject"
         mc:Ignorable="d"
-        Title="MDCourseProject" Height="720" Width="1080" MinWidth="480" MinHeight="360" WindowStartupLocation="CenterScreen">
+        Title="Мои Документы" Height="720" Width="1080" MinWidth="480" MinHeight="360" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="8 0 8 8">
         <Grid.RowDefinitions>
@@ -21,12 +21,12 @@
                 <ColumnDefinition Width="128"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             
-            <ComboBox Grid.Column="0" x:Name="ComboBox_Subsystem" SelectionChanged="Selector_OnSubsystemChanged">
+            <ComboBox Grid.Column="0" x:Name="ComboBox_Subsystem" SelectionChanged="ComboBox_OnSubsystemChanged">
                 <ComboBoxItem>Клиенты</ComboBoxItem>
                 <ComboBoxItem>Сотрудники</ComboBoxItem>
                 <ComboBoxItem>Подразделения</ComboBoxItem>
             </ComboBox>
-            <Button Grid.Column="1" Margin="4 0 0 0" Click="DebugButtonClick">Отладка</Button>
+            <Button Grid.Column="1" Margin="4 0 0 0" Click="Button_OpenDebugWindow">Отладка</Button>
         </Grid>
         
         <Border Grid.Row="2" Margin="0 4 0 0" Padding="8 4 8 8" BorderThickness="1" BorderBrush="DarkGray">
@@ -39,7 +39,7 @@
                 </Grid.RowDefinitions>
             
                 <Label Grid.Row="0">Выбор справочника</Label>
-                <ComboBox Grid.Row="1" x:Name="ComboBox_Catalogue" SelectionChanged="Selector_OnCatalogueChanged"/>
+                <ComboBox Grid.Row="1" x:Name="ComboBox_Catalogue" SelectionChanged="ComboBox_OnCatalogueChanged"/>
                 
                 <Grid Grid.Row="2" Margin="0 0 0 4">
                     <Grid.RowDefinitions>
@@ -55,8 +55,8 @@
                         </Grid.ColumnDefinitions>
                         
                         <Button Grid.Column="0"  Margin="0 0 1 0" Click="Button_OpenAddValuesWindow"> Добавить </Button>
-                        <Button Grid.Column="1"  Margin="1 0 1 0"> Удалить </Button>
-                        <Button Grid.Column="2"  Margin="1 0 0 0"> Найти </Button>
+                        <Button Grid.Column="1"  Margin="1 0 1 0" Click="Button_OpenRemoveValuesWindow"> Удалить </Button>
+                        <Button Grid.Column="2"  Margin="1 0 0 0" Click="Button_OpenSearchValuesWindow"> Найти </Button>
                     </Grid>
                     <Border Grid.Row="1" Margin="0 4 0 0" BorderThickness="1" BorderBrush="DarkGray">
                         <Grid Background="#F6F6F6"></Grid>

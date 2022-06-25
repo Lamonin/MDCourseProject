@@ -1,7 +1,7 @@
 ﻿using System;
 using MDCourseProject.AppWindows;
 
-namespace MDCourseProject.MDCourseSystem.MDDebugConsole;
+namespace MDCourseProject.MDCourseSystem;
 
 public static class MDDebugConsole
 {
@@ -15,7 +15,7 @@ public static class MDDebugConsole
         {
             _consoleData = value;
             
-            if (_window.ShowActivated)
+            if (_window.IsVisible) //Если консоль активирована, то обновляем в ней текст
             {
                 _window.DebugTextBlock.Text = _consoleData;
             }
@@ -30,7 +30,12 @@ public static class MDDebugConsole
     public static void ShowWindow()
     {
         _window.DebugTextBlock.Text = _consoleData;
-        _window.Show();
+        
+        if (!_window.IsVisible)
+        {
+            _window.Show();
+            WriteLine("Открыта консоль!");
+        }
     }
 
     public static void Write(string data, bool withTime = false)

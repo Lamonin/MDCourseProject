@@ -7,9 +7,8 @@
         mc:Ignorable="d"
         Height="240"
         Width="300"
-        WindowStyle="ToolWindow"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="CanMinimize">
+        ResizeMode="NoResize">
     
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
         <TextBlock Text="Мои Документы" TextAlignment="Center" FontWeight="Bold" FontSize="24" Margin="0 0 0 24"></TextBlock>

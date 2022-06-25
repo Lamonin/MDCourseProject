@@ -54,6 +54,8 @@
         <Page Include="AppWindows\AddValuesWindow.xaml" />
         <Page Include="AppWindows\DebugWindow.xaml" />
         <Page Include="AppWindows\LoadDataWindow.xaml" />
+        <Page Include="AppWindows\RemoveValuesWindow.xaml" />
+        <Page Include="AppWindows\SearchValuesWindow.xaml" />
         <Page Include="AppWindows\SelectLoadDataWindow.xaml" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
@@ -72,13 +74,16 @@
         <Compile Include="AppWindows\LoadDataWindow.xaml.cs">
           <DependentUpon>LoadDataWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="AppWindows\RemoveValuesWindow.xaml.cs">
+          <DependentUpon>RemoveValuesWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="AppWindows\SearchValuesWindow.xaml.cs">
+          <DependentUpon>SearchValuesWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="AppWindows\SelectLoadDataWindow.xaml.cs">
           <DependentUpon>SelectLoadDataWindow.xaml</DependentUpon>
         </Compile>
-        <Compile Include="AppWindows\WindowsInitializers\ClientsWindowInitializer.cs" />
-        <Compile Include="AppWindows\WindowsInitializers\CommonWindowGenerator.cs" />
-        <Compile Include="AppWindows\WindowsInitializers\DivisionWindowInitializer.cs" />
-        <Compile Include="AppWindows\WindowsInitializers\StaffWindowInitializer.cs" />
+        <Compile Include="AppWindows\WindowsBuilder\CommonWindowGenerator.cs" />
         <Compile Include="FundamentalStructures\DynamicHashTable.cs" />
         <Compile Include="FundamentalStructures\HashEnumerator.cs" />
         <Compile Include="FundamentalStructures\IHashTable.cs" />
@@ -94,14 +99,16 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="MDCourseSystem\Catalogues.cs" />
         <Compile Include="MDCourseSystem\DataAnalysers\ClientsDataAnalyser.cs" />
         <Compile Include="MDCourseSystem\DataAnalysers\DataAnalyser.cs" />
         <Compile Include="MDCourseSystem\DataAnalysers\DivisionDataAnalyser.cs" />
         <Compile Include="MDCourseSystem\DataAnalysers\IDataAnalyser.cs" />
         <Compile Include="MDCourseSystem\DataAnalysers\StaffDataAnalyser.cs" />
-        <Compile Include="MDCourseSystem\MDCatalogues\DivisionsCatalogueHandler.cs" />
+        <Compile Include="MDCourseSystem\MDSubsystems\ClientsSubsystem.cs" />
+        <Compile Include="MDCourseSystem\MDSubsystems\DivisionsSubsystem.cs" />
+        <Compile Include="MDCourseSystem\MDSubsystems\ISubsystem.cs" />
         <Compile Include="MDCourseSystem\MDDebugConsole\MDDebugConsole.cs" />
+        <Compile Include="MDCourseSystem\MDSubsystems\StaffSubsystem.cs" />
         <Compile Include="MDCourseSystem\MDSystem.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>

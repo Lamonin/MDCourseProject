@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.Win32;
-using MDCourseProject.MDCourseSystem.MDDebugConsole;
+using MDCourseProject.MDCourseSystem;
 
 namespace MDCourseProject.AppWindows;
 
@@ -38,7 +38,6 @@ public partial class SelectLoadDataWindow : Window
         var fileDialog = new OpenFileDialog
         {
             Multiselect = false,
-            //InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             Filter = "Text files (*.txt)|*.txt",
         };
         
