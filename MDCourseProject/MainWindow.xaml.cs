@@ -5,6 +5,8 @@ using System.Windows.Controls;
 using MDCourseProject.AppWindows;
 using MDCourseProject.MDCourseSystem;
 using MDCourseProject.MDCourseSystem.MDDebugConsole;
+using MDCourseProject.MDCourseSystem.MDCatalogues;
+using MDCourseProject.MDCourseSystem.MDCatalogues.Divisions;
 
 namespace MDCourseProject
 {
@@ -12,6 +14,9 @@ namespace MDCourseProject
     {
         public MainWindow()
         {
+            var f = new FullName("Aa Aa Aa");
+            var f1 = new FullName("Ba Ba Ba");
+            Console.WriteLine(f1.GetHashCode());
             InitializeComponent();
             Initialize();
         }

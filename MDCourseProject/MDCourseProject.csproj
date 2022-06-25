@@ -101,6 +101,7 @@
         <Compile Include="MDCourseSystem\DataAnalysers\IDataAnalyser.cs" />
         <Compile Include="MDCourseSystem\DataAnalysers\StaffDataAnalyser.cs" />
         <Compile Include="MDCourseSystem\MDCatalogues\DivisionsCatalogueHandler.cs" />
+        <Compile Include="MDCourseSystem\MDCatalogues\StaffSystem.cs" />
         <Compile Include="MDCourseSystem\MDDebugConsole\MDDebugConsole.cs" />
         <Compile Include="MDCourseSystem\MDSystem.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
