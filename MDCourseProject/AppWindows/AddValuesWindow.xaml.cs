@@ -16,9 +16,6 @@ public partial class AddValuesWindow : Window
 
     private void AddValuesInitialize()
     {
-        AddValuesGrid.ColumnDefinitions.Clear();
-        AddValuesGrid.RowDefinitions.Clear();
-
         _dataAnalyser = MDSystem.Subsystem.BuildAddValuesWindow(AddValuesGrid);
     }
 
@@ -34,6 +31,7 @@ public partial class AddValuesWindow : Window
 
         if (_dataAnalyser.IsCorrectInputData())
         {
+            MDSystem.Subsystem.Add(_dataAnalyser.GetData());
             //Логика успешного добавления элементов
             Close();
         }

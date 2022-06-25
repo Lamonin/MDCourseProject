@@ -10,7 +10,7 @@ public class AddValuesDivisionAnalyser: DataAnalyser
     public override bool IsCorrectInputData()
     {
         //ЛОГИКА АНАЛИЗАТОРА
-        return false;
+        return true;
     }
     
 }

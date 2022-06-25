@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using MDCourseProject.AppWindows.DataAnalysers;
 
@@ -6,6 +7,14 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems;
 
 public class ClientsSubsystem:ISubsystem
 {
+    public void Add(string[] data)
+    {
+    }
+
+    public void PrintDataInGrid(DataGrid mainDataGrid)
+    {
+    }
+
     public DataAnalyser BuildAddValuesWindow(Grid mainGrid)
     {
         return null;
@@ -21,6 +30,8 @@ public class ClientsSubsystem:ISubsystem
         return null;
     }
 
+    public event Action OnCatalogueValuesUpdated;
+
     private int _catalogueIndex;
     public int CatalogueIndex
     {
@@ -32,7 +43,7 @@ public class ClientsSubsystem:ISubsystem
         }
     }
 
-    public string CurrentCatalogueName => CatalogueIndex == 0 ? "Клиенты": "Услуги";
+    public string CurrentCatalogueName => CatalogueIndex == 0 ? "Клиенты": "Обращения";
 
-    public IEnumerable<string> CataloguesNames => new []{"Клиенты", "Услуги"};
+    public IEnumerable<string> CataloguesNames => new []{"Клиенты", "Обращения"};
 }

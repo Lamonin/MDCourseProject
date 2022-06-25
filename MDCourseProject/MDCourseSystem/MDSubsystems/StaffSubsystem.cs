@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.AppWindows.WindowsBuilder;
@@ -7,6 +8,14 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems;
 
 public class StaffSubsystem:ISubsystem
 {
+    public void Add(string[] data)
+    {
+    }
+
+    public void PrintDataInGrid(DataGrid mainDataGrid)
+    {
+    }
+
     public DataAnalyser BuildAddValuesWindow(Grid mainGrid)
     {
         if (CatalogueIndex == 0)
@@ -24,6 +33,8 @@ public class StaffSubsystem:ISubsystem
     {
         return null;
     }
+
+    public event Action OnCatalogueValuesUpdated;
 
     private int _catalogueIndex;
     public int CatalogueIndex

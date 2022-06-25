@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MDCourseProject"
         mc:Ignorable="d"
-        Title="Мои Документы" Height="720" Width="1080" MinWidth="480" MinHeight="360" WindowStartupLocation="CenterScreen">
+        Title="Мои Документы" Height="720" Width="1080" MinWidth="640" MinHeight="360" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="8 0 8 8">
         <Grid.RowDefinitions>
@@ -58,9 +58,24 @@
                         <Button Grid.Column="1"  Margin="1 0 1 0" Click="Button_OpenRemoveValuesWindow"> Удалить </Button>
                         <Button Grid.Column="2"  Margin="1 0 0 0" Click="Button_OpenSearchValuesWindow"> Найти </Button>
                     </Grid>
-                    <Border Grid.Row="1" Margin="0 4 0 0" BorderThickness="1" BorderBrush="DarkGray">
-                        <Grid Background="#F6F6F6"></Grid>
-                    </Border>
+                    <DataGrid Grid.Row="1"
+                              x:Name="MainDataGrid"
+                              Margin="0 8 0 0"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              CanUserReorderColumns="False"
+                              CanUserResizeColumns="False"
+                              CanUserSortColumns="False"
+                              CanUserResizeRows="False"
+                              HorizontalScrollBarVisibility="Hidden">
+                        
+                    </DataGrid>
+                    
+                    
+                    <!--<Border Grid.Row="1" Margin="0 4 0 0" BorderThickness="1" BorderBrush="DarkGray">
+                        <Grid x:Name="MainDataGrid" Background="#F6F6F6"></Grid>
+                    </Border>-->
                 </Grid>
                 
                 <Grid Grid.Row="3">

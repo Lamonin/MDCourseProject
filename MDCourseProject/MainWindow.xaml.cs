@@ -26,6 +26,11 @@ namespace MDCourseProject
             loadDataWindow.ShowDialog();
         }
 
+        private void UpdateMainDataGridValues()
+        {
+            MDSystem.Subsystem.PrintDataInGrid(MainDataGrid);
+        }
+
         private void ComboBox_OnSubsystemChanged(object sender, SelectionChangedEventArgs e)
         {
             var subsystemComboBox = (ComboBox)sender;
@@ -34,6 +39,8 @@ namespace MDCourseProject
 
         private void SelectSubsystem(int index)
         {
+            MDSystem.Subsystem.OnCatalogueValuesUpdated -= UpdateMainDataGridValues;
+            
             switch (index)
             {
                 case 0:
@@ -56,6 +63,8 @@ namespace MDCourseProject
                 }
             }
             
+            MDSystem.Subsystem.OnCatalogueValuesUpdated += UpdateMainDataGridValues;
+            
             if (ComboBox_Catalogue != null)
             {
                 cataloguesNames.Clear();
@@ -65,6 +74,8 @@ namespace MDCourseProject
                 }
                 ComboBox_Catalogue.SelectedIndex = 0;
             }
+            
+            UpdateMainDataGridValues();
         }
 
         private void ComboBox_OnCatalogueChanged(object sender, SelectionChangedEventArgs e)
@@ -76,6 +87,7 @@ namespace MDCourseProject
             if (selectCatalogueComboBox.SelectedIndex < 0) return;
 
             MDSystem.Subsystem.CatalogueIndex = selectCatalogueComboBox.SelectedIndex;
+            UpdateMainDataGridValues();
         }
 
 

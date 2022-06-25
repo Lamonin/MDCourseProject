@@ -4,7 +4,6 @@ namespace FundamentalStructures
 {
     public class LRBTree<TKey, TValue> where TKey:IComparable<TKey> where TValue:IComparable<TValue>
     {
-        
         protected class ListNode
         {
             public ListNode prev, next;
