@@ -52,11 +52,13 @@
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="128"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         
                         <Button Grid.Column="0"  Margin="0 0 1 0" Click="Button_OpenAddValuesWindow"> Добавить </Button>
                         <Button Grid.Column="1"  Margin="1 0 1 0" Click="Button_OpenRemoveValuesWindow"> Удалить </Button>
-                        <Button Grid.Column="2"  Margin="1 0 0 0" Click="Button_OpenSearchValuesWindow"> Найти </Button>
+                        <Button Grid.Column="2"  Margin="1 0 1 0" Click="Button_OpenSearchValuesWindow"> Найти </Button>
+                        <Button Grid.Column="3"  Margin="1 0 0 0" Click="Button_ResetSearchResult"> Сбросить </Button>
                     </Grid>
                     <DataGrid Grid.Row="1"
                               x:Name="MainDataGrid"

@@ -9,27 +9,14 @@ public enum SubsystemTypeEnum
     Divisions
 }
 
-public enum CatalogueTypeEnum
-{
-    Clients,
-    Appeals,
-    Staff,
-    Documents,
-    Divisions,
-    SendRequests
-}
-
 public static class MDSystem
 {
     /// <summary> Текущая подсистема </summary>
     public static SubsystemTypeEnum currentSubsystem = SubsystemTypeEnum.Clients;
-    
-    /// <summary> Текущий справочник </summary>
-    public static CatalogueTypeEnum currentCatalogue = CatalogueTypeEnum.Clients;
 
-    private static ClientsSubsystem _clientsSubsystem;
-    private static StaffSubsystem _staffSubsystem;
-    private static DivisionsSubsystem _divisionsSubsystem;
+    public static readonly ClientsSubsystem clientsSubsystem;
+    public static readonly StaffSubsystem staffSubsystem;
+    public static readonly DivisionsSubsystem divisionsSubsystem;
 
     public static ISubsystem Subsystem
     {
@@ -37,9 +24,9 @@ public static class MDSystem
         {
             return currentSubsystem switch
             {
-                SubsystemTypeEnum.Clients => _clientsSubsystem,
-                SubsystemTypeEnum.Staff => _staffSubsystem,
-                SubsystemTypeEnum.Divisions => _divisionsSubsystem,
+                SubsystemTypeEnum.Clients => clientsSubsystem,
+                SubsystemTypeEnum.Staff => staffSubsystem,
+                SubsystemTypeEnum.Divisions => divisionsSubsystem,
                 _ => null //Чтобы не ругался компилятор
             };
         }
@@ -47,8 +34,8 @@ public static class MDSystem
 
     static MDSystem()
     {
-        _clientsSubsystem = new ClientsSubsystem();
-        _staffSubsystem = new StaffSubsystem();
-        _divisionsSubsystem = new DivisionsSubsystem();
+        clientsSubsystem = new ClientsSubsystem();
+        staffSubsystem = new StaffSubsystem();
+        divisionsSubsystem = new DivisionsSubsystem();
     }
 }

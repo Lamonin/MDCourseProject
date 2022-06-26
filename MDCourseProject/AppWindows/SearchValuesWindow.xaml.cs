@@ -21,6 +21,15 @@ public partial class SearchValuesWindow : Window
         _dataAnalyser = MDSystem.Subsystem.BuildSearchValuesWindow(SearchValuesGrid);
     }
 
+    private void Button_AcceptShowSearchResult(object sender, RoutedEventArgs e)
+    {
+        if (_dataAnalyser is null) return;
+        
+        MDSystem.Subsystem.Find(MainWindow.Handler.MainDataGrid, _dataAnalyser.GetData());
+        
+        Close();
+    }
+    
     private void Button_Cancel(object sender, RoutedEventArgs e)
     {
         Close();

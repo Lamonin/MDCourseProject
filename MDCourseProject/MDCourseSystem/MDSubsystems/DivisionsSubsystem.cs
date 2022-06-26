@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -122,9 +123,10 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
         
         public DivisionsSubsystem()
         {
+            CatalogueIndex = 0;
+            
             DivisionsTable = new StaticHashTable<DivisionNameAndArea, string>(1000);
             SendRequestsTree = new LRBTree<DivisionNameAndArea, SendRequestClientServiceAndDate>();
-            CatalogueIndex = 0;
 
             _divisionsData = new ObservableCollection<Division>();
             _sendRequestsData = new ObservableCollection<SendRequest>();
@@ -153,46 +155,113 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
                 
                 _sendRequestsData.Add(new SendRequest(data[0], data[1], data[2], data[3]));
             }
+        }
+
+        public void Remove(string[] data)
+        {
+            if (CatalogueIndex == 0)
+            {
+                var key = new DivisionNameAndArea(data[0], data[1]);
+                if (DivisionsTable.TryGetValue(key, out var value))
+                {
+                    DivisionsTable.Remove(key, value);
+                    _divisionsData.Remove(new Division(key.Name, key.Area, value));
+                }
+            }
+            else
+            {
+                var key = new DivisionNameAndArea(data[0], data[1]);
+                var value = new SendRequestClientServiceAndDate(data[1], data[2], data[3]);
+                SendRequestsTree.Remove(key, value);
+
+                _sendRequestsData.Remove(new SendRequest(data[0], data[1], data[2], data[3]));
+            }
+        }
+        
+        public void Find(DataGrid mainDataGrid, string[] data)
+        {
+            mainDataGrid.ItemsSource = null;
             
-            OnCatalogueValuesUpdated?.Invoke();
+            string[] headers;
+            if (CatalogueIndex == 0)
+            {
+                var searchResult = new ObservableCollection<Division>();
+                if (DivisionsTable.TryGetValue(new DivisionNameAndArea(data[0], data[1]), out var value))
+                {
+                    searchResult.Add(new Division(data[0], data[1], value));
+                }
+                mainDataGrid.ItemsSource = searchResult;
+                
+                headers = new []{"Подразделение", "Район", "Тип подразделения"};
+            }
+            else
+            {
+                headers = new []{"Подразделение", "Клиент", "Услуга", "Дата"};
+            }
+            CommonWindowGenerator.CreateHeadersInDataGrid(mainDataGrid, headers);
         }
 
         public void PrintDataInGrid(DataGrid mainDataGrid)
         {
             mainDataGrid.ItemsSource = null;
             mainDataGrid.Columns.Clear();
+
+            string[] headers;
             
             if (CatalogueIndex == 0)
             {
                 mainDataGrid.ItemsSource = _divisionsData;
-                
-                //СТРОИМ НАИМЕНОВАНИЕ СТОЛБЦОВ
-                mainDataGrid.Columns[0].Header = "Подразделение";
-                mainDataGrid.Columns[0].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-                
-                mainDataGrid.Columns[1].Header = "Район";
-                mainDataGrid.Columns[1].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-                
-                mainDataGrid.Columns[2].Header = "Тип подразделения";
-                mainDataGrid.Columns[2].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+                headers = new []{"Подразделение", "Район", "Тип подразделения"};
             }
             else
             {
                 mainDataGrid.ItemsSource = _sendRequestsData;
-                
-                //СТРОИМ НАИМЕНОВАНИЕ СТОЛБЦОВ
-                mainDataGrid.Columns[0].Header = "Подразделение";
-                mainDataGrid.Columns[0].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-                
-                mainDataGrid.Columns[1].Header = "Клиент";
-                mainDataGrid.Columns[1].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-                
-                mainDataGrid.Columns[2].Header = "Услуга";
-                mainDataGrid.Columns[2].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-                
-                mainDataGrid.Columns[3].Header = "Дата";
-                mainDataGrid.Columns[3].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+                headers = new []{"Подразделение", "Клиент", "Услуга", "Дата"};
             }
+            
+            //УСТАНАВЛИВАЕТ НАЗВАНИЯ СТОЛБЦОВ
+            CommonWindowGenerator.CreateHeadersInDataGrid(mainDataGrid, headers);
+        }
+
+        public void LoadDefaultFirstCatalogue()
+        {
+            LoadFirstCatalogue("DefaultFiles/divisions_default.txt");
+        }
+        
+        public void LoadFirstCatalogue(string filePath)
+        {
+            var reader = new StreamReader(filePath);
+            
+            CatalogueIndex = 0;
+
+            while (!reader.EndOfStream)
+            {
+                var data = reader.ReadLine()!.Split(';');
+                Add(data);
+            }
+            
+            reader.Close();
+        }
+
+        public void LoadDefaultSecondCatalogue()
+        {
+            LoadFirstCatalogue("DefaultFiles/sendrequests_default.txt");
+        }
+        public void LoadSecondCatalogue(string filePath)
+        {
+            var reader = new StreamReader(filePath);
+            
+            CatalogueIndex = 1;
+            
+            while (!reader.EndOfStream)
+            {
+                var data = reader.ReadLine()!.Split(';');
+                Add(data);
+            }
+            
+            CatalogueIndex = 0;
+            
+            reader.Close();
         }
 
         public DataAnalyser BuildAddValuesWindow(Grid mainGrid)
@@ -215,13 +284,11 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
         {
             if (CatalogueIndex == 0)
             {
-                return new SearchValuesDivisionsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Название подразделения:", "Район:", "Тип подразделения:"));
+                return new SearchValuesDivisionsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Название подразделения:", "Район:"));
             }
 
             return new SearchValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Подразделение:", "Клиент:", "Название услуги:", "Дата:"));
         }
-
-        public event Action OnCatalogueValuesUpdated;
 
         public int CatalogueIndex
         {

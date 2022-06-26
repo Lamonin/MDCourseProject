@@ -9,6 +9,7 @@ namespace MDCourseProject
 {
     public partial class MainWindow
     {
+        public static MainWindow Handler;
         private ObservableCollection<string> cataloguesNames; //Коллекция названий каталогов
         public MainWindow()
         {
@@ -18,6 +19,8 @@ namespace MDCourseProject
 
         private void InitializeMainWindow()
         {
+            Handler = this;
+            
             cataloguesNames = new ObservableCollection<string>();
             ComboBox_Catalogue.ItemsSource = cataloguesNames;
             ComboBox_Subsystem.SelectedIndex = 0;
@@ -26,7 +29,7 @@ namespace MDCourseProject
             loadDataWindow.ShowDialog();
         }
 
-        private void UpdateMainDataGridValues()
+        public void UpdateMainDataGridValues()
         {
             MDSystem.Subsystem.PrintDataInGrid(MainDataGrid);
         }
@@ -39,8 +42,6 @@ namespace MDCourseProject
 
         private void SelectSubsystem(int index)
         {
-            MDSystem.Subsystem.OnCatalogueValuesUpdated -= UpdateMainDataGridValues;
-            
             switch (index)
             {
                 case 0:
@@ -62,9 +63,7 @@ namespace MDCourseProject
                     break;
                 }
             }
-            
-            MDSystem.Subsystem.OnCatalogueValuesUpdated += UpdateMainDataGridValues;
-            
+
             if (ComboBox_Catalogue != null)
             {
                 cataloguesNames.Clear();
@@ -120,6 +119,11 @@ namespace MDCourseProject
         protected override void OnClosed(EventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void Button_ResetSearchResult(object sender, RoutedEventArgs e)
+        {
+            UpdateMainDataGridValues();
         }
     }
 }

@@ -24,7 +24,7 @@
             
         <Separator Grid.Row="1" Margin="16 0 16 0" VerticalAlignment="Top"/>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="16 0 16 0">
-            <Button Width="128" Margin="0 0 8 0">Найти</Button>
+            <Button Width="128" Margin="0 0 8 0" Click="Button_AcceptShowSearchResult">Найти</Button>
             <Button Width="128" Click="Button_Cancel">Отмена</Button>
         </StackPanel>
     </Grid>

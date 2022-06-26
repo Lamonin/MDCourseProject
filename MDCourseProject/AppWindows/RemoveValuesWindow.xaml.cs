@@ -20,6 +20,12 @@ public partial class RemoveValuesWindow : Window
 
         _dataAnalyser = MDSystem.Subsystem.BuildRemoveValuesWindow(RemoveValuesGrid);
     }
+    
+    private void Button_AcceptRemoveValues(object sender, RoutedEventArgs e)
+    {
+        MDSystem.Subsystem.Remove(_dataAnalyser.GetData());
+        Close();
+    }
 
     private void Button_Cancel(object sender, RoutedEventArgs e)
     {

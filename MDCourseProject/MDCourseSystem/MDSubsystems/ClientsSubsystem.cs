@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
 using MDCourseProject.AppWindows.DataAnalysers;
 
@@ -11,7 +10,23 @@ public class ClientsSubsystem:ISubsystem
     {
     }
 
+    public void Remove(string[] data)
+    {
+    }
+
+    public void Find(DataGrid mainDataGrid, string[] data)
+    {
+    }
+
     public void PrintDataInGrid(DataGrid mainDataGrid)
+    {
+    }
+
+    public void LoadFirstCatalogue(string filePath)
+    {
+    }
+
+    public void LoadSecondCatalogue(string filePath)
     {
     }
 
@@ -29,8 +44,6 @@ public class ClientsSubsystem:ISubsystem
     {
         return null;
     }
-
-    public event Action OnCatalogueValuesUpdated;
 
     private int _catalogueIndex;
     public int CatalogueIndex

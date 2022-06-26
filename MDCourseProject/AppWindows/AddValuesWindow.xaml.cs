@@ -32,6 +32,7 @@ public partial class AddValuesWindow : Window
         if (_dataAnalyser.IsCorrectInputData())
         {
             MDSystem.Subsystem.Add(_dataAnalyser.GetData());
+            MainWindow.Handler.UpdateMainDataGridValues();
             //Логика успешного добавления элементов
             Close();
         }
