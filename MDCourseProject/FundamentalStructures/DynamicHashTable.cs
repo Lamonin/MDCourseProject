@@ -112,7 +112,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         }
     }
     
-    public DynamicHashTable()
+    public DynamicHashTable(Func<int, int> func1, Func<int, int> func2)
     {
         _capacity = INITIAL_CAPACITY;
         _maxCapacity = _capacity * 75 / 100;
@@ -122,8 +122,8 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         _valuesTable = new KeyValuePair<TKey, TValue>[_capacity];
         _statusesTable = new byte[_capacity];
 
-        FirstHashFunc = FirstHashFunction;
-        SecondHashFunc = SecondHashFunction;
+        FirstHashFunc = func1;
+        SecondHashFunc = func2;
         
         _hashEnumerator = new HashEnumerator();
         _hashTableEnumerator = new HashTableEnumerator(this);
