@@ -18,14 +18,14 @@ public partial class SearchValuesWindow : Window
         SearchValuesGrid.ColumnDefinitions.Clear();
         SearchValuesGrid.RowDefinitions.Clear();
 
-        _dataAnalyser = MDSystem.Subsystem.BuildSearchValuesWindow(SearchValuesGrid);
+        _dataAnalyser = MDSystem.Subsystem.Catalogue.BuildSearchValuesWindow(SearchValuesGrid);
     }
 
     private void Button_AcceptShowSearchResult(object sender, RoutedEventArgs e)
     {
         if (_dataAnalyser is null) return;
         
-        MDSystem.Subsystem.Find(MainWindow.Handler.MainDataGrid, _dataAnalyser.GetData());
+        MDSystem.Subsystem.Catalogue.Find(MainWindow.Handler.MainDataGrid, _dataAnalyser.GetData());
         
         Close();
     }

@@ -18,12 +18,12 @@ public partial class RemoveValuesWindow : Window
         RemoveValuesGrid.ColumnDefinitions.Clear();
         RemoveValuesGrid.RowDefinitions.Clear();
 
-        _dataAnalyser = MDSystem.Subsystem.BuildRemoveValuesWindow(RemoveValuesGrid);
+        _dataAnalyser = MDSystem.Subsystem.Catalogue.BuildRemoveValuesWindow(RemoveValuesGrid);
     }
     
     private void Button_AcceptRemoveValues(object sender, RoutedEventArgs e)
     {
-        MDSystem.Subsystem.Remove(_dataAnalyser.GetData());
+        MDSystem.Subsystem.Catalogue.Remove(_dataAnalyser.GetData());
         Close();
     }
 

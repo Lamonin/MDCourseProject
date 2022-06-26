@@ -31,7 +31,7 @@ namespace MDCourseProject
 
         public void UpdateMainDataGridValues()
         {
-            MDSystem.Subsystem.PrintDataInGrid(MainDataGrid);
+            MDSystem.Subsystem.Catalogue?.PrintDataToGrid(MainDataGrid);
         }
 
         private void ComboBox_OnSubsystemChanged(object sender, SelectionChangedEventArgs e)
@@ -125,10 +125,16 @@ namespace MDCourseProject
         {
             UpdateMainDataGridValues();
         }
+        
+        private void Button_OpenReportWindow(object sender, RoutedEventArgs e)
+        {
+            var window = new ReportWindow{ Owner = this };
+            window.ShowDialog();
+        }
 
         private void Button_SaveCatalogue(object sender, RoutedEventArgs e)
         {
-            MDSystem.Subsystem.SaveCatalogue();
+            MDSystem.Subsystem.Catalogue.Save();
         }
     }
 }

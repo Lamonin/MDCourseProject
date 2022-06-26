@@ -16,7 +16,7 @@ public partial class AddValuesWindow : Window
 
     private void AddValuesInitialize()
     {
-        _dataAnalyser = MDSystem.Subsystem.BuildAddValuesWindow(AddValuesGrid);
+        _dataAnalyser = MDSystem.Subsystem.Catalogue.BuildAddValuesWindow(AddValuesGrid);
     }
 
     private void Button_CancelAddValuesWindow(object sender, RoutedEventArgs e)
@@ -31,7 +31,7 @@ public partial class AddValuesWindow : Window
 
         if (_dataAnalyser.IsCorrectInputData())
         {
-            MDSystem.Subsystem.Add(_dataAnalyser.GetData());
+            MDSystem.Subsystem.Catalogue.Add(_dataAnalyser.GetData());
             MainWindow.Handler.UpdateMainDataGridValues();
             //Логика успешного добавления элементов
             Close();

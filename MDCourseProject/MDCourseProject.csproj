@@ -56,6 +56,7 @@
         <Page Include="AppWindows\DebugWindow.xaml" />
         <Page Include="AppWindows\LoadDataWindow.xaml" />
         <Page Include="AppWindows\RemoveValuesWindow.xaml" />
+        <Page Include="AppWindows\ReportWindow.xaml" />
         <Page Include="AppWindows\SearchValuesWindow.xaml" />
         <Page Include="AppWindows\SelectLoadDataWindow.xaml" />
         <Page Include="MainWindow.xaml">
@@ -77,6 +78,9 @@
         </Compile>
         <Compile Include="AppWindows\RemoveValuesWindow.xaml.cs">
           <DependentUpon>RemoveValuesWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="AppWindows\ReportWindow.xaml.cs">
+          <DependentUpon>ReportWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="AppWindows\SearchValuesWindow.xaml.cs">
           <DependentUpon>SearchValuesWindow.xaml</DependentUpon>
@@ -109,6 +113,9 @@
         <Compile Include="MDCourseSystem\MDSubsystems\DivisionsSubsystem.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\ISubsystem.cs" />
         <Compile Include="MDCourseSystem\MDDebugConsole\MDDebugConsole.cs" />
+        <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\DivisionsCatalogue.cs" />
+        <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\Catalogue.cs" />
+        <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\SendRequestsCatalogue.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\StaffSubsystem.cs" />
         <Compile Include="MDCourseSystem\MDSystem.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
