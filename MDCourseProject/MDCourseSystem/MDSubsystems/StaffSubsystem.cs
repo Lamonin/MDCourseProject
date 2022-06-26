@@ -31,6 +31,10 @@ public class StaffSubsystem:ISubsystem
     {
     }
 
+    public void SaveCatalogue()
+    {
+    }
+
     public DataAnalyser BuildAddValuesWindow(Grid mainGrid)
     {
         if (CatalogueIndex == 0)

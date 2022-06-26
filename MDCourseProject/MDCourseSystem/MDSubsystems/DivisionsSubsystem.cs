@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Media;
 using FundamentalStructures;
 using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.AppWindows.WindowsBuilder;
+using Microsoft.Win32;
 
 namespace MDCourseProject.MDCourseSystem.MDSubsystems
 {
@@ -44,9 +42,9 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
     
     public struct SendRequest:IComparable<SendRequest>
     {
-        public SendRequest(string division, string client, string service, string date)
+        public SendRequest(string divisionName, string client, string service, string date)
         {
-            Division = division;
+            DivisionName = divisionName;
             Client = client;
             Service = service;
             Date = date;
@@ -54,7 +52,7 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
 
         public int CompareTo(SendRequest other)
         {
-            var compareRes = String.Compare(Division, other.Division, StringComparison.OrdinalIgnoreCase);
+            var compareRes = String.Compare(DivisionName, other.DivisionName, StringComparison.OrdinalIgnoreCase);
             if (compareRes != 0) return compareRes; 
             
             compareRes = string.Compare(Client, other.Client, StringComparison.OrdinalIgnoreCase);
@@ -66,7 +64,7 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             return string.Compare(Date, other.Date, StringComparison.OrdinalIgnoreCase);
         }
 
-        public string Division { get; set; }
+        public string DivisionName { get; set; }
         public string Client { get; set; }
         public string Service { get; set; }
         public string Date { get; set; }
@@ -87,7 +85,12 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             
             return string.Compare(Area, other.Area, StringComparison.OrdinalIgnoreCase);
         }
-        
+
+        public override string ToString()
+        {
+            return Name + "; " + Area;
+        }
+
         public readonly string Name;
         public readonly string Area;
     }
@@ -245,7 +248,7 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
 
         public void LoadDefaultSecondCatalogue()
         {
-            LoadFirstCatalogue("DefaultFiles/sendrequests_default.txt");
+            LoadSecondCatalogue("DefaultFiles/sendrequests_default.txt");
         }
         public void LoadSecondCatalogue(string filePath)
         {
@@ -262,6 +265,38 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             CatalogueIndex = 0;
             
             reader.Close();
+        }
+
+        public void SaveCatalogue()
+        {
+            var saveDialog = new SaveFileDialog
+            {
+                FileName = CurrentCatalogueName + "_Справочник",
+                Filter = "Text files (*.txt)|*.txt",
+            };
+
+            if (saveDialog.ShowDialog() == true)
+            {
+                var writer = new StreamWriter(saveDialog.FileName);
+                writer.Flush();
+                
+                if (CatalogueIndex == 0)
+                {
+                    foreach (var division in _divisionsData)
+                    {
+                        writer.WriteLine($"{division.Name};{division.Area};{division.Type}");
+                    }
+                }
+                else
+                {
+                    foreach (var sendRequest in _sendRequestsData)
+                    {
+                        writer.WriteLine($"{sendRequest.DivisionName};{sendRequest.Client};{sendRequest.Service};{sendRequest.Date}");
+                    }
+                }
+                
+                writer.Close();
+            }
         }
 
         public DataAnalyser BuildAddValuesWindow(Grid mainGrid)

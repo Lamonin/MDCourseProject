@@ -12,6 +12,7 @@ public interface ISubsystem
     public void PrintDataInGrid(DataGrid mainDataGrid);
     public void LoadFirstCatalogue(string filePath);
     public void LoadSecondCatalogue(string filePath);
+    public void SaveCatalogue();
     public DataAnalyser BuildAddValuesWindow(Grid mainGrid);
     public DataAnalyser BuildRemoveValuesWindow(Grid mainGrid);
     public DataAnalyser BuildSearchValuesWindow(Grid mainGrid);

@@ -125,5 +125,10 @@ namespace MDCourseProject
         {
             UpdateMainDataGridValues();
         }
+
+        private void Button_SaveCatalogue(object sender, RoutedEventArgs e)
+        {
+            MDSystem.Subsystem.SaveCatalogue();
+        }
     }
 }

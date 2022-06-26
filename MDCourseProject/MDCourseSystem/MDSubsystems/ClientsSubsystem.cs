@@ -30,6 +30,10 @@ public class ClientsSubsystem:ISubsystem
     {
     }
 
+    public void SaveCatalogue()
+    {
+    }
+
     public DataAnalyser BuildAddValuesWindow(Grid mainGrid)
     {
         return null;
