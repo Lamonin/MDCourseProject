@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.Win32;
-using MDCourseProject.MDCourseSystem.MDDebugConsole;
+using MDCourseProject.MDCourseSystem;
 
 namespace MDCourseProject.AppWindows;
 
@@ -33,12 +33,11 @@ public partial class SelectLoadDataWindow : Window
         DialogResult = false;
     }
 
-    private string SelectFile(TextBlock textBlock)
+    private bool SelectFile(TextBlock textBlock, out string filePath)
     {
         var fileDialog = new OpenFileDialog
         {
             Multiselect = false,
-            //InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             Filter = "Text files (*.txt)|*.txt",
         };
         
@@ -47,38 +46,59 @@ public partial class SelectLoadDataWindow : Window
             MDDebugConsole.WriteLine(fileDialog.FileName);
             textBlock.Text = fileDialog.FileName;
             textBlock.Foreground = new SolidColorBrush(Colors.Black);
+            filePath = fileDialog.FileName;
+            return true;
         }
 
-        return fileDialog.FileName;
+        filePath = default;
+        return false;
     }
 
     private void Button_SelectClientDataFile(object sender, RoutedEventArgs e)
     {
-        var filePath = SelectFile(TextBlock_FilePathClients);
+        if (SelectFile(TextBlock_FilePathClients, out var filePath))
+        {
+            MDSystem.clientsSubsystem.LoadFirstCatalogue(filePath);
+        }
     }
 
     private void Button_SelectAppealDataFile(object sender, RoutedEventArgs e)
     {
-        var filePath = SelectFile(TextBlock_FilePathAppeals);
+        if (SelectFile(TextBlock_FilePathAppeals, out var filePath))
+        {
+            MDSystem.clientsSubsystem.LoadSecondCatalogue(filePath);
+        }
     }
     
     private void Button_SelectStaffDataFile(object sender, RoutedEventArgs e)
     {
-        var filePath = SelectFile(TextBlock_FilePathStaff);
+        if (SelectFile(TextBlock_FilePathStaff, out var filePath))
+        {
+            MDSystem.staffSubsystem.LoadFirstCatalogue(filePath);
+        }
     }
     
     private void Button_SelectDocumentsDataFile(object sender, RoutedEventArgs e)
     {
-        var filePath = SelectFile(TextBlock_FilePathDocuments);
+        if (SelectFile(TextBlock_FilePathDocuments, out var filePath))
+        {
+            MDSystem.staffSubsystem.LoadSecondCatalogue(filePath);
+        }
     }
     
     private void Button_SelectDivisionsDataFile(object sender, RoutedEventArgs e)
     {
-        var filePath = SelectFile(TextBlock_FilePathDivisions);
+        if (SelectFile(TextBlock_FilePathDivisions, out var filePath))
+        {
+            MDSystem.divisionsSubsystem.LoadFirstCatalogue(filePath);
+        }
     }
     
     private void Button_SelectSendRequestsDataFile(object sender, RoutedEventArgs e)
     {
-        var filePath = SelectFile(TextBlock_FilePathSendRequests);
+        if (SelectFile(TextBlock_FilePathSendRequests, out var filePath))
+        {
+            MDSystem.divisionsSubsystem.LoadSecondCatalogue(filePath);
+        }
     }
 }

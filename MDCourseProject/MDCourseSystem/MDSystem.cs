@@ -1,37 +1,41 @@
-﻿using MDCourseProject.MDCourseSystem.MDCatalogues.Divisions;
+﻿using MDCourseProject.MDCourseSystem.MDSubsystems;
 
 namespace MDCourseProject.MDCourseSystem;
 
 public enum SubsystemTypeEnum
 {
     Clients,
-    Stuff,
-    Divisions
-}
-
-public enum CatalogueTypeEnum
-{
-    Clients,
-    Appeals,
     Staff,
-    Documents,
-    Divisions,
-    SendRequests
+    Divisions
 }
 
 public static class MDSystem
 {
     /// <summary> Текущая подсистема </summary>
     public static SubsystemTypeEnum currentSubsystem = SubsystemTypeEnum.Clients;
-    
-    /// <summary> Текущий справочник </summary>
-    public static CatalogueTypeEnum currentCatalogue = CatalogueTypeEnum.Clients;
 
-    public static DivisionsCatalogueHandler divisionsCatalogueHandler;
-    
+    public static readonly ClientsSubsystem clientsSubsystem;
+    public static readonly StaffSubsystem staffSubsystem;
+    public static readonly DivisionsSubsystem divisionsSubsystem;
+
+    public static ISubsystem Subsystem
+    {
+        get
+        {
+            return currentSubsystem switch
+            {
+                SubsystemTypeEnum.Clients => clientsSubsystem,
+                SubsystemTypeEnum.Staff => staffSubsystem,
+                SubsystemTypeEnum.Divisions => divisionsSubsystem,
+                _ => null //Чтобы не ругался компилятор
+            };
+        }
+    }
+
     static MDSystem()
     {
-        divisionsCatalogueHandler = new DivisionsCatalogueHandler();
+        clientsSubsystem = new ClientsSubsystem();
+        staffSubsystem = new StaffSubsystem();
+        divisionsSubsystem = new DivisionsSubsystem();
     }
-    
 }

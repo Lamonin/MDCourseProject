@@ -1,28 +1,26 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Collections.ObjectModel;
 using MDCourseProject.AppWindows;
 using MDCourseProject.MDCourseSystem;
-using MDCourseProject.MDCourseSystem.MDDebugConsole;
-using MDCourseProject.MDCourseSystem.MDCatalogues;
-using MDCourseProject.MDCourseSystem.MDCatalogues.Divisions;
 
 namespace MDCourseProject
 {
     public partial class MainWindow
     {
+        public static MainWindow Handler;
+        private ObservableCollection<string> cataloguesNames; //Коллекция названий каталогов
         public MainWindow()
         {
-            var f = new FullName("Aa Aa Aa");
-            var f1 = new FullName("Ba Ba Ba");
-            Console.WriteLine(f1.GetHashCode());
             InitializeComponent();
-            Initialize();
+            InitializeMainWindow();
         }
 
-        private void Initialize()
+        private void InitializeMainWindow()
         {
+            Handler = this;
+            
             cataloguesNames = new ObservableCollection<string>();
             ComboBox_Catalogue.ItemsSource = cataloguesNames;
             ComboBox_Subsystem.SelectedIndex = 0;
@@ -30,17 +28,16 @@ namespace MDCourseProject
             var loadDataWindow = new LoadDataWindow();
             loadDataWindow.ShowDialog();
         }
-        
-        private void DebugButtonClick(object sender, RoutedEventArgs e)
+
+        public void UpdateMainDataGridValues()
         {
-            MDDebugConsole.WriteLine("Открыта консоль!");
-            MDDebugConsole.ShowWindow();
+            MDSystem.Subsystem.Catalogue?.PrintDataToGrid(MainDataGrid);
         }
 
-        private void Selector_OnSubsystemChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBox_OnSubsystemChanged(object sender, SelectionChangedEventArgs e)
         {
-            var comboBox = (ComboBox)sender;
-            SelectSubsystem(comboBox.SelectedIndex);
+            var subsystemComboBox = (ComboBox)sender;
+            SelectSubsystem(subsystemComboBox.SelectedIndex);
         }
 
         private void SelectSubsystem(int index)
@@ -51,46 +48,52 @@ namespace MDCourseProject
                 {
                     MDDebugConsole.WriteLine("Активирована подсистема Клиенты");
                     MDSystem.currentSubsystem = SubsystemTypeEnum.Clients;
-                    currentCatalogue = new ClientsCatalogue();
                     break;
                 }
                 case 1:
                 {
                     MDDebugConsole.WriteLine("Активирована подсистема Сотрудники");
-                    MDSystem.currentSubsystem = SubsystemTypeEnum.Stuff;
-                    currentCatalogue = new StaffCatalogue();
+                    MDSystem.currentSubsystem = SubsystemTypeEnum.Staff;
                     break;
                 }
                 case 2:
                 {
                     MDDebugConsole.WriteLine("Активирована подсистема Подразделения");
                     MDSystem.currentSubsystem = SubsystemTypeEnum.Divisions;
-                    currentCatalogue = new DivisionsCatalogue();
                     break;
                 }
             }
-            
+
             if (ComboBox_Catalogue != null)
             {
                 cataloguesNames.Clear();
-                currentCatalogue.catalogues.ForEach(s => cataloguesNames.Add(s));
+                foreach (var name in MDSystem.Subsystem.CataloguesNames)
+                {
+                    cataloguesNames.Add(name);
+                }
                 ComboBox_Catalogue.SelectedIndex = 0;
             }
+            
+            UpdateMainDataGridValues();
         }
 
-        private ICatalogue currentCatalogue;
-        private ObservableCollection<string> cataloguesNames; //Коллекция названий каталогов
-
-        private void Selector_OnCatalogueChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBox_OnCatalogueChanged(object sender, SelectionChangedEventArgs e)
         {
-            var comboBox = (ComboBox)sender;
+            var selectCatalogueComboBox = (ComboBox)sender;
 
             //Эта проверка нужна, т.к. индекс бывает отрицательный,
             //потому что кол-во элементов не успело обновиться
-            if (comboBox.SelectedIndex < 0) return;
-            
-            currentCatalogue.SetCatalogue(comboBox.SelectedIndex);
-            Console.Out.WriteLine($"Выбран каталог {currentCatalogue.catalogues[comboBox.SelectedIndex]}");
+            if (selectCatalogueComboBox.SelectedIndex < 0) return;
+
+            MDSystem.Subsystem.CatalogueIndex = selectCatalogueComboBox.SelectedIndex;
+            UpdateMainDataGridValues();
+        }
+
+
+        #region СОБЫТИЯ_НАЖАТИЯ_КНОПОК
+        private void Button_OpenDebugWindow(object sender, RoutedEventArgs e)
+        {
+            MDDebugConsole.ShowWindow();
         }
 
         private void Button_OpenAddValuesWindow(object sender, RoutedEventArgs e)
@@ -98,10 +101,40 @@ namespace MDCourseProject
             var window = new AddValuesWindow{ Owner = this };
             window.ShowDialog();
         }
+        
+        private void Button_OpenRemoveValuesWindow(object sender, RoutedEventArgs e)
+        {
+            var window = new RemoveValuesWindow{ Owner = this };
+            window.ShowDialog();
+        }
+        
+        private void Button_OpenSearchValuesWindow(object sender, RoutedEventArgs e)
+        {
+            var window = new SearchValuesWindow{ Owner = this };
+            window.ShowDialog();
+        }
+        
+        #endregion
 
         protected override void OnClosed(EventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void Button_ResetSearchResult(object sender, RoutedEventArgs e)
+        {
+            UpdateMainDataGridValues();
+        }
+        
+        private void Button_OpenReportWindow(object sender, RoutedEventArgs e)
+        {
+            var window = new ReportWindow{ Owner = this };
+            window.ShowDialog();
+        }
+
+        private void Button_SaveCatalogue(object sender, RoutedEventArgs e)
+        {
+            MDSystem.Subsystem.Catalogue.Save();
         }
     }
 }

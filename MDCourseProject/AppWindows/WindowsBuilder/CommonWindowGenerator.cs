@@ -1,8 +1,9 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace MDCourseProject.AppWindows.WindowsInitializers;
+namespace MDCourseProject.AppWindows.WindowsBuilder;
 
 public static class CommonWindowGenerator
 {
@@ -56,5 +57,16 @@ public static class CommonWindowGenerator
         }
         
         return tBoxes;
+    }
+
+    public static void CreateHeadersInDataGrid(DataGrid mainGrid, IEnumerable<string> headers)
+    {
+        int index = 0;
+        foreach (var header in headers)
+        {
+            mainGrid.Columns[index].Header = header;
+            mainGrid.Columns[index].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            index++;
+        }
     }
 }

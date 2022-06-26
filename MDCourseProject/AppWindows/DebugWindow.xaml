@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:MDCourseProject.AppWindows"
         mc:Ignorable="d"
         Title="Окно отладки" Height="450" Width="800" MinWidth="480" MinHeight="320"
-        WindowStyle="ToolWindow"
         ResizeMode="CanResizeWithGrip">
     <Grid Background="Black">
         <ScrollViewer>
