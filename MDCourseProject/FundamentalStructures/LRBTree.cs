@@ -4,109 +4,6 @@ namespace FundamentalStructures
 {
     public class LRBTree<TKey, TValue> where TKey:IComparable<TKey> where TValue:IComparable<TValue>
     {
-        protected class ListNode
-        {
-            public ListNode prev, next;
-            public TValue value { get; }
-
-            public ListNode(TValue value)
-            {
-                this.value = value;
-                prev = next = null;
-            }
-
-            public bool EqualsValue(TValue val)
-            {
-                return value.Equals(val);
-            }
-        }
-
-        protected class BiList
-        {
-            private ListNode _head;
-            
-            private static ListNode InsertBetween(ListNode insert, ListNode left, ListNode right)
-            {
-                left.next = right.prev = insert;
-                insert.prev = left;
-                insert.next = right;
-                return insert;
-            }
-
-            public BiList() { _head = null; }
-
-            public void AddLast(TValue val)
-            {
-                var insertListNode = new ListNode(val);
-
-                if (IsEmpty)
-                {
-                    _head = InsertBetween(insertListNode, insertListNode, insertListNode);
-                }
-                else
-                {
-                    var temp = _head;
-                    do
-                    {
-                        if (temp.EqualsValue(val))
-                        {
-                            //throw new Exception($"Value {val} exist!");
-                            return;
-                        }
-                        temp = temp.next;
-                    } while (temp != _head);
-
-                    InsertBetween(insertListNode, _head.prev, _head);
-                }
-            }
-
-            public void Remove(TValue val)
-            {
-                if (IsEmpty) return;
-
-                if (_head == _head.next)
-                {
-                    if (_head.EqualsValue(val)) _head = null;
-                }
-                else if (_head.EqualsValue(val))
-                {
-                    _head.next.prev = _head.prev;
-                    _head.prev.next = _head.next;
-                    _head = _head.next;
-                }
-                else
-                {
-                    var temp = _head.next;
-                    do
-                    {
-                        if (temp.EqualsValue(val))
-                        {
-                            temp.next.prev = temp.prev;
-                            temp.prev.next = temp.next;
-                            break;
-                        }
-                        
-                        temp = temp.next;
-                    } while (temp != _head);
-                }
-            }
-
-            public bool Find(TValue val)
-            {
-                if (IsEmpty) return false;
-                
-                var temp = _head;
-                while (temp.next != _head)
-                    if (temp.EqualsValue(val))
-                        return true;
-
-                return false;
-            }
-
-            public void Clear() => _head = null;
-            public bool IsEmpty => _head == null;
-        }
-        
         private const bool BLACK = false;
         private const bool RED = true;
 
@@ -115,16 +12,16 @@ namespace FundamentalStructures
             public RBNode left;
             public RBNode right;
             
-            public BiList list;
+            public DoubleLinkedList<TValue> list;
 
             public RBNode(TKey key)
             {
                 this.key = key;
-                list = new BiList();
+                list = new DoubleLinkedList<TValue>();
                 left = right = null;
             }
             
-            public void Add(TValue val) => list.AddLast(val);
+            public void Add(TValue val) => list.Add(val);
             public void Remove(TValue val) => list.Remove(val);
 
             public bool Color = RED; //По умолчанию цвет нового узла - красный
@@ -361,7 +258,7 @@ namespace FundamentalStructures
             if (node != null)
             {
                 node.Remove(val);
-                if (node.list.IsEmpty)
+                if (node.list.Count()==0)
                 {
                     Remove(key);
                 }
