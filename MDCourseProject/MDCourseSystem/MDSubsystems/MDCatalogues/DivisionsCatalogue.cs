@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using FundamentalStructures;
 using MDCourseProject.AppWindows.DataAnalysers;
@@ -54,6 +54,11 @@ public readonly struct DivisionNameAndArea:IComparable<DivisionNameAndArea>
         return string.Compare(Area, other.Area, StringComparison.OrdinalIgnoreCase);
     }
 
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode() + Area.GetHashCode();
+    }
+
     public override string ToString()
     {
         return Name + " (" + Area + ")";
@@ -66,21 +71,31 @@ public readonly struct DivisionNameAndArea:IComparable<DivisionNameAndArea>
 public class DivisionsCatalogue:Catalogue
 {
     public readonly StaticHashTable<DivisionNameAndArea, string> DivisionsTable;
-    private readonly ObservableCollection<Division> _divisionsData;
-    
+    private readonly List<Division> _divisionsData;
+
+    public readonly LRBTree<string, Division> DivisionsByName;
+    public readonly LRBTree<string, Division> DivisionsByArea;
+
     public DivisionsCatalogue()
     {
         DivisionsTable = new StaticHashTable<DivisionNameAndArea, string>(1000);
-        _divisionsData = new ObservableCollection<Division>();
+        _divisionsData = new List<Division>();
+        
+        DivisionsByName = new LRBTree<string, Division>();
+        DivisionsByArea = new LRBTree<string, Division>();
     }
 
     public override void Add(string[] data)
     {
         var key = new DivisionNameAndArea(data[0], data[1]);
         
-        MDDebugConsole.WriteLine($"Добавление в таблицу по ключу: {key.ToString()}; Первчиная ХФ: {DivisionsTable.FirstHashFunc(key.GetHashCode())}; Вторичная ХФ: {DivisionsTable.SecondHashFunc(key.GetHashCode())}");
+        MDDebugConsole.WriteLine($"Добавление в таблицу по ключу: {key.ToString()}; Первичная ХФ: {DivisionsTable.FirstHashFunc(key.GetHashCode())}; Вторичная ХФ: {DivisionsTable.SecondHashFunc(key.GetHashCode())}");
         DivisionsTable.Add(key, data[2]);
-        _divisionsData.Add(new Division(data[0], data[1], data[2]));
+
+        var division = new Division(data[0], data[1], data[2]);
+        DivisionsByName.Add(data[0], division);
+        DivisionsByArea.Add(data[1], division);
+        _divisionsData.Add(division);
     }
 
     public override void Remove(string[] data)
@@ -90,7 +105,20 @@ public class DivisionsCatalogue:Catalogue
         if (DivisionsTable.TryGetValue(key, out var value))
         {
             DivisionsTable.Remove(key, value);
-            _divisionsData.Remove(new Division(key.Name, key.Area, value));
+            
+            var division = new Division(key.Name, key.Area, value);
+            _divisionsData.Remove(division);
+            DivisionsByName.Remove(key.Name, division);
+            DivisionsByArea.Remove(key.Area, division);
+            
+            //Удаляем все отправленные заявки этого подразделения
+            if (MDSystem.divisionsSubsystem.SendRequestsCatalogue.SendRequestsTree.TryGetValuesList(key, out var list))
+            {
+                foreach (var s in list)
+                {
+                    MDSystem.divisionsSubsystem.SendRequestsCatalogue.Remove(new []{key.Area, key.Name, s.Client, s.Service, s.Date});
+                }
+            }
         }
     }
 
@@ -98,7 +126,7 @@ public class DivisionsCatalogue:Catalogue
     {
         MDDebugConsole.WriteLine($"Поиск в справочнике {Name} значения: {data[0]};{data[1]}");
         
-        var searchResult = new ObservableCollection<Division>();
+        var searchResult = new List<Division>();
         if (DivisionsTable.TryGetValue(new DivisionNameAndArea(data[0], data[1]), out var value))
         {
             searchResult.Add(new Division(data[0], data[1], value));
