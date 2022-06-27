@@ -1,5 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using MDCourseProject.MDCourseSystem;
+using MDCourseProject.MDCourseSystem.MDSubsystems;
+using MDCourseProject.MDCourseSystem.MDCatalogues;
 
 namespace MDCourseProject.AppWindows.DataAnalysers;
 
@@ -9,8 +12,15 @@ public class AddValuesDivisionAnalyser: DataAnalyser
     
     public override bool IsCorrectInputData()
     {
-        //ЛОГИКА АНАЛИЗАТОРА
-        return true;
+        bool isError = _textBoxes[0].Text.Length < 2; //Длина названия подразделения меньше двух
+        isError = isError || _textBoxes[1].Text.Length < 2; //Длина названия района меньше двух
+        
+        if (isError)
+        {
+            MessageBox.Show("Некорректные данные!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        
+        return !isError;
     }
     
 }
@@ -22,20 +32,14 @@ public class AddValuesSendRequestsAnalyser: DataAnalyser
     public override bool IsCorrectInputData()
     {
         //ЛОГИКА АНАЛИЗАТОРА
-        bool isHasErrorInInputData = false;
-
-        if (_textBoxes[0].Text.Length < 3)
-            isHasErrorInInputData = true;
+        bool isError = !MDSystem.divisionsSubsystem.DivisionsCatalogue.DivisionsTable.ContainsKey(new DivisionNameAndArea(_textBoxes[1].Text, _textBoxes[0].Text));
         
-        if (_textBoxes[1].Text.Length < 2)
-            isHasErrorInInputData = true;
-
-        if (isHasErrorInInputData)
+        if (isError)
         {
             MessageBox.Show("Некорректные данные!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
-        return !isHasErrorInInputData;
+        return !isError;
     }
 }
 
