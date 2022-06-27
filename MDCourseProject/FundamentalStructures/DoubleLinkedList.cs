@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace FundamentalStructures
 {
-    public class DoubleLinkedList<TValue> where TValue: IComparable<TValue>
+    public class DoubleLinkedList<TValue>:IEnumerable<TValue> where TValue: IComparable<TValue>
     {
        /// <summary>
        /// Узел двухсвязного кольцевого списка
@@ -141,7 +143,7 @@ namespace FundamentalStructures
            _head.Prev.Next = _head;
            return count;
        }
-
+       
        public override string ToString()
        {
            var str = "";
@@ -154,5 +156,47 @@ namespace FundamentalStructures
            }
            return str;
        }
-   }
+       
+       private class DoubleLinkedListEnumerator:IEnumerator<TValue>
+       {
+           private ListNode head;
+           private ListNode currentNode;
+           private int count;
+           private int i;
+           
+           public DoubleLinkedListEnumerator(ListNode head, int count)
+           {
+               this.head = head;
+               this.count = count;
+               currentNode = head;
+           }
+           
+           public bool MoveNext()
+           {
+               Current = currentNode.GetValue();
+               currentNode = currentNode.Next;
+               
+               i += 1;
+               if (i > count) return false;
+               return true;
+           }
+
+           public void Dispose() { }
+           public void Reset() { currentNode = head; i = 0; }
+
+           public TValue Current { get; private set; }
+
+           object IEnumerator.Current => Current;
+       }
+
+       public IEnumerator<TValue> GetEnumerator()
+       {
+           return new DoubleLinkedListEnumerator(_head, Count());
+       }
+       
+       IEnumerator IEnumerable.GetEnumerator()
+       {
+           return GetEnumerator();
+       }
+    }
 }
