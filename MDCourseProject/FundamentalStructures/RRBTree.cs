@@ -375,7 +375,17 @@ namespace FundamentalStructures
                else throw new Exception($"Such key {key} or value {value} doesn't exist");
                if (!IsEmpty(_root)) _root.Color = BLACK;
            }
-           
+
+           public void RemoveKey(TKey key)
+           {
+               var deleteNode = FindKeyHelper(_root, key);
+               if (deleteNode != null)
+               {
+                   var flag = true;
+                   DeleteAndBalance(ref _root, ref deleteNode, ref flag);
+               }
+               if (!IsEmpty(_root)) _root.Color = BLACK;
+           }
            public bool FindElem(TKey key)
            {
                var node = FindKeyHelper(_root, key);

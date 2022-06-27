@@ -64,6 +64,7 @@ namespace FundamentalStructures
 
        public DoubleLinkedList() => _head = null;
 
+       // Добавляет в конец узел со значением value
        public void Add(TValue value)
        {
            if (!IsEmpty(FindHelper(value))) return;
@@ -76,6 +77,7 @@ namespace FundamentalStructures
            }
        }
 
+       // Находит узел со значением key
        private ListNode FindHelper(TValue key)
        {
            if (IsEmpty(_head)) return null;
@@ -94,6 +96,7 @@ namespace FundamentalStructures
            return null;
        }
 
+       // Удаляет узел по значению elem
        public void Remove(TValue elem)
        {
            if (IsEmpty(_head)) return;
@@ -114,7 +117,7 @@ namespace FundamentalStructures
                dElem.Next.Prev = dElem.Prev;
            }
        }
-
+       
        public bool Find(TValue value)
        {
            return !IsEmpty(FindHelper(value));
