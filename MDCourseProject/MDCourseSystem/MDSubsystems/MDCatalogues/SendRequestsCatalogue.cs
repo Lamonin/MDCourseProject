@@ -76,20 +76,20 @@ public class SendRequestsCatalogue:Catalogue
     
     public override void Add(string[] data)
     {
-        var key = new DivisionNameAndArea(data[0], data[1]);
-        var value = new SendRequestClientServiceAndDate(data[1], data[2], data[3]);
+        var key = new DivisionNameAndArea(data[1], data[0]);
+        var value = new SendRequestClientServiceAndDate(data[2], data[3], data[4]);
                 
         _sendRequestTree.Add(key, value);
-        _sendRequestsData.Add(new SendRequest(data[0], data[1], data[2], data[3]));
+        _sendRequestsData.Add(new SendRequest(key.ToString(), data[2], data[3], data[4]));
     }
 
     public override void Remove(string[] data)
     {
-        var key = new DivisionNameAndArea(data[0], data[1]);
-        var value = new SendRequestClientServiceAndDate(data[1], data[2], data[3]);
+        var key = new DivisionNameAndArea(data[1], data[0]);
+        var value = new SendRequestClientServiceAndDate(data[2], data[3], data[4]);
 
         _sendRequestTree.Remove(key, value);
-        _sendRequestsData.Remove(new SendRequest(data[0], data[1], data[2], data[3]));
+        _sendRequestsData.Remove(new SendRequest(key.ToString(), data[2], data[3], data[4]));
     }
 
     public override void Find(DataGrid mainDataGrid, string[] data)
@@ -133,17 +133,17 @@ public class SendRequestsCatalogue:Catalogue
 
     public override DataAnalyser BuildAddValuesWindow(Grid mainGrid)
     {
-        return new AddValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Подразделение:", "Клиент:", "Название услуги:", "Дата:"));
+        return new AddValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Район:", "Подразделение:", "Клиент:", "Название услуги:", "Дата:"));
     }
 
     public override DataAnalyser BuildRemoveValuesWindow(Grid mainGrid)
     {
-        return new RemoveValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Подразделение:", "Клиент:", "Название услуги:", "Дата:"));
+        return new RemoveValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Район:", "Подразделение:", "Клиент:", "Название услуги:", "Дата:"));
     }
 
     public override DataAnalyser BuildSearchValuesWindow(Grid mainGrid)
     {
-        return new SearchValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Подразделение:", "Клиент:", "Название услуги:", "Дата:"));
+        return new SearchValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Район:", "Подразделение:", "Клиент:", "Название услуги:", "Дата:"));
     }
 
     public override string Name => "Отправленные заявки";

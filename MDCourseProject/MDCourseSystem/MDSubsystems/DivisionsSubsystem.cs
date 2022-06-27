@@ -34,6 +34,9 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             _sendRequestsCatalogue.Load(filePath);
         }
 
+        public DivisionsCatalogue DivisionsCatalogue => _divisionsCatalogue;
+        public SendRequestsCatalogue SendRequestsCatalogue => _sendRequestsCatalogue;
+
         public int CatalogueIndex
         {
             get => _catalogueIndex;

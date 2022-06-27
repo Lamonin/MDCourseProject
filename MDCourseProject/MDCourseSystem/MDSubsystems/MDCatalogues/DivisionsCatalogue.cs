@@ -56,7 +56,7 @@ public readonly struct DivisionNameAndArea:IComparable<DivisionNameAndArea>
 
     public override string ToString()
     {
-        return Name + "; " + Area;
+        return Name + " (" + Area + ")";
     }
 
     public readonly string Name;
@@ -65,12 +65,12 @@ public readonly struct DivisionNameAndArea:IComparable<DivisionNameAndArea>
 
 public class DivisionsCatalogue:Catalogue
 {
-    private StaticHashTable<DivisionNameAndArea, string> _divisionsTable;
-    private ObservableCollection<Division> _divisionsData;
+    public readonly StaticHashTable<DivisionNameAndArea, string> DivisionsTable;
+    private readonly ObservableCollection<Division> _divisionsData;
     
     public DivisionsCatalogue()
     {
-        _divisionsTable = new StaticHashTable<DivisionNameAndArea, string>(1000);
+        DivisionsTable = new StaticHashTable<DivisionNameAndArea, string>(1000);
         _divisionsData = new ObservableCollection<Division>();
     }
 
@@ -78,17 +78,18 @@ public class DivisionsCatalogue:Catalogue
     {
         var key = new DivisionNameAndArea(data[0], data[1]);
         
-        _divisionsTable.Add(key, data[2]);
-        _divisionsData.Add(new Division(key.Name, key.Area, data[2]));
+        MDDebugConsole.WriteLine($"Добавление в таблицу по ключу: {key.ToString()}; Первчиная ХФ: {DivisionsTable.FirstHashFunc(key.GetHashCode())}; Вторичная ХФ: {DivisionsTable.SecondHashFunc(key.GetHashCode())}");
+        DivisionsTable.Add(key, data[2]);
+        _divisionsData.Add(new Division(data[0], data[1], data[2]));
     }
 
     public override void Remove(string[] data)
     {
         var key = new DivisionNameAndArea(data[0], data[1]);
         
-        if (_divisionsTable.TryGetValue(key, out var value))
+        if (DivisionsTable.TryGetValue(key, out var value))
         {
-            _divisionsTable.Remove(key, value);
+            DivisionsTable.Remove(key, value);
             _divisionsData.Remove(new Division(key.Name, key.Area, value));
         }
     }
@@ -98,7 +99,7 @@ public class DivisionsCatalogue:Catalogue
         MDDebugConsole.WriteLine($"Поиск в справочнике {Name} значения: {data[0]};{data[1]}");
         
         var searchResult = new ObservableCollection<Division>();
-        if (_divisionsTable.TryGetValue(new DivisionNameAndArea(data[0], data[1]), out var value))
+        if (DivisionsTable.TryGetValue(new DivisionNameAndArea(data[0], data[1]), out var value))
         {
             searchResult.Add(new Division(data[0], data[1], value));
         }
