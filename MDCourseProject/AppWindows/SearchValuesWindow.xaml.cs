@@ -26,6 +26,7 @@ public partial class SearchValuesWindow : Window
         if (_dataAnalyser is null) return;
         
         MDSystem.Subsystem.Catalogue.Find(MainWindow.Handler.MainDataGrid, _dataAnalyser.GetData());
+        MainWindow.Handler.UpdateMainDataGridValues();
         
         Close();
     }

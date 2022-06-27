@@ -133,6 +133,9 @@ namespace FundamentalStructures
        public int Count()
        {
            var count = 0;
+
+           if (_head is null) return count;
+           
            _head.Prev.Next = null;
            var tmp = _head;
            while (!IsEmpty(tmp))
@@ -173,6 +176,8 @@ namespace FundamentalStructures
            
            public bool MoveNext()
            {
+               if (head is null) return false;
+               
                Current = currentNode.GetValue();
                currentNode = currentNode.Next;
                

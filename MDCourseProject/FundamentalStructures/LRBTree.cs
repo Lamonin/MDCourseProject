@@ -14,10 +14,10 @@ namespace FundamentalStructures
             
             public DoubleLinkedList<TValue> list;
 
-            public RBNode(TKey key)
+            public RBNode(TKey key, TValue val)
             {
                 this.key = key;
-                list = new DoubleLinkedList<TValue>();
+                list = new DoubleLinkedList<TValue>(){val};
                 left = right = null;
             }
             
@@ -98,16 +98,16 @@ namespace FundamentalStructures
             return node;
         }
 
-        private static RBNode _add(RBNode node, TKey key)
+        private static RBNode _add(RBNode node, TKey key, TValue val)
         {
-            if (node == null) return new RBNode(key);
+            if (node == null) return new RBNode(key, val);
 
             int res = node.key.CompareTo(key);
 
             if (res > 0)
-                node.left = _add(node.left, key);
+                node.left = _add(node.left, key, val);
             else
-                node.right = _add(node.right, key);
+                node.right = _add(node.right, key, val);
             
             return _balance(node); //Балансировка дерева при вставке
         }
@@ -234,8 +234,7 @@ namespace FundamentalStructures
             }
             else
             {
-                _root = _add(_root, key);
-                _root.Add(val); //Add value to list
+                _root = _add(_root, key, val);
                 if (_isRed(_root)) _root.Color = BLACK;
             }
         }
@@ -263,6 +262,16 @@ namespace FundamentalStructures
                     Remove(key);
                 }
             }
+        }
+
+        public bool TryGetValuesList(TKey key, out DoubleLinkedList<TValue> list)
+        {
+            list = default;
+            if (!Contains(key)) return false;
+            
+            list = _findNodeByKey(key).list;
+            
+            return true;
         }
 
         /// <summary> Содержит ли дерево указанный ключ </summary>

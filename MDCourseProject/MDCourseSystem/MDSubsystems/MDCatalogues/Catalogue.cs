@@ -20,6 +20,7 @@ public abstract class Catalogue
         mainDataGrid.ItemsSource = null;
         mainDataGrid.Columns.Clear();
         mainDataGrid.ItemsSource = itemsSource;
+        mainDataGrid.Items.Refresh();
         CommonWindowGenerator.CreateHeadersInDataGrid(mainDataGrid, headers);
     }
     
