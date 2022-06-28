@@ -34,6 +34,11 @@ public struct SendRequest:IComparable<SendRequest>
         return string.Compare(Date, other.Date, StringComparison.OrdinalIgnoreCase);
     }
 
+    public override string ToString()
+    {
+        return string.Join(", ", DivisionName, Client, Service, Date);
+    }
+
     public string DivisionName { get; set; }
     public string Client { get; set; }
     public string Service { get; set; }

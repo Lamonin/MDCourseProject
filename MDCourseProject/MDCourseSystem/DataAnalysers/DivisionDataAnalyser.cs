@@ -70,3 +70,24 @@ public class SearchValuesSendRequestsAnalyser : DataAnalyser
     {
     }
 }
+
+public class ReportDivisionsAnalyser : DataAnalyser
+{
+    public ReportDivisionsAnalyser(TextBox[] textBoxes) : base(textBoxes) { }
+    public override bool IsCorrectInputData()
+    {
+        bool isError = !MDSystem.divisionsSubsystem.SendRequestsCatalogue.SendRequestsByService.Contains(_textBoxes[0].Text);
+
+        if (isError)
+        {
+            MessageBox.Show("Некорректные данные!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        
+        return !isError;
+    }
+}
+
+public class ReportSendRequestsAnalyser : DataAnalyser
+{
+    public ReportSendRequestsAnalyser(TextBox[] textBoxes) : base(textBoxes) { }
+}

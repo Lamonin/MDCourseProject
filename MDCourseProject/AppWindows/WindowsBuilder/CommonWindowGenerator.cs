@@ -7,9 +7,8 @@ namespace MDCourseProject.AppWindows.WindowsBuilder;
 
 public static class CommonWindowGenerator
 {
-    private static TextBox CreateInputField(Grid mainGrid, string title, int row)
+    public static TextBox CreateInputField(Grid mainGrid, string title, int row)
     {
-        //Поле ввода названия подразделения
         var label = new Label
         {
             Content = title,
@@ -35,6 +34,81 @@ public static class CommonWindowGenerator
         Grid.SetColumn(tBox, 1);
 
         return tBox;
+    }
+    
+    public static TextBox[] CreateReportInputBetweenField(Grid mainGrid, string title, int row, string fromLabel = "От:", string toLabel = "До:")
+    {
+        var label = new Label
+        {
+            Content = title,
+            HorizontalContentAlignment = HorizontalAlignment.Right,
+            VerticalContentAlignment = VerticalAlignment.Center
+        };
+
+        var smallGrid = new Grid
+        {
+            ColumnDefinitions =
+            {
+                new ColumnDefinition{ Width = new GridLength(1, GridUnitType.Auto) }, 
+                new ColumnDefinition(), 
+                new ColumnDefinition{ Width = new GridLength(1, GridUnitType.Auto) }, 
+                new ColumnDefinition()
+            }
+        };
+        
+        var labelFrom = new Label
+        {
+            Content = fromLabel,
+            HorizontalContentAlignment = HorizontalAlignment.Right,
+            VerticalContentAlignment = VerticalAlignment.Center
+        };
+
+        var tBoxFrom = new TextBox
+        {
+            TextWrapping = TextWrapping.Wrap,
+            BorderBrush = new SolidColorBrush(Colors.Black),
+            BorderThickness = new Thickness(1),
+            Padding = new Thickness(4),
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            MaxLength = 128
+        };
+        
+        var tBoxTo = new TextBox
+        {
+            TextWrapping = TextWrapping.Wrap,
+            BorderBrush = new SolidColorBrush(Colors.Black),
+            BorderThickness = new Thickness(1),
+            Padding = new Thickness(4),
+            MaxLength = 128
+        };
+        
+        var labelTo = new Label
+        {
+            Content = toLabel,
+            HorizontalContentAlignment = HorizontalAlignment.Right,
+            VerticalContentAlignment = VerticalAlignment.Center
+        };
+
+        smallGrid.Children.Add(labelFrom);
+        smallGrid.Children.Add(tBoxFrom);
+        smallGrid.Children.Add(labelTo);
+        smallGrid.Children.Add(tBoxTo);
+        
+        Grid.SetColumn(labelFrom, 0);
+        Grid.SetColumn(tBoxFrom, 1);
+        Grid.SetColumn(labelTo, 2);
+        Grid.SetColumn(tBoxTo, 3);
+        
+        mainGrid.Children.Add(label);
+        mainGrid.Children.Add(smallGrid);
+        
+        Grid.SetRow(label, row);
+        Grid.SetRow(smallGrid, row);
+        
+        Grid.SetColumn(label, 0);
+        Grid.SetColumn(smallGrid, 1);
+        
+        return new []{ tBoxFrom, tBoxTo };
     }
 
     public static TextBox[] CreateWindow(Grid mainGrid, params string[] titles)
