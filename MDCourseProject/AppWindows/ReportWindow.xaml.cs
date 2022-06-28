@@ -22,11 +22,8 @@ public partial class ReportWindow : Window
     {
         if (!_dataAnalyser.IsCorrectInputData()) return;
         
-        if (!MDSystem.Subsystem.MakeReport(_dataAnalyser.GetData()))
-        {
-            //Диалоговое окно сохранения отчета было просто закрыто
-            return;
-        }
+        //Диалоговое окно сохранения отчета было просто закрыто
+        if (!MDSystem.Subsystem.MakeReport(_dataAnalyser.GetData())) { return; }
         
         Close();
     }

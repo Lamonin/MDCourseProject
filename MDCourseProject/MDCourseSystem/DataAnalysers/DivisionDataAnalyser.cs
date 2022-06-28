@@ -1,7 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using MDCourseProject.MDCourseSystem;
-using MDCourseProject.MDCourseSystem.MDSubsystems;
 using MDCourseProject.MDCourseSystem.MDCatalogues;
 
 namespace MDCourseProject.AppWindows.DataAnalysers;
@@ -76,11 +76,13 @@ public class ReportDivisionsAnalyser : DataAnalyser
     public ReportDivisionsAnalyser(TextBox[] textBoxes) : base(textBoxes) { }
     public override bool IsCorrectInputData()
     {
-        bool isError = !MDSystem.divisionsSubsystem.SendRequestsCatalogue.SendRequestsByService.Contains(_textBoxes[0].Text);
-
+        //Проверяем введенную дату на корректность
+        bool isError = !DateTime.TryParse(_textBoxes[1].Text, out var t1);
+        isError = isError || !DateTime.TryParse(_textBoxes[2].Text, out var t2);
+        
         if (isError)
         {
-            MessageBox.Show("Некорректные данные!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("Некорректная дата!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         
         return !isError;

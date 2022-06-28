@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.AppWindows.WindowsBuilder;
@@ -15,32 +13,26 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
     public class DivisionsSubsystem:ISubsystem
     {
         private int _catalogueIndex;
-        private DivisionsCatalogue _divisionsCatalogue;
-        private SendRequestsCatalogue _sendRequestsCatalogue;
-        
+
         public DivisionsSubsystem()
         {
             CatalogueIndex = 0;
-            _divisionsCatalogue = new DivisionsCatalogue();
-            _sendRequestsCatalogue = new SendRequestsCatalogue();
+            DivisionsCatalogue = new DivisionsCatalogue();
+            SendRequestsCatalogue = new SendRequestsCatalogue();
         }
 
-        public void LoadDefaultFirstCatalogue()
-        {
-            LoadFirstCatalogue("DefaultFiles/divisions_default.txt");
-        }
+        public DivisionsCatalogue DivisionsCatalogue { get; }
+
+        public SendRequestsCatalogue SendRequestsCatalogue { get; }
+
         public void LoadFirstCatalogue(string filePath)
         {
-            _divisionsCatalogue.Load(filePath);
+            DivisionsCatalogue.Load(filePath);
         }
 
-        public void LoadDefaultSecondCatalogue()
-        {
-            LoadSecondCatalogue("DefaultFiles/sendrequests_default.txt");
-        }
         public void LoadSecondCatalogue(string filePath)
         {
-            _sendRequestsCatalogue.Load(filePath);
+            SendRequestsCatalogue.Load(filePath);
         }
 
         public bool MakeReport(string[] data)
@@ -54,33 +46,35 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
         
             if (saveReportDialog.ShowDialog() == true)
             {
-                if (SendRequestsCatalogue.SendRequestsByService.TryGetValuesList(data[0], out var list))
-                {
-                    var reportResults = new List<SendRequest>();
+                var reportResults = new List<SendRequest>();
 
+                if (DivisionsCatalogue.DivisionsByArea.Contains(data[3]) && SendRequestsCatalogue.SendRequestsByService.TryGetValuesList(data[0], out var list))
+                {
+                    var dateFrom = DateTime.Parse(data[1]);
+                    var dateTo = DateTime.Parse(data[2]);
+                    
                     foreach (var send in list)
                     {
-                        if (DateTime.Parse(send.Date).CompareTo(DateTime.Parse(data[1]))>=0 && DateTime.Parse(send.Date).CompareTo(DateTime.Parse(data[2]))<=0)
+                        var sendDate = DateTime.Parse(send.Date);
+                        if (sendDate.CompareTo(dateFrom)>=0 && sendDate.CompareTo(dateTo)<=0 && string.Compare(send.Division.Area, data[3], StringComparison.OrdinalIgnoreCase)==0)
                         {
-                            if (String.Compare(send.Division.Area, data[3], StringComparison.OrdinalIgnoreCase)==0)
-                            {
-                                reportResults.Add(send);
-                            }
+                            reportResults.Add(send);
                         }
                     }
-                    
-                    var writer = new StreamWriter(saveReportDialog.FileName);
-                    foreach (var result in reportResults)
-                        writer.WriteLine(result.ToString());
-                    writer.Close();
-                    
-                    Process.Start(saveReportDialog.FileName);
                 }
-                else
-                {
-                    Console.Out.WriteLine("Анализатор не справился!");
-                    return false;
-                }
+
+                var writer = new StreamWriter(saveReportDialog.FileName);
+                
+                foreach (var result in reportResults)
+                    writer.WriteLine(result.ToString());
+                
+                if (reportResults.Count == 0)
+                    writer.WriteLine("Не было найдено ни одной записи удовлетворяющей условиям!");
+                
+                writer.Close();
+                    
+                //Открывает итоговый текстовый файл для просмотра
+                Process.Start(saveReportDialog.FileName);
 
                 return true;
             }
@@ -91,27 +85,18 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
         public DataAnalyser BuildReportWindow(Grid mainGrid)
         {
             mainGrid.RowDefinitions.Clear();
-        
-            mainGrid.RowDefinitions.Add(new RowDefinition{Height = new GridLength(28)});
-            mainGrid.RowDefinitions.Add(new RowDefinition{Height = new GridLength(8)});
-            mainGrid.RowDefinitions.Add(new RowDefinition{Height = new GridLength(28)});
-            mainGrid.RowDefinitions.Add(new RowDefinition{Height = new GridLength(8)});
-            mainGrid.RowDefinitions.Add(new RowDefinition{Height = new GridLength(28)});
-            mainGrid.RowDefinitions.Add(new RowDefinition{Height = new GridLength(8)});
+            CommonWindowGenerator.GenerateRowsInGrid(mainGrid, 3);
 
-            var tBoxes = CommonWindowGenerator.CreateReportInputBetweenField(mainGrid, "Дата:", 2);
+            var tBoxes = CommonWindowGenerator.CreateInputBetweenField(mainGrid, "Дата:", 2);
             var tList = new TextBox[]
             {
                 CommonWindowGenerator.CreateInputField(mainGrid, "Услуга:", 0),
-                tBoxes[0],
-                tBoxes[1],
+                tBoxes[0], //Дата от которой
+                tBoxes[1], //Дата до которой
                 CommonWindowGenerator.CreateInputField(mainGrid, "Район:", 4)
             };
             return new ReportDivisionsAnalyser(tList);
         }
-
-        public DivisionsCatalogue DivisionsCatalogue => _divisionsCatalogue;
-        public SendRequestsCatalogue SendRequestsCatalogue => _sendRequestsCatalogue;
 
         public int CatalogueIndex
         {
@@ -129,9 +114,19 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             }
         }
 
-        public Catalogue Catalogue => _catalogueIndex == 0 ? _divisionsCatalogue : _sendRequestsCatalogue;
+        public Catalogue Catalogue => _catalogueIndex == 0 ? DivisionsCatalogue : SendRequestsCatalogue;
 
-        public IEnumerable<string> CataloguesNames => new[]{_divisionsCatalogue.Name, _sendRequestsCatalogue.Name};
+        public IEnumerable<string> CataloguesNames => new[]{DivisionsCatalogue.Name, SendRequestsCatalogue.Name};
+
+        public void LoadDefaultFirstCatalogue()
+        {
+            LoadFirstCatalogue("DefaultFiles/divisions_default.txt");
+        }
+
+        public void LoadDefaultSecondCatalogue()
+        {
+            LoadSecondCatalogue("DefaultFiles/sendrequests_default.txt");
+        }
     }
 }
 

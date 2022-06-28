@@ -7,6 +7,14 @@ namespace MDCourseProject.AppWindows.WindowsBuilder;
 
 public static class CommonWindowGenerator
 {
+    public static void GenerateRowsInGrid(Grid grid, int count, int height = 28, int spacing = 8)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition{Height = new GridLength(height)});
+            grid.RowDefinitions.Add(new RowDefinition{Height = new GridLength(spacing)});
+        }
+    }
     public static TextBox CreateInputField(Grid mainGrid, string title, int row)
     {
         var label = new Label
@@ -36,7 +44,7 @@ public static class CommonWindowGenerator
         return tBox;
     }
     
-    public static TextBox[] CreateReportInputBetweenField(Grid mainGrid, string title, int row, string fromLabel = "От:", string toLabel = "До:")
+    public static TextBox[] CreateInputBetweenField(Grid mainGrid, string title, int row, string fromLabel = "От:", string toLabel = "До:")
     {
         var label = new Label
         {
