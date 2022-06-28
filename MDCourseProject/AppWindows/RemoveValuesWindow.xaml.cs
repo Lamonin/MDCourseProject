@@ -24,6 +24,7 @@ public partial class RemoveValuesWindow : Window
     private void Button_AcceptRemoveValues(object sender, RoutedEventArgs e)
     {
         MDSystem.Subsystem.Catalogue.Remove(_dataAnalyser.GetData());
+        MainWindow.Handler.UpdateMainDataGridValues();
         Close();
     }
 

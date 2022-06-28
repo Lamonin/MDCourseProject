@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Controls;
+using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.MDCourseSystem.MDCatalogues;
 
 namespace MDCourseProject.MDCourseSystem.MDSubsystems;
@@ -11,6 +13,16 @@ public class ClientsSubsystem:ISubsystem
 
     public void LoadSecondCatalogue(string filePath)
     {
+    }
+
+    public bool MakeReport(string[] data)
+    {
+        return false;
+    }
+
+    public DataAnalyser BuildReportWindow(Grid mainGrid)
+    {
+        return null;
     }
 
     private int _catalogueIndex;

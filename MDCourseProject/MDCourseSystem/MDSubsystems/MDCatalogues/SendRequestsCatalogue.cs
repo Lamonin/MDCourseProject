@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Controls;
 using FundamentalStructures;
@@ -10,9 +10,11 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues;
 
 public struct SendRequest:IComparable<SendRequest>
 {
-    public SendRequest(string divisionName, string client, string service, string date)
+    public readonly DivisionNameAndArea Division;
+    public SendRequest(DivisionNameAndArea division, string client, string service, string date)
     {
-        DivisionName = divisionName;
+        Division = division;
+        DivisionName = Division.ToString();
         Client = client;
         Service = service;
         Date = date;
@@ -20,7 +22,7 @@ public struct SendRequest:IComparable<SendRequest>
 
     public int CompareTo(SendRequest other)
     {
-        var compareRes = String.Compare(DivisionName, other.DivisionName, StringComparison.OrdinalIgnoreCase);
+        var compareRes = Division.CompareTo(other.Division);
         if (compareRes != 0) return compareRes; 
             
         compareRes = string.Compare(Client, other.Client, StringComparison.OrdinalIgnoreCase);
@@ -30,6 +32,11 @@ public struct SendRequest:IComparable<SendRequest>
         if (compareRes != 0) return compareRes;
             
         return string.Compare(Date, other.Date, StringComparison.OrdinalIgnoreCase);
+    }
+
+    public override string ToString()
+    {
+        return string.Join(", ", DivisionName, Client, Service, Date);
     }
 
     public string DivisionName { get; set; }
@@ -65,37 +72,48 @@ public readonly struct SendRequestClientServiceAndDate:IComparable<SendRequestCl
 
 public class SendRequestsCatalogue:Catalogue
 {
-    private LRBTree<DivisionNameAndArea, SendRequestClientServiceAndDate> _sendRequestTree;
-    private ObservableCollection<SendRequest> _sendRequestsData;
+    public readonly LRBTree<DivisionNameAndArea, SendRequest> SendRequestsTree;
+    private readonly List<SendRequest> _sendRequestsData;
+
+    public readonly LRBTree<string, SendRequest> SendRequestsByService;
 
     public SendRequestsCatalogue()
     {
-        _sendRequestTree = new LRBTree<DivisionNameAndArea, SendRequestClientServiceAndDate>();
-        _sendRequestsData = new ObservableCollection<SendRequest>();
+        SendRequestsTree = new LRBTree<DivisionNameAndArea, SendRequest>();
+        _sendRequestsData = new List<SendRequest>();
+
+        SendRequestsByService = new LRBTree<string, SendRequest>();
     }
     
     public override void Add(string[] data)
     {
         var key = new DivisionNameAndArea(data[1], data[0]);
-        var value = new SendRequestClientServiceAndDate(data[2], data[3], data[4]);
+        var value = new SendRequest(key, data[2], data[3], data[4]);
                 
-        _sendRequestTree.Add(key, value);
-        _sendRequestsData.Add(new SendRequest(key.ToString(), data[2], data[3], data[4]));
+        SendRequestsTree.Add(key, value);
+        MDDebugConsole.WriteLine(key.ToString());
+
+        var sendRequest = new SendRequest(key, data[2], data[3], data[4]);
+        _sendRequestsData.Add(sendRequest);
+        SendRequestsByService.Add(data[3], sendRequest);
     }
 
     public override void Remove(string[] data)
     {
         var key = new DivisionNameAndArea(data[1], data[0]);
-        var value = new SendRequestClientServiceAndDate(data[2], data[3], data[4]);
+        var value = new SendRequest(key, data[2], data[3], data[4]);
 
-        _sendRequestTree.Remove(key, value);
-        _sendRequestsData.Remove(new SendRequest(key.ToString(), data[2], data[3], data[4]));
+        SendRequestsTree.Remove(key, value);
+        
+        var sendRequest = new SendRequest(key, data[2], data[3], data[4]);
+        _sendRequestsData.RemoveAll(request => request.CompareTo(sendRequest)==0);
     }
 
     public override void Find(DataGrid mainDataGrid, string[] data)
     {
-        var searchResult = new ObservableCollection<SendRequest>();
-        //TODO Дереву надо метод TryGetValue добавить
+        var searchResult = new List<SendRequest>();
+        var key = new DivisionNameAndArea(data[1], data[0]);
+        if (SendRequestsTree.TryGetValuesList(key, out var list)) { searchResult.AddRange(list); }
         PrintDataToGrid(mainDataGrid, searchResult, new []{"Подразделение", "Клиент", "Услуга", "Дата"});
     }
 
@@ -143,7 +161,7 @@ public class SendRequestsCatalogue:Catalogue
 
     public override DataAnalyser BuildSearchValuesWindow(Grid mainGrid)
     {
-        return new SearchValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Район:", "Подразделение:", "Клиент:", "Название услуги:", "Дата:"));
+        return new SearchValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Район:", "Подразделение:"));
     }
 
     public override string Name => "Отправленные заявки";

@@ -32,6 +32,7 @@ namespace MDCourseProject
         public void UpdateMainDataGridValues()
         {
             MDSystem.Subsystem.Catalogue?.PrintDataToGrid(MainDataGrid);
+            MainDataGrid.Items.Refresh();
         }
 
         private void ComboBox_OnSubsystemChanged(object sender, SelectionChangedEventArgs e)

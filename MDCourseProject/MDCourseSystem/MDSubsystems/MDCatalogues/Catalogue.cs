@@ -20,15 +20,17 @@ public abstract class Catalogue
         mainDataGrid.ItemsSource = null;
         mainDataGrid.Columns.Clear();
         mainDataGrid.ItemsSource = itemsSource;
+        mainDataGrid.Items.Refresh();
         CommonWindowGenerator.CreateHeadersInDataGrid(mainDataGrid, headers);
     }
     
     public abstract void Load(string filePath);
     public abstract void Save();
-    protected bool OpenSaveCatalogueDialog(string name, out string savePath)
+    protected static bool OpenSaveCatalogueDialog(string name, out string savePath)
     {
         var saveDialog = new SaveFileDialog
         {
+            Title = "Выберите место для сохранения справочника " + name,
             FileName = name + "_Справочник",
             Filter = "Text files (*.txt)|*.txt",
         };
