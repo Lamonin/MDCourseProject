@@ -4,6 +4,20 @@ using System.Text;
 
 namespace MDCourseProject.MDCourseSystem.MDCatalogues
 {
+    public static class Count
+    {
+        public static int CountDigit(int num)
+        {
+            var count = 0;
+            while (num > 0)
+            {
+                ++count;
+                num /= 10;
+            }
+            return count;
+        }
+    }
+    
     public class FullName:IComparable<FullName>
     {
         private readonly string _surname;
@@ -28,9 +42,9 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override int GetHashCode()
         {
-            var codeSurname = Encoding.ASCII.GetBytes(_surname);
-            var codeName = Encoding.ASCII.GetBytes(_name);
-            var codePatronymic = Encoding.ASCII.GetBytes(_patronymic);
+            var codeSurname = Encoding.UTF8.GetBytes(_surname);
+            var codeName = Encoding.UTF8.GetBytes(_name);
+            var codePatronymic = Encoding.UTF8.GetBytes(_patronymic);
             var hash = codeSurname.Aggregate(0, (curr, elem) => curr + elem);
             hash += codeName.Aggregate(0, (curr, elem) => curr + elem);
             hash += codePatronymic.Aggregate(0, (curr, elem) => curr + elem);
@@ -53,7 +67,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override int GetHashCode()
         {
-            var codeOccupation = Encoding.ASCII.GetBytes(_occupation);
+            var codeOccupation = Encoding.UTF8 .GetBytes(_occupation);
             return codeOccupation.Aggregate(0, (curr, elem) => curr + elem);
         }
     }

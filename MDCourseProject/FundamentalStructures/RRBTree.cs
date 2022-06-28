@@ -372,7 +372,6 @@ namespace FundamentalStructures
                        var flag = true;
                        DeleteAndBalance( ref _root, ref deleteNode, ref flag);
                    }
-               else throw new Exception($"Such key {key} or value {value} doesn't exist");
                if (!IsEmpty(_root)) _root.Color = BLACK;
            }
 

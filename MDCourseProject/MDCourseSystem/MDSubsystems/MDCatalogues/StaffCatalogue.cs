@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using MDCourseProject.AppWindows.DataAnalysers;
 using FundamentalStructures;
+using MDCourseProject.AppWindows.WindowsBuilder;
 
 namespace MDCourseProject.MDCourseSystem.MDCatalogues
 {
     
     public class StaffCatalogue:Catalogue
     {
-        private DynamicHashTable<StaffNameAndOccupation, StaffInfo> _staffTable;
-        private RRBTree<WorkPlace, StaffInfo> _workplaceTree;
+        public DynamicHashTable<StaffNameAndOccupation, StaffInfo> _staffTable;
+        public RRBTree<WorkPlace, StaffInfo> _workplaceTree;
         private RRBTree<Occupation, StaffInfo> _occupationTree;
         private List<StaffInfo> _staffInfo;
 
@@ -26,6 +27,16 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
                     var mult = key * (Math.Sqrt(5) - 1) / 2;
                     var doublePart = mult - Math.Truncate(mult);
                     return (int)(_staffTable.GetCapacity() * doublePart);
+                },
+                
+                SecondHashFunc = key =>
+                {
+                    key *= key;
+                    var keyCountDigit = Count.CountDigit(key);
+                    var howManyDigit = Count.CountDigit(_staffTable.GetCapacity());
+                    key /= keyCountDigit == 1 ?  (int)Math.Pow(10, keyCountDigit / 2) : (int)Math.Pow(10, keyCountDigit / howManyDigit);
+                    key %= (int)Math.Pow(10, howManyDigit);
+                    return ++key;
                 }
             };
         }
@@ -74,19 +85,20 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override DataAnalyser BuildAddValuesWindow(Grid mainGrid)
         {
-            throw new NotImplementedException();
+            return new AddValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО", "Должность", "Район"));
         }
 
         public override DataAnalyser BuildRemoveValuesWindow(Grid mainGrid)
         {
-            throw new NotImplementedException();
+            return new RemoveValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО", "Должность", "Район"));
         }
 
         public override DataAnalyser BuildSearchValuesWindow(Grid mainGrid)
         {
-            throw new NotImplementedException();
+            return new SearchValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО", "Должность"));
         }
 
-        public override string Name { get; }
+        public override string Name => "Сотрудники";
+        
     }
 }
