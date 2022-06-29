@@ -63,10 +63,14 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             _workplaceTree.Delete(keyToWorkPlaceTree, staffInfo);
             _staffTable.Remove(keyToStaffTable, staffInfo);
             _staffInfo.Remove(staffInfo);
-            var result = MDSystem.staffSubsystem.DocumentCatalogue.OccupationTree.GetValue(staffInfo.Occupation);
-            foreach (var delete in result)
+            if(!_occupationTree.ContainKey(staffInfo.Occupation))
             {
-                MDSystem.staffSubsystem.DocumentCatalogue.Remove(new []{delete.Document.ToString(), delete.Occupation.ToString(), delete.DivisionName.ToString()});
+                var result = MDSystem.staffSubsystem.DocumentCatalogue.OccupationTree.GetValue(staffInfo.Occupation);
+                foreach (var delete in result)
+                {
+                    MDSystem.staffSubsystem.DocumentCatalogue.Remove(new[]
+                        {delete.Document.ToString(), delete.Occupation.ToString(), delete.DivisionName.ToString()});
+                }
             }
             //TODO удалить в справочниках "Отправленные заявки"
         }
