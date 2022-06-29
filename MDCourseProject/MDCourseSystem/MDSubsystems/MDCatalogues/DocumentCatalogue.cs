@@ -23,6 +23,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         {
             _documentInfo = new List<DocumentInfo>();
             _documentTree = new RRBTree<Document, DocumentInfo>();
+            _occupationTree = new RRBTree<Occupation, DocumentInfo>();
             _divisionNameTree = new RRBTree<DivisionName, DocumentInfo>();
         }
         
@@ -36,8 +37,10 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
                 return;
             }
             var keyToDivision = documentInfo.DivisionName;
+            var keyToOccupation = documentInfo.Occupation;
             _documentInfo.Add(documentInfo);
             _documentTree.Add(keyToDocumentTree, documentInfo);
+            _occupationTree.Add(keyToOccupation, documentInfo);
             _divisionNameTree.Add(keyToDivision, documentInfo);
         }
 
@@ -46,8 +49,10 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             var documentInfo = new DocumentInfo(new Document(data[0]), new Occupation(data[1]), new DivisionName(data[2]));
             var keyToDocumentTree = documentInfo.Document;
             var keyToDivision = documentInfo.DivisionName;
+            var keyToOccupation = documentInfo.Occupation;
             _documentInfo.Remove(documentInfo);
             _documentTree.Delete(keyToDocumentTree, documentInfo);
+            _occupationTree.Delete(keyToOccupation, documentInfo);
             _divisionNameTree.Delete(keyToDivision, documentInfo);
         }
 

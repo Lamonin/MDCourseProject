@@ -116,24 +116,21 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
     public class StaffInfo:IComparable<StaffInfo>
     {
-        private readonly FullName _staffFullName;
-        private readonly Occupation _occupation;
-        private readonly District _district;
 
         public StaffInfo(FullName name, Occupation occupation, District district)
         {
-            (_staffFullName, _occupation, _district) = (name, occupation, district);
+            (FullName, Occupation, District) = (name, occupation, district);
         }
 
         public int CompareTo(StaffInfo other)
         {
-            var cmpName = _staffFullName.CompareTo(other._staffFullName);
+            var cmpName = FullName.CompareTo(other.FullName);
             if (cmpName != 0) return cmpName;
-            var cmpOccupation = _occupation.CompareTo(other._occupation);
-            return cmpOccupation != 0 ? cmpOccupation : _district.CompareTo(other._district);
+            var cmpOccupation = Occupation.CompareTo(other.Occupation);
+            return cmpOccupation != 0 ? cmpOccupation : District.CompareTo(other.District);
         }
 
-        public override string ToString() => string.Join(" ", _staffFullName, _occupation, _district);
+        public override string ToString() => string.Join(" ", FullName, Occupation, District);
 
         public FullName FullName { get; set; }
 

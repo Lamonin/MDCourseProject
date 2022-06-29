@@ -16,30 +16,26 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         private RRBTree<WorkPlace, StaffInfo> _workplaceTree;
         private RRBTree<Occupation, StaffInfo> _occupationTree;
         private List<StaffInfo> _staffInfo;
-
         public StaffCatalogue()
         {
             _staffInfo = new List<StaffInfo>();
             _occupationTree = new RRBTree<Occupation, StaffInfo>();
             _workplaceTree = new RRBTree<WorkPlace, StaffInfo>();
-            _staffTable = new DynamicHashTable<StaffNameAndOccupation, StaffInfo>
+            _staffTable = new DynamicHashTable<StaffNameAndOccupation, StaffInfo>();
+            _staffTable.FirstHashFunc = key =>
             {
-                FirstHashFunc = key =>
-                {
-                    var mult = key * (Math.Sqrt(5) - 1) / 2;
-                    var doublePart = mult - Math.Truncate(mult);
-                    return (int)(_staffTable.GetCapacity() * doublePart);
-                },
-                
-                SecondHashFunc = key =>
-                {
-                    key *= key;
-                    var keyCountDigit = Count.CountDigit(key);
-                    var howManyDigit = Count.CountDigit(_staffTable.GetCapacity());
-                    key /= keyCountDigit == 1 ?  (int)Math.Pow(10, keyCountDigit / 2) : (int)Math.Pow(10, keyCountDigit / howManyDigit);
-                    key %= (int)Math.Pow(10, howManyDigit);
-                    return ++key;
-                }
+                var mult = key * (Math.Sqrt(5) - 1) / 2;
+                var doublePart = mult - Math.Truncate(mult);
+                return (int)(_staffTable.GetCapacity() * doublePart);
+            };
+            _staffTable.SecondHashFunc = key =>
+            {
+                key *= key;
+                var keyCountDigit = Count.CountDigit(key);
+                var howManyDigit = Count.CountDigit(_staffTable.GetCapacity());
+                key /= keyCountDigit == 1 ?  (int)Math.Pow(10, keyCountDigit / 2) : (int)Math.Pow(10, keyCountDigit / howManyDigit);
+                key %= (int)Math.Pow(10, howManyDigit);
+                return ++key;
             };
         }
         public override void Add(string[] data)
