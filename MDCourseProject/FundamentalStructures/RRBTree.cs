@@ -372,16 +372,33 @@ namespace FundamentalStructures
                        var flag = true;
                        DeleteAndBalance( ref _root, ref deleteNode, ref flag);
                    }
-               else throw new Exception($"Such key {key} or value {value} doesn't exist");
                if (!IsEmpty(_root)) _root.Color = BLACK;
            }
-           
-           public bool FindElem(TKey key)
+
+           public void RemoveKey(TKey key)
+           {
+               var deleteNode = FindKeyHelper(_root, key);
+               if (deleteNode != null)
+               {
+                   var flag = true;
+                   DeleteAndBalance(ref _root, ref deleteNode, ref flag);
+               }
+               if (!IsEmpty(_root)) _root.Color = BLACK;
+           }
+           public bool ContainKey(TKey key)
            {
                var node = FindKeyHelper(_root, key);
                return !IsEmpty(node);
            }
-   
+
+           public bool Contains(TKey key, TValue value) => FindKeyHelper(_root, key) != null && FindKeyHelper(_root, key).Find(value);
+
+           public DoubleLinkedList<TValue> GetValue(TKey key)
+           {
+               var find = FindKeyHelper(_root, key);
+               return !IsEmpty(find) ? find.GetList() : null;
+           }
+           
            private void Print(TreeNode root, int height)
            {
                if (!IsEmpty(root))

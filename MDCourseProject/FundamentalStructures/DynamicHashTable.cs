@@ -334,4 +334,6 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         get => _secondHashFunc;
         set => _secondHashFunc = value ?? throw new Exception("Unable to set second hash function to null!");
     }
+
+    public int GetCapacity() => _capacity;
 }
