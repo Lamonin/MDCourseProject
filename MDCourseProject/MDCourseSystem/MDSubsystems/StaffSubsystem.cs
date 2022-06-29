@@ -61,11 +61,11 @@ public class StaffSubsystem:ISubsystem
                 var district = new District(data[1]);
                 foreach (var document in documentInfo)
                 {
-                    var searchWork = new WorkPlace(document.GetOccupation(), district);
+                    var searchWork = new WorkPlace(document.Occupation, district);
                     var staffInfo = _staffCatalogue.WorkplaceTree.GetValue(searchWork);
                     foreach (var staff in staffInfo)
                     {
-                        report.Add(staff.GetFullName());
+                        report.Add(staff.FullName);
                     }
                 }
                 report.Sort();

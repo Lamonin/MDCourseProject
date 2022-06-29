@@ -29,13 +29,13 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         public override void Add(string[] data)
         {
             var documentInfo = new DocumentInfo(new Document(data[0]), new Occupation(data[1]), new DivisionName(data[2]));
-            var keyToDocumentTree = documentInfo.GetDocument();
+            var keyToDocumentTree = documentInfo.Document;
             if (_documentTree.Contains(keyToDocumentTree, documentInfo))
             {
                 MessageBox.Show("Элемент существует", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            var keyToDivision = documentInfo.GetDivisionName();
+            var keyToDivision = documentInfo.DivisionName;
             _documentInfo.Add(documentInfo);
             _documentTree.Add(keyToDocumentTree, documentInfo);
             _divisionNameTree.Add(keyToDivision, documentInfo);
@@ -44,8 +44,8 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         public override void Remove(string[] data)
         {
             var documentInfo = new DocumentInfo(new Document(data[0]), new Occupation(data[1]), new DivisionName(data[2]));
-            var keyToDocumentTree = documentInfo.GetDocument();
-            var keyToDivision = documentInfo.GetDivisionName();
+            var keyToDocumentTree = documentInfo.Document;
+            var keyToDivision = documentInfo.DivisionName;
             _documentInfo.Remove(documentInfo);
             _documentTree.Delete(keyToDocumentTree, documentInfo);
             _divisionNameTree.Delete(keyToDivision, documentInfo);
@@ -79,7 +79,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
                 output.Flush();
                 
                 foreach(var document in _documentInfo)
-                    output.WriteLine(string.Join("|", document.GetDocument(), document.GetOccupation(), document.GetDivisionName()));
+                    output.WriteLine(string.Join("|", document.Document, document.Occupation, document.DivisionName));
                 output.Close();
             }
         }

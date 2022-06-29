@@ -45,14 +45,14 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         public override void Add(string[] data)
         {
             var staffInfo = new StaffInfo(new FullName(data[0]), new Occupation(data[1]), new District(data[2]));
-            var keyToStaffTable = new StaffNameAndOccupation(staffInfo.GetFullName(), staffInfo.GetOccupation());
+            var keyToStaffTable = new StaffNameAndOccupation(staffInfo.FullName, staffInfo.Occupation);
             if (_staffTable.Contains(keyToStaffTable, staffInfo) || _staffTable.ContainsKey(keyToStaffTable))
             {
                 MessageBox.Show("Элемент существует", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            var keyToWorkPlaceTree = new WorkPlace(staffInfo.GetOccupation(), staffInfo.GetDistrict());
-            _occupationTree.Add(staffInfo.GetOccupation(), staffInfo);
+            var keyToWorkPlaceTree = new WorkPlace(staffInfo.Occupation, staffInfo.District);
+            _occupationTree.Add(staffInfo.Occupation, staffInfo);
             _workplaceTree.Add(keyToWorkPlaceTree, staffInfo);
             _staffTable.Add(keyToStaffTable, staffInfo);
             _staffInfo.Add(staffInfo);
@@ -61,16 +61,16 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         public override void Remove(string[] data)
         {
             var staffInfo = new StaffInfo(new FullName(data[0]), new Occupation(data[1]), new District(data[2]));
-            var keyToStaffTable = new StaffNameAndOccupation(staffInfo.GetFullName(), staffInfo.GetOccupation());
-            var keyToWorkPlaceTree = new WorkPlace(staffInfo.GetOccupation(), staffInfo.GetDistrict());
-            _occupationTree.Delete(staffInfo.GetOccupation(), staffInfo);
+            var keyToStaffTable = new StaffNameAndOccupation(staffInfo.FullName, staffInfo.Occupation);
+            var keyToWorkPlaceTree = new WorkPlace(staffInfo.Occupation, staffInfo.District);
+            _occupationTree.Delete(staffInfo.Occupation, staffInfo);
             _workplaceTree.Delete(keyToWorkPlaceTree, staffInfo);
             _staffTable.Remove(keyToStaffTable, staffInfo);
             _staffInfo.Remove(staffInfo);
-            var result = MDSystem.staffSubsystem.DocumentCatalogue.OccupationTree.GetValue(staffInfo.GetOccupation());
+            var result = MDSystem.staffSubsystem.DocumentCatalogue.OccupationTree.GetValue(staffInfo.Occupation);
             foreach (var delete in result)
             {
-                MDSystem.staffSubsystem.DocumentCatalogue.Remove(new []{delete.GetDocument().ToString(), delete.GetOccupation().ToString(), delete.GetDivisionName().ToString()});
+                MDSystem.staffSubsystem.DocumentCatalogue.Remove(new []{delete.Document.ToString(), delete.Occupation.ToString(), delete.DivisionName.ToString()});
             }
             //TODO удалить в справочниках "Отправленные заявки"
         }
@@ -103,7 +103,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
                 output.Flush();
                 
                 foreach(var staff in _staffInfo)
-                    output.WriteLine(string.Join("|", staff.GetFullName(), staff.GetOccupation(), staff.GetDistrict()));
+                    output.WriteLine(string.Join("|", staff.FullName, staff.Occupation, staff.District));
                 output.Close();
             }
         }

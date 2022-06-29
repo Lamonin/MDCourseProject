@@ -135,11 +135,11 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override string ToString() => string.Join(" ", _staffFullName, _occupation, _district);
 
-        public FullName GetFullName() => _staffFullName;
+        public FullName FullName { get; set; }
 
-        public Occupation GetOccupation() => _occupation;
+        public Occupation Occupation { get; set; }
 
-        public District GetDistrict() => _district;
+        public District District { get; set; }
     }
 
     public class StaffNameAndOccupation:IComparable<StaffNameAndOccupation>
@@ -187,29 +187,26 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
     public class DocumentInfo:IComparable<DocumentInfo>
     {
-        private readonly Document _document;
-        private readonly Occupation _occupation;
-        private readonly DivisionName _divisionName;
 
         public DocumentInfo(Document document, Occupation occupation, DivisionName divisionName)
         {
-            (_document, _occupation, _divisionName) = (document, occupation, divisionName);
+            (Document, Occupation, DivisionName) = (document, occupation, divisionName);
         }
 
         public int CompareTo(DocumentInfo other)
         {
-            var cmpDocument = _document.CompareTo(other._document);
+            var cmpDocument = Document.CompareTo(other.Document);
             if (cmpDocument != 0) return cmpDocument;
-            var cmpOccupation = _occupation.CompareTo(other._occupation);
-            return cmpOccupation != 0 ? cmpOccupation : _divisionName.CompareTo(other._divisionName);
+            var cmpOccupation = Occupation.CompareTo(other.Occupation);
+            return cmpOccupation != 0 ? cmpOccupation : DivisionName.CompareTo(other.DivisionName);
         }
 
-        public override string ToString() => string.Join(" ", _document, _occupation, _divisionName);
+        public override string ToString() => string.Join(" ", Document, Occupation, DivisionName);
 
-        public Document GetDocument() => _document;
+        public Document Document { get; set; }
 
-        public Occupation GetOccupation() => _occupation;
-        
-        public DivisionName GetDivisionName() => _divisionName;
+        public Occupation Occupation { get; set; }
+
+        public DivisionName DivisionName { get; set; }
     }
 }
