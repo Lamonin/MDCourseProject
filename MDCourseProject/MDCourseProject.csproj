@@ -115,6 +115,7 @@
         <Compile Include="MDCourseSystem\MDDebugConsole\MDDebugConsole.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\DivisionsCatalogue.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\Catalogue.cs" />
+        <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\DocumentCatalogue.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\SendRequestsCatalogue.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\StaffCatalogue.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\StaffSubsystemCataloguesTypes.cs" />
@@ -140,7 +141,13 @@
       <Content Include="DefaultFiles\divisions_default.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Content Include="DefaultFiles\Document.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <Content Include="DefaultFiles\sendrequests_default.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="DefaultFiles\Staff.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Include="Notes.txt" />

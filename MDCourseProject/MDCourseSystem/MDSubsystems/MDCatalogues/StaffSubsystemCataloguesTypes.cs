@@ -205,5 +205,11 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         }
 
         public override string ToString() => string.Join(" ", _document, _occupation, _divisionName);
+
+        public Document GetDocument() => _document;
+
+        public Occupation GetOccupation() => _occupation;
+        
+        public DivisionName GetDivisionName() => _divisionName;
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using MDCourseProject.AppWindows.DataAnalysers;
 using FundamentalStructures;
@@ -10,8 +12,8 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
     
     public class StaffCatalogue:Catalogue
     {
-        public DynamicHashTable<StaffNameAndOccupation, StaffInfo> _staffTable;
-        public RRBTree<WorkPlace, StaffInfo> _workplaceTree;
+        private DynamicHashTable<StaffNameAndOccupation, StaffInfo> _staffTable;
+        private RRBTree<WorkPlace, StaffInfo> _workplaceTree;
         private RRBTree<Occupation, StaffInfo> _occupationTree;
         private List<StaffInfo> _staffInfo;
 
@@ -44,7 +46,11 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         {
             var staffInfo = new StaffInfo(new FullName(data[0]), new Occupation(data[1]), new District(data[2]));
             var keyToStaffTable = new StaffNameAndOccupation(staffInfo.GetFullName(), staffInfo.GetOccupation());
-            if (_staffTable.Contains(keyToStaffTable, staffInfo) || _staffTable.ContainsKey(keyToStaffTable)) return;
+            if (_staffTable.Contains(keyToStaffTable, staffInfo) || _staffTable.ContainsKey(keyToStaffTable))
+            {
+                MessageBox.Show("Элемент существует", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             var keyToWorkPlaceTree = new WorkPlace(staffInfo.GetOccupation(), staffInfo.GetDistrict());
             _occupationTree.Add(staffInfo.GetOccupation(), staffInfo);
             _workplaceTree.Add(keyToWorkPlaceTree, staffInfo);
@@ -61,44 +67,69 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             _workplaceTree.Delete(keyToWorkPlaceTree, staffInfo);
             _staffTable.Remove(keyToStaffTable, staffInfo);
             _staffInfo.Remove(staffInfo);
+            var result = MDSystem.staffSubsystem.DocumentCatalogue.OccupationTree.GetValue(staffInfo.GetOccupation());
+            foreach (var delete in result)
+            {
+                MDSystem.staffSubsystem.DocumentCatalogue.Remove(new []{delete.GetDocument().ToString(), delete.GetOccupation().ToString(), delete.GetDivisionName().ToString()});
+            }
+            //TODO удалить в справочниках "Отправленные заявки"
         }
 
         public override void Find(DataGrid mainDataGrid, string[] data)
         {
-            throw new NotImplementedException();
+            var keyToStaffTable = new StaffNameAndOccupation(new FullName(data[0]), new Occupation(data[1]));
+            _staffTable.TryGetValue(keyToStaffTable, out var res);
+            PrintDataToGrid(mainDataGrid, new List<StaffInfo>{res}, new []{"ФИО", "Должность", "Район"});
         }
 
         public override void PrintDataToGrid(DataGrid mainDataGrid)
         {
-            throw new NotImplementedException();
+            PrintDataToGrid(mainDataGrid, _staffInfo, new []{"ФИО", "Должность", "Район"});
         }
 
         public override void Load(string filePath)
         {
-            throw new NotImplementedException();
+            var input = new StreamReader(filePath);
+            while (!input.EndOfStream)
+                Add(input.ReadLine()?.Split('|'));
+            input.Close();
         }
 
         public override void Save()
         {
-            throw new NotImplementedException();
+            if (OpenSaveCatalogueDialog(Name, out var filePath))
+            {
+                var output = new StreamWriter(filePath);
+                output.Flush();
+                
+                foreach(var staff in _staffInfo)
+                    output.WriteLine(string.Join("|", staff.GetFullName(), staff.GetOccupation(), staff.GetDistrict()));
+                output.Close();
+            }
         }
 
         public override DataAnalyser BuildAddValuesWindow(Grid mainGrid)
         {
-            return new AddValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО", "Должность", "Район"));
+            return new AddValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО:", "Должность:", "Район:"));
         }
 
         public override DataAnalyser BuildRemoveValuesWindow(Grid mainGrid)
         {
-            return new RemoveValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО", "Должность", "Район"));
+            return new RemoveValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО:", "Должность:", "Район:"));
         }
 
         public override DataAnalyser BuildSearchValuesWindow(Grid mainGrid)
         {
-            return new SearchValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО", "Должность"));
+            return new SearchValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО:", "Должность:"));
         }
 
         public override string Name => "Сотрудники";
         
+        public DynamicHashTable<StaffNameAndOccupation, StaffInfo> StaffTable => _staffTable;
+        
+        public RRBTree<WorkPlace, StaffInfo> WorkplaceTree => _workplaceTree;
+        
+        public RRBTree<Occupation, StaffInfo> OccupationTree => _occupationTree;
+
     }
 }

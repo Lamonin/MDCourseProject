@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using MDCourseProject.AppWindows.DataAnalysers;
@@ -49,7 +48,7 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             {
                 Title = "Выберите место для сохранения отчета по подсистеме Подразделения",
                 FileName ="Подразделения_Отчет",
-                Filter = "Text files (*.txt)|*.txt",
+                Filter = "Text files (*.txt)|*.txt"
             };
         
             if (saveReportDialog.ShowDialog() == true)
