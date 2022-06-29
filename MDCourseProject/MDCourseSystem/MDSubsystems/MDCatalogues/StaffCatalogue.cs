@@ -62,15 +62,16 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             _occupationTree.Delete(staffInfo.Occupation, staffInfo);
             _workplaceTree.Delete(keyToWorkPlaceTree, staffInfo);
             _staffTable.Remove(keyToStaffTable, staffInfo);
-            _staffInfo.Remove(staffInfo);
+            _staffInfo.RemoveAll(staff => staff.CompareTo(staffInfo) == 0);
             if(!_occupationTree.ContainKey(staffInfo.Occupation))
             {
                 var result = MDSystem.staffSubsystem.DocumentCatalogue.OccupationTree.GetValue(staffInfo.Occupation);
-                foreach (var delete in result)
-                {
-                    MDSystem.staffSubsystem.DocumentCatalogue.Remove(new[]
-                        {delete.Document.ToString(), delete.Occupation.ToString(), delete.DivisionName.ToString()});
-                }
+                if(result != null)
+                    foreach (var delete in result)
+                    {
+                        MDSystem.staffSubsystem.DocumentCatalogue.Remove(new[]
+                            {delete.Document.ToString(), delete.Occupation.ToString(), delete.DivisionName.ToString()});
+                    }
             }
             //TODO удалить в справочниках "Отправленные заявки"
         }
@@ -79,7 +80,10 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         {
             var keyToStaffTable = new StaffNameAndOccupation(new FullName(data[0]), new Occupation(data[1]));
             _staffTable.TryGetValue(keyToStaffTable, out var res);
-            PrintDataToGrid(mainDataGrid, new List<StaffInfo>{res}, new []{"ФИО", "Должность", "Район"});
+            if (res != null)
+                PrintDataToGrid(mainDataGrid, new List<StaffInfo> {res}, new[] {"ФИО", "Должность", "Район"});
+            else
+                MessageBox.Show("Элемент не найден", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         public override void PrintDataToGrid(DataGrid mainDataGrid)

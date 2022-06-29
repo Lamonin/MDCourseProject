@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using MDCourseProject.AppWindows.DataAnalysers;
@@ -47,20 +49,25 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         public override void Remove(string[] data)
         {
             var documentInfo = new DocumentInfo(new Document(data[0]), new Occupation(data[1]), new DivisionName(data[2]));
-            var keyToDocumentTree = documentInfo.Document;
-            var keyToDivision = documentInfo.DivisionName;
-            var keyToOccupation = documentInfo.Occupation;
-            _documentInfo.Remove(documentInfo);
+            var keyToDocumentTree = new Document(data[0]);
+            var keyToDivision = new DivisionName(data[2]);
+            var keyToOccupation = new Occupation(data[1]);
             _documentTree.Delete(keyToDocumentTree, documentInfo);
             _occupationTree.Delete(keyToOccupation, documentInfo);
             _divisionNameTree.Delete(keyToDivision, documentInfo);
+            _documentInfo.RemoveAll(document => document.CompareTo(documentInfo) == 0);
         }
 
         public override void Find(DataGrid mainDataGrid, string[] data)
         {
             var findKey = new Document(data[0]);
             var info = _documentTree.GetValue(findKey);
-            PrintDataToGrid(mainDataGrid, info, new []{"Тип документа", "Должность", "Подразделение"});
+            if(info != null)
+                PrintDataToGrid(mainDataGrid, info, new []{"Тип документа", "Должность", "Подразделение"});
+            else
+            {
+                MessageBox.Show("Элемент не найден!", "Предупрежедние", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         public override void PrintDataToGrid(DataGrid mainDataGrid)

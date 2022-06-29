@@ -63,10 +63,11 @@ public class ReportCheck: ICheck
 {
     public bool CheckSyntax(TextBox[] textBoxes)
     {
-        var noSyntaxErrorInOccupation = textBoxes[0].Text.All(sym => char.IsLetter(sym) || sym is ' ' or '-') && textBoxes[0].Text != string.Empty;
+        var noSyntaxErrorInDocument = textBoxes[0].Text.All(sym => char.IsLetterOrDigit(sym) || sym is '-' or ' ')
+                                      && textBoxes[0].Text != string.Empty;
         var noSyntaxErrorInDistrict = textBoxes[1].Text.All(sym => char.IsLetterOrDigit(sym) || sym is '-' or '/' or '.' or ',' or ' ')
                                       && textBoxes[1].Text != string.Empty;
-        return noSyntaxErrorInDistrict && noSyntaxErrorInOccupation;
+        return noSyntaxErrorInDistrict && noSyntaxErrorInDocument;
     }
 
     public bool CheckInOtherCatalogue(TextBox[] textBoxes, out string[] text)
@@ -88,9 +89,9 @@ public static class CheckCorrectnessOfData
         var checkExistence = checkSystem.CheckInOtherCatalogue(textBoxes, out var error);
         if(!checkExistence)
         {
-            if (error[0] != string.Empty)
+            if (error[0] != null)
                 MessageBox.Show(error[0], "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
-            else
+            if(error[1] != null)
                 MessageBox.Show(error[1], "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
@@ -127,6 +128,7 @@ public class SearchValuesStaffAnalyser: DataAnalyser
 
     public override bool IsCorrectInputData()
     {
+        // TODO Поменять логику поиска в справочнике
         return CheckCorrectnessOfData.Check(new CheckStaffCatalogue(), _textBoxes);
     }
 }

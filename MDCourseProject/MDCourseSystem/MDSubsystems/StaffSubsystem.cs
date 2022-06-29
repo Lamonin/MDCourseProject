@@ -46,9 +46,8 @@ public class StaffSubsystem:ISubsystem
         {
             Title = "Выберите место для сохранения отчета <Документы сотрудника>",
             FileName = "Документы сотдрудника",
-            Filter = "Text files (*.txt)"
+            Filter = "Text files (*.txt)|*.txt"
         };
-
         
         if (saveReportDialogWindow.ShowDialog() == true)
         {
@@ -61,11 +60,15 @@ public class StaffSubsystem:ISubsystem
                 foreach (var document in documentInfo)
                 {
                     var searchWork = new WorkPlace(document.Occupation, district);
-                    var staffInfo = _staffCatalogue.WorkplaceTree.GetValue(searchWork);
-                    foreach (var staff in staffInfo)
+                    if (_staffCatalogue.WorkplaceTree.ContainKey(searchWork))
                     {
-                        report.Add(staff.FullName);
+                        var staffInfo = _staffCatalogue.WorkplaceTree.GetValue(searchWork);
+                        foreach (var staff in staffInfo)
+                        {
+                            report.Add(staff.FullName);
+                        }
                     }
+                    else return false;
                 }
                 report.Sort();
                 var output = new StreamWriter(saveReportDialogWindow.FileName);
