@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows;
 using System.Windows.Controls;
 using FundamentalStructures;
 using MDCourseProject.AppWindows.DataAnalysers;

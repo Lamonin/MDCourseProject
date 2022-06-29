@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
+using System.Diagnostics;
 using System.Windows.Controls;
+using System.Collections.Generic;
 using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.AppWindows.WindowsBuilder;
 using MDCourseProject.MDCourseSystem.MDCatalogues;
@@ -107,10 +107,7 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
                 _catalogueIndex = value;
 
                 //Этот вывод в консоль так... для красоты)
-                if (_catalogueIndex == 0)
-                    MDDebugConsole.WriteLine("Выбран справочник Подразделения");
-                else
-                    MDDebugConsole.WriteLine("Выбран справочник Отправленные заявки");
+                MDDebugConsole.WriteLine(_catalogueIndex == 0 ? "Выбран справочник Подразделения" : "Выбран справочник Отправленные заявки");
             }
         }
 

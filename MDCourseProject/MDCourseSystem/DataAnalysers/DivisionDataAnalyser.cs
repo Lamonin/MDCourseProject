@@ -31,8 +31,10 @@ public class AddValuesSendRequestsAnalyser: DataAnalyser
 
     public override bool IsCorrectInputData()
     {
-        //ЛОГИКА АНАЛИЗАТОРА
         bool isError = !MDSystem.divisionsSubsystem.DivisionsCatalogue.DivisionsTable.ContainsKey(new DivisionNameAndArea(_textBoxes[1].Text, _textBoxes[0].Text));
+
+        //Проверка корректности даты
+        isError = isError || !DateTime.TryParse(_textBoxes[4].Text, out var t);
         
         if (isError)
         {
@@ -45,30 +47,22 @@ public class AddValuesSendRequestsAnalyser: DataAnalyser
 
 public class RemoveValuesDivisionsAnalyser: DataAnalyser
 {
-    public RemoveValuesDivisionsAnalyser(TextBox[] textBoxes) : base(textBoxes)
-    {
-    }
+    public RemoveValuesDivisionsAnalyser(TextBox[] textBoxes) : base(textBoxes) { }
 }
 
 public class RemoveValuesSendRequestsAnalyser : DataAnalyser
 {
-    public RemoveValuesSendRequestsAnalyser(TextBox[] textBoxes) : base(textBoxes)
-    {
-    }
+    public RemoveValuesSendRequestsAnalyser(TextBox[] textBoxes) : base(textBoxes) { }
 }
 
 public class SearchValuesDivisionsAnalyser : DataAnalyser
 {
-    public SearchValuesDivisionsAnalyser(TextBox[] textBoxes) : base(textBoxes)
-    {
-    }
+    public SearchValuesDivisionsAnalyser(TextBox[] textBoxes) : base(textBoxes) { }
 }
 
 public class SearchValuesSendRequestsAnalyser : DataAnalyser
 {
-    public SearchValuesSendRequestsAnalyser(TextBox[] textBoxes) : base(textBoxes)
-    {
-    }
+    public SearchValuesSendRequestsAnalyser(TextBox[] textBoxes) : base(textBoxes) { }
 }
 
 public class ReportDivisionsAnalyser : DataAnalyser

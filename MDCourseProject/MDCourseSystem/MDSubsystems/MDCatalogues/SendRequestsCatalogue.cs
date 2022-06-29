@@ -8,7 +8,7 @@ using MDCourseProject.AppWindows.WindowsBuilder;
 
 namespace MDCourseProject.MDCourseSystem.MDCatalogues;
 
-public struct SendRequest:IComparable<SendRequest>
+public class SendRequest:IComparable<SendRequest>
 {
     public readonly DivisionNameAndArea Division;
     public SendRequest(DivisionNameAndArea division, string client, string service, string date)
@@ -80,13 +80,16 @@ public class SendRequestsCatalogue:Catalogue
     public SendRequestsCatalogue()
     {
         SendRequestsTree = new LRBTree<DivisionNameAndArea, SendRequest>();
-        _sendRequestsData = new List<SendRequest>();
-
         SendRequestsByService = new LRBTree<string, SendRequest>();
+        _sendRequestsData = new List<SendRequest>();
     }
     
     public override void Add(string[] data)
     {
+        //Преобразование даты к единому формату
+        var date = DateTime.Parse(data[4]);
+        data[4] = $"{date.Day}.{date.Month}.{date.Year}";
+        
         var key = new DivisionNameAndArea(data[1], data[0]);
         var value = new SendRequest(key, data[2], data[3], data[4]);
                 
