@@ -45,7 +45,7 @@ public class StaffSubsystem:ISubsystem
         var saveReportDialogWindow = new SaveFileDialog
         {
             Title = "Выберите место для сохранения отчета <Документы сотрудника>",
-            FileName = "Документы сотдрудника",
+            FileName = "Отчет \"Документы сотрудника\" ",
             Filter = "Text files (*.txt)|*.txt"
         };
         

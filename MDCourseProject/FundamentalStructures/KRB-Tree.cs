@@ -1,6 +1,5 @@
 ﻿using System;
 
-//TODO Возможно, переделать все это
 //TODO Как по мне, надо в первую очередь нейминг привести в порядок
 namespace FundamentalStructures
 {

@@ -44,7 +44,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             var keyToStaffTable = new StaffNameAndOccupation(staffInfo.FullName, staffInfo.Occupation);
             if (_staffTable.Contains(keyToStaffTable, staffInfo) || _staffTable.ContainsKey(keyToStaffTable))
             {
-                MessageBox.Show("Элемент существует", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Элемент существует", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             var keyToWorkPlaceTree = new WorkPlace(staffInfo.Occupation, staffInfo.District);
@@ -52,6 +52,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             _workplaceTree.Add(keyToWorkPlaceTree, staffInfo);
             _staffTable.Add(keyToStaffTable, staffInfo);
             _staffInfo.Add(staffInfo);
+            MDDebugConsole.WriteLine($"Добавление в таблицу по ключу: {keyToStaffTable}; Первичная ХФ: {_staffTable.FirstHashFunc(keyToStaffTable.GetHashCode())}; Вторичная ХФ: {_staffTable.SecondHashFunc(keyToStaffTable.GetHashCode())}");
         }
 
         public override void Remove(string[] data)
@@ -83,7 +84,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             if (res != null)
                 PrintDataToGrid(mainDataGrid, new List<StaffInfo> {res}, new[] {"ФИО", "Должность", "Район"});
             else
-                MessageBox.Show("Элемент не найден", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Элемент не найден", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public override void PrintDataToGrid(DataGrid mainDataGrid)

@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using MDCourseProject.AppWindows;
 using MDCourseProject.MDCourseSystem;
+using MDCourseProject.MDCourseSystem.MDCatalogues;
 
 namespace MDCourseProject
 {

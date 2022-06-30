@@ -35,7 +35,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             var keyToDocumentTree = documentInfo.Document;
             if (_documentTree.Contains(keyToDocumentTree, documentInfo))
             {
-                MessageBox.Show("Элемент существует", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Элемент существует", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             var keyToDivision = documentInfo.DivisionName;
@@ -66,7 +66,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
                 PrintDataToGrid(mainDataGrid, info, new []{"Тип документа", "Должность", "Подразделение"});
             else
             {
-                MessageBox.Show("Элемент не найден!", "Предупрежедние", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Элемент не найден!", "Предупрежедние", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
