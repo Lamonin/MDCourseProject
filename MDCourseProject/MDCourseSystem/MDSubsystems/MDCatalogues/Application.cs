@@ -21,6 +21,7 @@ public class Staff:IComparable<Staff>
     
     public int CompareTo(Staff other)
     {
+        if (other == null) return 1;
         var staffNameComparison = string.Compare(StaffName, other.StaffName, StringComparison.Ordinal);
         if (staffNameComparison != 0) return staffNameComparison;
         var staffSurnameComparison = string.Compare(StaffSurname, other.StaffSurname, StringComparison.Ordinal);
@@ -28,6 +29,11 @@ public class Staff:IComparable<Staff>
         var staffPatronymicComparison = string.Compare(StaffPatronymic, other.StaffPatronymic, StringComparison.Ordinal);
         if (staffPatronymicComparison != 0) return staffPatronymicComparison;
         return string.Compare(StaffOccupation, other.StaffOccupation, StringComparison.Ordinal);
+    }
+
+    public override string ToString()
+    {
+        return String.Join(" ", StaffName, StaffSurname, StaffPatronymic, StaffOccupation);
     }
 
     public Staff(string staffName, string staffSurname, string staffPatronymic, string staffOccupation)
@@ -40,17 +46,17 @@ public class Staff:IComparable<Staff>
 }
 public class Application : IComparable<Application>
 {
-    public Staff staff;
+    public Staff staff { get; set; }
 
-    public string ClientName;
+    public string ClientName  { get; set; }
     
-    public string ClientSurname;
+    public string ClientSurname  { get; set; }
     
-    public string ClientPatronymic;
+    public string ClientPatronymic  { get; set; }
 
-    public string ClientTelephone;
+    public string ClientTelephone  { get; set; }
     
-    public DateTime Date;
+    public DateTime Date { get; set; }
     
     public override string ToString()
     {
@@ -97,7 +103,7 @@ public class Applications:Catalogue
     public override void Add(string[] data)
     {
         var key = new Staff(data[0],data[1],data[2],data[3]);
-        var ApplicationInfo = new Application(key, data[4], data[5], data[6], data[7], DateTime.Parse(data[7]));
+        var ApplicationInfo = new Application(key, data[4], data[5], data[6], data[7], DateTime.Parse(data[8]));
         tree.RBAddLeaf(key,ApplicationInfo);
         ApplicationsInfo.Add(ApplicationInfo);
     }
@@ -105,26 +111,34 @@ public class Applications:Catalogue
     public override void Remove(string[] data)
     {
         var key = new Staff(data[0],data[1],data[2],data[3]);
-        var ApplicationInfo = new Application(key, data[4], data[5], data[6], data[7], DateTime.Parse(data[7]));
+        var ApplicationInfo = new Application(key, data[4], data[5], data[6], data[7], DateTime.Parse(data[8]));
         tree.RBDelete(key,ApplicationInfo);
-        ApplicationsInfo.Remove(ApplicationInfo);
+        ApplicationsInfo.RemoveAll(application => application.CompareTo(ApplicationInfo) == 0);
     }
 
     public override void Find(DataGrid mainDataGrid, string[] data)
     {
         var key = new Staff(data[0],data[1],data[2],data[3]);
-        var res = tree.GetLeaf(tree.m_root, key).valList.head.pData;
-        if(res != null)
-            PrintDataToGrid(mainDataGrid, new List<Application> {res}, new[] {"Имя сотрудника","Фамилия сотрудника","Отчество сотрудника",
-                "Должность сотрудника","Имя клиента","Фамилия клиента", "Отчество клиента","Телефон клиента", "Дата"});
+        var head = tree.GetLeaf(tree.m_root, key).valList.head;
+        if (head != null)
+        {
+            var results = new List<Application>();
+            var node = head;
+            do
+            {
+                results.Add(node.pData);
+                node = node.pNext;
+            } while (node != null);
+                
+            PrintDataToGrid(mainDataGrid, results, new[] {"Имя сотрудника","Фамилия сотрудника","Отчество сотрудника", "Должность сотрудника","Имя клиента","Фамилия клиента", "Отчество клиента","Телефон клиента", "Дата"});
+        }
         else
             MessageBox.Show("Элемент не найден", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     public override void PrintDataToGrid(DataGrid mainDataGrid)
     {
-        PrintDataToGrid(mainDataGrid, ApplicationsInfo, new []{"Имя сотрудника","Фамилия сотрудника","Отчество сотрудника",
-            "Должность сотрудника","Имя клиента","Фамилия клиента", "Отчество клиента","Телефон клиента", "Дата"});
+        PrintDataToGrid(mainDataGrid, ApplicationsInfo, new []{"Сотрудник","Имя клиента","Фамилия клиента", "Отчество клиента","Телефон клиента", "Дата"});
     }
 
     public override void Load(string filePath)

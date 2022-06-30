@@ -11,13 +11,6 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues;
 
 public class Client:IComparable<Client>
 {
-    public string Name {get; set;}
-    public string Surname {get; set;}
-    public string Patronymic {get; set;}
-    public string Telephone {get; set;}
-    public string Gender {get; set;}
-    public DateTime Date {get; set;}
-
     public Client(string name, string surname, string patronymic, string telephone, string gender, DateTime date)
     {
         Name = name;
@@ -47,6 +40,13 @@ public class Client:IComparable<Client>
         if (genderComparison != 0) return genderComparison;
         return Date.CompareTo(other.Date);
     }
+    
+    public string Name {get; set;}
+    public string Surname {get; set;}
+    public string Patronymic {get; set;}
+    public string Telephone {get; set;}
+    public string Gender {get; set;}
+    public DateTime Date {get; set;}
 }
 
 public class ClientFullNameAndTelephone:IComparable<ClientFullNameAndTelephone>
@@ -96,17 +96,19 @@ public class Clients:Catalogue
     {
         _clientTable = new DynamicHashTable<ClientFullNameAndTelephone, Client>();
         CliestsInfo = new List<Client>();
+        ClientAgeTree = new RB_Tree<int, Client>();
         
-        _clientTable.FirstHashFunc = key =>
+        /*_clientTable.FirstHashFunc = key =>
         {
-            return key;
+            return key % _clientTable.GetCapacity();
         };
 
         _clientTable.SecondHashFunc = key =>
         {
-            return key;
-        };
-        //придумать хеш функции
+            return 1;
+        };*/
+        
+        //TODO придумать хеш функции
     }
 
     public override void Add(string[] data)
@@ -120,7 +122,7 @@ public class Clients:Catalogue
         }
         _clientTable.Add(key,ClientInfo);
         CliestsInfo.Add(ClientInfo);
-        ClientAgeTree.RBAddLeaf(DateTime.Today.Year - ClientInfo.Date.Year,ClientInfo);
+        ClientAgeTree.RBAddLeaf(DateTime.Today.Year - ClientInfo.Date.Year, ClientInfo);
     }
 
     public override void Remove(string[] data)
@@ -128,7 +130,7 @@ public class Clients:Catalogue
         var ClientInfo = new Client(data[0], data[1], data[2], data[3], data[4], DateTime.Parse(data[5]));
         var key = new ClientFullNameAndTelephone(data[0],data[1],data[2],data[3]);
         _clientTable.Remove(key,ClientInfo);
-        CliestsInfo.Remove(ClientInfo);
+        CliestsInfo.RemoveAll(client => client.CompareTo(ClientInfo) == 0);
         ClientAgeTree.RBDelete(DateTime.Today.Year - ClientInfo.Date.Year, ClientInfo);
     }
 
@@ -138,7 +140,6 @@ public class Clients:Catalogue
 
         if ( _clientTable.TryGetValue(key, out var res))
             PrintDataToGrid(mainDataGrid, new List<Client> {res}, new[] {"Имя", "Фамилия", "Отчество", "Телефон", "Пол", "Дата рождения"});
-
         else
             MessageBox.Show("Элемент не найден", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Information);
 

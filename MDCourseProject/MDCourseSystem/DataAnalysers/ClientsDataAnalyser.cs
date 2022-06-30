@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using MDCourseProject.MDCourseSystem;
 using MDCourseProject.MDCourseSystem.MDCatalogues;
 
@@ -12,7 +13,7 @@ public class AddValuesClientsAnalyser:DataAnalyser
     
     public override bool IsCorrectInputData()
     {
-        return false;
+        return true;
     }
 }
 
@@ -24,12 +25,23 @@ public class AddValuesApplicationAnalyser:DataAnalyser
     
     public override bool IsCorrectInputData()
     {
+        bool isError = false;
         foreach (var textbox in _textBoxes)
         {
-            if (textbox.Text.Trim().Length == 0) return false;
+            if (textbox.Text.Trim().Length == 0)
+            {
+                isError = true;
+                break;
+            }
         }
         
-        var client = MDSystem.clientsSubsystem._clients.ClientsTable.ContainsKey(new ClientFullNameAndTelephone(_textBoxes[4].Text, _textBoxes[5].Text, _textBoxes[6].Text, _textBoxes[7].Text));
-        return client;
+        isError = isError || !MDSystem.clientsSubsystem._clients.ClientsTable.ContainsKey(new ClientFullNameAndTelephone(_textBoxes[4].Text, _textBoxes[5].Text, _textBoxes[6].Text, _textBoxes[7].Text));
+        
+        if (isError)
+        {
+            MessageBox.Show("Некорректные данные!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        
+        return !isError;
     }
 }
