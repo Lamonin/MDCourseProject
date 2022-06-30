@@ -7,6 +7,9 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems;
 
 public class ClientsSubsystem:ISubsystem
 {
+    public Applications _applications { get; set; }
+    public Clients _clients { get; set; }
+
     public void LoadDefaultFirstCatalogue()
     {
         //LoadFirstCatalogue("DefaultFiles/имя_справочника.txt");

@@ -24,7 +24,7 @@ namespace FundamentalStructures
                     }
                 }
 
-                Node head;
+                public Node head;
                 Node last;
 
                 public list()
