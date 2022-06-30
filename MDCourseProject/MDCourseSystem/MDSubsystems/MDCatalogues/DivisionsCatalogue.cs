@@ -173,12 +173,12 @@ public class DivisionsCatalogue:Catalogue
 
     public override DataAnalyser BuildRemoveValuesWindow(Grid mainGrid)
     {
-        return new RemoveValuesDivisionsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Подразделение:", "Район:"));
+        return new DataAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Подразделение:", "Район:"));
     }
 
     public override DataAnalyser BuildSearchValuesWindow(Grid mainGrid)
     {
-        return new SearchValuesDivisionsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Название подразделения:", "Район:"));
+        return new DataAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Название подразделения:", "Район:"));
     }
 
     public override string PrintData()

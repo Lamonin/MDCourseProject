@@ -2,7 +2,7 @@
 
 namespace MDCourseProject.AppWindows.DataAnalysers;
 
-public abstract class DataAnalyser
+public class DataAnalyser
 {
     protected readonly TextBox[] _textBoxes;
     
@@ -11,7 +11,7 @@ public abstract class DataAnalyser
         _textBoxes = textBoxes;
     }
 
-    public string[] GetData()
+    public virtual string[] GetData()
     {
         var data = new string[_textBoxes.Length];
 

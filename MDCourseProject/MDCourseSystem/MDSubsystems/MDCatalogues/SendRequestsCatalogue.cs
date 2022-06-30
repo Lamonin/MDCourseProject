@@ -165,12 +165,12 @@ public class SendRequestsCatalogue:Catalogue
 
     public override DataAnalyser BuildRemoveValuesWindow(Grid mainGrid)
     {
-        return new RemoveValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Район:", "Подразделение:", "Клиент:", "Название услуги:", "Дата:"));
+        return new DataAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Район:", "Подразделение:", "Клиент:", "Название услуги:", "Дата:"));
     }
 
     public override DataAnalyser BuildSearchValuesWindow(Grid mainGrid)
     {
-        return new SearchValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Район:", "Подразделение:"));
+        return new DataAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Район:", "Подразделение:"));
     }
 
     public override string PrintData()

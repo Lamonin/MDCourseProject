@@ -222,7 +222,7 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
         for (int i = 0; i < _capacity; i++)
         {
             if (_statusesTable[i] != 0) //Модифицировал, чтобы не выводило миллион записей
-                output += $"{i+1}) Key:{_valuesTable[i].Key}; Value: {_valuesTable[i].Value}; Status: {_statusesTable[i]}\n";
+                output += $"{i+1}) Key:{_valuesTable[i].Key}; Value: {_valuesTable[i].Value}; Status: {_statusesTable[i]}; FirstHF: {FirstHashFunc(_valuesTable[i].Key.GetHashCode())}; SecondHF: {SecondHashFunc(_valuesTable[i].Key.GetHashCode())}\n";
         }
 
         return output;

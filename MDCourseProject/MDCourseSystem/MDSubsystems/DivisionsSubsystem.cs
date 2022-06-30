@@ -40,7 +40,7 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             var saveReportDialog = new SaveFileDialog
             {
                 Title = "Выберите место для сохранения отчета по подсистеме Подразделения",
-                FileName ="Подразделения_Отчет",
+                FileName ="Отчет: Заявки по услуге",
                 Filter = "Text files (*.txt)|*.txt",
             };
         
