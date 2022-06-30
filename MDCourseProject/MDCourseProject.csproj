@@ -113,6 +113,8 @@
         <Compile Include="MDCourseSystem\MDSubsystems\DivisionsSubsystem.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\ISubsystem.cs" />
         <Compile Include="MDCourseSystem\MDDebugConsole\MDDebugConsole.cs" />
+        <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\Application.cs" />
+        <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\Clients.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\DivisionsCatalogue.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\Catalogue.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\DocumentCatalogue.cs" />

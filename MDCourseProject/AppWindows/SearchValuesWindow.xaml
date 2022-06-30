@@ -16,11 +16,10 @@
             <RowDefinition Height="24"/>
             <RowDefinition Height="16"/>
         </Grid.RowDefinitions>
-            
-        <Border BorderThickness="1"  Margin="4" Padding="16 16 16 16">
-            <Grid x:Name="SearchValuesGrid">
-            </Grid>
-        </Border>
+        
+        <ScrollViewer Padding="16 16 16 16" VerticalScrollBarVisibility="Auto">
+            <Grid x:Name="SearchValuesGrid"></Grid>
+        </ScrollViewer>
             
         <Separator Grid.Row="1" Margin="16 0 16 0" VerticalAlignment="Top"/>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="16 0 16 0">

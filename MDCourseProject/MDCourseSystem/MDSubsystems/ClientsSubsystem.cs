@@ -7,6 +7,15 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems;
 
 public class ClientsSubsystem:ISubsystem
 {
+    public Applications _applications { get;}
+    public Clients _clients { get;}
+
+    public ClientsSubsystem()
+    {
+        _applications = new Applications();
+        _clients = new Clients();
+    }
+
     public void LoadDefaultFirstCatalogue()
     {
         //LoadFirstCatalogue("DefaultFiles/имя_справочника.txt");
@@ -46,7 +55,7 @@ public class ClientsSubsystem:ISubsystem
         }
     }
 
-    public Catalogue Catalogue => null;
+    public Catalogue Catalogue => _catalogueIndex == 0 ? _clients : _applications;
 
     public IEnumerable<string> CataloguesNames => new []{"Клиенты", "Обращения"};
 }

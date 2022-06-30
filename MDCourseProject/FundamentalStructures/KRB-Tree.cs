@@ -24,7 +24,7 @@ namespace FundamentalStructures
                     }
                 }
 
-                Node head;
+                public Node head;
                 Node last;
 
                 public list()
@@ -51,18 +51,16 @@ namespace FundamentalStructures
                 public int ReturnCountOfElements()
                 {
                     if (head == null) return 0;
-                    else
+                    
+                    int count = 1;
+                    Node cur = head;
+                    while (cur != null)
                     {
-                        int count = 1;
-                        Node cur = head;
-                        while (cur != null)
-                        {
-                            count++;
-                            cur = cur.pNext;
-                        }
-
-                        return count;
+                        count++;
+                        cur = cur.pNext;
                     }
+
+                    return count;
                 }
 
                 public void DelNode(TValue val)
@@ -425,9 +423,9 @@ namespace FundamentalStructures
         public bool isEqual(leaf leaf1, leaf leaf2)
         {
             if ((leaf1 == null && leaf2 != null) || (leaf1 != null && leaf2 == null)) return false;
-            if (leaf1.IsRed == leaf2.IsRed && leaf1.key.CompareTo(leaf2.key) == 0 &&
+            if (leaf1.key is null || leaf1.IsRed == leaf2.IsRed && leaf1.key.CompareTo(leaf2.key) == 0 &&
                 leaf1.Lleaf == leaf2.Lleaf && leaf1.Rleaf == leaf2.Rleaf) return true;
-            else return false;
+            return false;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using MDCourseProject.AppWindows;
 using MDCourseProject.MDCourseSystem;
 using MDCourseProject.MDCourseSystem.MDCatalogues;
+using Application = System.Windows.Application;
 
 namespace MDCourseProject
 {
@@ -32,8 +33,11 @@ namespace MDCourseProject
 
         public void UpdateMainDataGridValues()
         {
-            MDSystem.Subsystem.Catalogue?.PrintDataToGrid(MainDataGrid);
-            MainDataGrid.Items.Refresh();
+            if (MainDataGrid.IsLoaded)
+            {
+                MDSystem.Subsystem.Catalogue?.PrintDataToGrid(MainDataGrid);
+                MainDataGrid.Items.Refresh();
+            }
         }
 
         private void ComboBox_OnSubsystemChanged(object sender, SelectionChangedEventArgs e)
