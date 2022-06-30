@@ -10,9 +10,13 @@ namespace MDCourseProject.AppWindows;
 public partial class SelectLoadDataWindow : Window
 {
     private bool isJustClosing;
+
+    private string[] filePaths;
+    
     public SelectLoadDataWindow()
     {
         InitializeComponent();
+        filePaths = new string[6];
     }
     
     protected override void OnClosed(EventArgs e)
@@ -23,6 +27,23 @@ public partial class SelectLoadDataWindow : Window
 
     private void Button_Continue(object sender, RoutedEventArgs e)
     {
+        try
+        {
+            MDSystem.clientsSubsystem.LoadFirstCatalogue(filePaths[0]);
+            MDSystem.staffSubsystem.LoadFirstCatalogue(filePaths[2]);
+            MDSystem.divisionsSubsystem.LoadFirstCatalogue(filePaths[4]);
+            
+            MDSystem.clientsSubsystem.LoadSecondCatalogue(filePaths[1]);
+            MDSystem.staffSubsystem.LoadSecondCatalogue(filePaths[3]);
+            MDSystem.divisionsSubsystem.LoadSecondCatalogue(filePaths[5]);
+        }
+        catch (Exception exception)
+        {
+            MDDebugConsole.WriteLine(exception.Message);
+            MessageBox.Show("Указан некорректный путь!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        
         isJustClosing = true;
         DialogResult = true;
     }
@@ -58,7 +79,7 @@ public partial class SelectLoadDataWindow : Window
     {
         if (SelectFile(TextBlock_FilePathClients, out var filePath))
         {
-            MDSystem.clientsSubsystem.LoadFirstCatalogue(filePath);
+            filePaths[0] = filePath;
         }
     }
 
@@ -66,7 +87,7 @@ public partial class SelectLoadDataWindow : Window
     {
         if (SelectFile(TextBlock_FilePathAppeals, out var filePath))
         {
-            MDSystem.clientsSubsystem.LoadSecondCatalogue(filePath);
+            filePaths[1] = filePath;
         }
     }
     
@@ -74,7 +95,7 @@ public partial class SelectLoadDataWindow : Window
     {
         if (SelectFile(TextBlock_FilePathStaff, out var filePath))
         {
-            MDSystem.staffSubsystem.LoadFirstCatalogue(filePath);
+            filePaths[2] = filePath;
         }
     }
     
@@ -82,7 +103,7 @@ public partial class SelectLoadDataWindow : Window
     {
         if (SelectFile(TextBlock_FilePathDocuments, out var filePath))
         {
-            MDSystem.staffSubsystem.LoadSecondCatalogue(filePath);
+            filePaths[3] = filePath;
         }
     }
     
@@ -90,7 +111,7 @@ public partial class SelectLoadDataWindow : Window
     {
         if (SelectFile(TextBlock_FilePathDivisions, out var filePath))
         {
-            MDSystem.divisionsSubsystem.LoadFirstCatalogue(filePath);
+            filePaths[4] = filePath;
         }
     }
     
@@ -98,7 +119,7 @@ public partial class SelectLoadDataWindow : Window
     {
         if (SelectFile(TextBlock_FilePathSendRequests, out var filePath))
         {
-            MDSystem.divisionsSubsystem.LoadSecondCatalogue(filePath);
+            filePaths[5] = filePath;
         }
     }
 }
