@@ -42,9 +42,14 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         {
             var staffInfo = new StaffInfo(new FullName(data[0]), new Occupation(data[1]), new District(data[2]));
             var keyToStaffTable = new StaffNameAndOccupation(staffInfo.FullName, staffInfo.Occupation);
-            if (_staffTable.Contains(keyToStaffTable, staffInfo) || _staffTable.ContainsKey(keyToStaffTable))
+            if (_staffTable.Contains(keyToStaffTable, staffInfo))
             {
                 MessageBox.Show("Элемент существует", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            if (_staffTable.ContainsKey(keyToStaffTable))
+            {
+                MessageBox.Show($"Ключ {keyToStaffTable} неуникален", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             var keyToWorkPlaceTree = new WorkPlace(staffInfo.Occupation, staffInfo.District);
@@ -52,7 +57,6 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             _workplaceTree.Add(keyToWorkPlaceTree, staffInfo);
             _staffTable.Add(keyToStaffTable, staffInfo);
             _staffInfo.Add(staffInfo);
-            //MDDebugConsole.WriteLine($"Добавление в таблицу по ключу: {keyToStaffTable}; Первичная ХФ: {_staffTable.FirstHashFunc(keyToStaffTable.GetHashCode())}; Вторичная ХФ: {_staffTable.SecondHashFunc(keyToStaffTable.GetHashCode())}");
         }
 
         public override void Remove(string[] data)

@@ -261,9 +261,9 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         for (int i = 0; i < _capacity; i++)
         {
             if (_statusesTable[i] == 0)
-                output += $"{i+1}] EMPTY\n";
+                output += $"{i}: EMPTY\n";
             else
-                output += $"{i+1}) Key:{_valuesTable[i].Key}; Value: {_valuesTable[i].Value}; Status: {_statusesTable[i]}; FirstHF: {FirstHashFunc(_valuesTable[i].Key.GetHashCode())}; SecondHF: {SecondHashFunc(_valuesTable[i].Key.GetHashCode())}\n";
+                output += $"{i}: Key: {_valuesTable[i].Key}; Value: {_valuesTable[i].Value}; Status: {_statusesTable[i]}; FirstHF: {FirstHashFunc(_valuesTable[i].Key.GetHashCode())}; SecondHF: {SecondHashFunc(_valuesTable[i].Key.GetHashCode())}\n";
         }
 
         return output;
