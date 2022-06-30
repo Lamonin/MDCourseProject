@@ -263,7 +263,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
             if (_statusesTable[i] == 0)
                 output += $"{i+1}] EMPTY\n";
             else
-                output += $"{i+1}] Key:{_valuesTable[i].Key}; Value: {_valuesTable[i].Value}; Status: {_statusesTable[i]}\n";
+                output += $"{i+1}) Key:{_valuesTable[i].Key}; Value: {_valuesTable[i].Value}; Status: {_statusesTable[i]}; FirstHF: {FirstHashFunc(_valuesTable[i].Key.GetHashCode())}; SecondHF: {SecondHashFunc(_valuesTable[i].Key.GetHashCode())}\n";
         }
 
         return output;

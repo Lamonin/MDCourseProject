@@ -113,7 +113,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override string PrintData()
         {
-            return string.Empty;
+            return "Дерево:\n" + _documentTree.PrintTree();
         }
 
         public override string Name => "Документы";

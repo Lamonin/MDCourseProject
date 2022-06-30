@@ -43,10 +43,10 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             
         public int CompareTo(FullName other)
         {
-            var cmpSurname = string.Compare(_surname, other._surname, StringComparison.OrdinalIgnoreCase);
+            var cmpSurname = string.Compare(_surname, other._surname, StringComparison.Ordinal);
             if (cmpSurname != 0) return cmpSurname;
-            var cmpName = string.Compare(_name, other._name, StringComparison.OrdinalIgnoreCase);
-            return cmpName != 0 ? cmpName : string.Compare(_patronymic, other._patronymic, StringComparison.OrdinalIgnoreCase);
+            var cmpName = string.Compare(_name, other._name, StringComparison.Ordinal);
+            return cmpName != 0 ? cmpName : string.Compare(_patronymic, other._patronymic, StringComparison.Ordinal);
         }
 
         public override string ToString() => string.Join(" ", _surname, _name, _patronymic);
@@ -72,7 +72,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             _occupation = occupation;
         }
 
-        public int CompareTo(Occupation other) => string.Compare(_occupation, other._occupation, StringComparison.OrdinalIgnoreCase);
+        public int CompareTo(Occupation other) => string.Compare(_occupation, other._occupation, StringComparison.Ordinal);
 
         public override string ToString() => _occupation;
 
@@ -92,7 +92,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             _district = district;
         }
 
-        public int CompareTo(District other) => string.Compare(_district, other._district, StringComparison.OrdinalIgnoreCase);
+        public int CompareTo(District other) => string.Compare(_district, other._district, StringComparison.Ordinal);
 
         public override string ToString() => _district;
     }
@@ -120,7 +120,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             _divisionName = divisionName;
         }
 
-        public int CompareTo(DivisionName other) => string.Compare(_divisionName, other._divisionName, StringComparison.OrdinalIgnoreCase);
+        public int CompareTo(DivisionName other) => string.Compare(_divisionName, other._divisionName, StringComparison.Ordinal);
 
         public override string ToString() => _divisionName;
     }

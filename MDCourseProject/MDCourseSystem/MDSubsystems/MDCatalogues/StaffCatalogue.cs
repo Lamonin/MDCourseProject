@@ -52,7 +52,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             _workplaceTree.Add(keyToWorkPlaceTree, staffInfo);
             _staffTable.Add(keyToStaffTable, staffInfo);
             _staffInfo.Add(staffInfo);
-            MDDebugConsole.WriteLine($"Добавление в таблицу по ключу: {keyToStaffTable}; Первичная ХФ: {_staffTable.FirstHashFunc(keyToStaffTable.GetHashCode())}; Вторичная ХФ: {_staffTable.SecondHashFunc(keyToStaffTable.GetHashCode())}");
+            //MDDebugConsole.WriteLine($"Добавление в таблицу по ключу: {keyToStaffTable}; Первичная ХФ: {_staffTable.FirstHashFunc(keyToStaffTable.GetHashCode())}; Вторичная ХФ: {_staffTable.SecondHashFunc(keyToStaffTable.GetHashCode())}");
         }
 
         public override void Remove(string[] data)
@@ -130,7 +130,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override string PrintData()
         {
-            return string.Empty;
+            return "Хеш-таблица:\n" + _staffTable.ToStringWithStatuses();
         }
 
         public override string Name => "Сотрудники";
@@ -140,6 +140,6 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         public RRBTree<WorkPlace, StaffInfo> WorkplaceTree => _workplaceTree;
         
         public RRBTree<Occupation, StaffInfo> OccupationTree => _occupationTree;
-
+        
     }
 }

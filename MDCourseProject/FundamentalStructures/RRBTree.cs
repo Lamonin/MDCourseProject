@@ -399,20 +399,22 @@ namespace FundamentalStructures
                return !IsEmpty(find) ? find.GetList() : null;
            }
            
-           private void Print(TreeNode root, int height)
+           private void Print(TreeNode root, int height, ref string output)
            {
                if (!IsEmpty(root))
                {
-                   Print(root.RBranch, height+4);
-                   for(var i = 1; i<height; i++) Console.Write("   ");
-                   Console.WriteLine(string.Join("-", root.Color, root.Key, root.GetList().ToString()));
-                   Print(root.LBranch, height+4);
+                   Print(root.RBranch, height+4, ref output);
+                   for(var i = 1; i<height; i++) output += "    ";
+                   output += root.Key+ " (" + root.GetList() + ")" + (root.Color ? "-RED" : "-BLACK") + '\n' + '\n';
+                   Print(root.LBranch, height+4, ref output);
                }
            }
    
-           public void PrintTree()
+           public string PrintTree()
            {
-               Print(_root, 0);
+               var output = string.Empty;
+               Print(_root, 0, ref output);
+               return output;
            }
        }
 }
