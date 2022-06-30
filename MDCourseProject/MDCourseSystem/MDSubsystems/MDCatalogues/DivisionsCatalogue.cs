@@ -183,7 +183,7 @@ public class DivisionsCatalogue:Catalogue
 
     public override string PrintData()
     {
-        return null;
+        return string.Empty;
     }
 
     public override string Name => "Подразделения";
