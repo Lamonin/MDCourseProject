@@ -48,9 +48,9 @@ public class AddValuesSendRequestsAnalyser: DataAnalyser
         isError = isError || _textBoxes[3].Text.Length < 2;
 
         //Проверяем на корректность данные о клиенте
-        var clientData = _textBoxes[2].Text.Split(',');
+        var clientData = _textBoxes[2].Text.Split(new []{","}, StringSplitOptions.RemoveEmptyEntries);
         isError = isError || clientData.Length!=2; //Данные клиента должны быть разделены запятой не меньше и не больше одного раза
-        isError = isError || clientData[0].Split().Length!=3; //ФИО должно состоять из трёх полей - фамилии, имени и отчества
+        isError = isError || clientData[0].Split(new []{" "}, StringSplitOptions.RemoveEmptyEntries).Length!=3; //ФИО должно состоять из трёх полей - фамилии, имени и отчества
         isError = isError || clientData[1].Trim().Length != 11; //Кол-во символов номера не должно быть меньше, или больше 11
         isError = isError || !clientData[1].Trim().All(char.IsDigit); //Номер телефона должен состоять только из цифр
 

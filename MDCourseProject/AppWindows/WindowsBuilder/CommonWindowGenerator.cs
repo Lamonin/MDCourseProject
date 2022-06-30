@@ -147,8 +147,10 @@ public static class CommonWindowGenerator
         foreach (var header in headers)
         {
             mainGrid.Columns[index].Header = header;
-            mainGrid.Columns[index].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            mainGrid.Columns[index].Width = new DataGridLength(1, DataGridLengthUnitType.Auto);
+            mainGrid.Columns[index].MinWidth = 96;
             index++;
         }
+        mainGrid.Columns[index-1].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
     }
 }
