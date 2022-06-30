@@ -135,9 +135,8 @@ public class Clients:Catalogue
     public override void Find(DataGrid mainDataGrid, string[] data)
     {
         var key = new ClientFullNameAndTelephone(data[0],data[1],data[2],data[3]);
-        _clientTable.TryGetValue(key, out var res);
 
-        if (res != null)
+        if ( _clientTable.TryGetValue(key, out var res))
             PrintDataToGrid(mainDataGrid, new List<Client> {res}, new[] {"Имя", "Фамилия", "Отчество", "Телефон", "Пол", "Дата рождения"});
 
         else
