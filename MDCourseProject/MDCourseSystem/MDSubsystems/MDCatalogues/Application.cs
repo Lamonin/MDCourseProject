@@ -130,7 +130,7 @@ public class Applications:Catalogue
                 node = node.pNext;
             } while (node != null);
                 
-            PrintDataToGrid(mainDataGrid, results, new[] {"Имя сотрудника","Фамилия сотрудника","Отчество сотрудника", "Должность сотрудника","Имя клиента","Фамилия клиента", "Отчество клиента","Телефон клиента", "Дата"});
+            PrintDataToGrid(mainDataGrid, results, new[] {"Сотрудник","Имя клиента","Фамилия клиента", "Отчество клиента","Телефон клиента", "Дата"});
         }
         else
             MessageBox.Show("Элемент не найден", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -176,8 +176,7 @@ public class Applications:Catalogue
 
     public override DataAnalyser BuildSearchValuesWindow(Grid mainGrid)
     {
-        return new DataAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Имя сотрудника","Фамилия сотрудника","Отчество сотрудника",
-            "Должность сотрудника","Имя клиента","Фамилия клиента", "Отчество клиента","Телефон клиента", "Дата"));
+        return new DataAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Имя сотрудника","Фамилия сотрудника","Отчество сотрудника", "Должность сотрудника"));
     }
 
     public override string PrintData()
