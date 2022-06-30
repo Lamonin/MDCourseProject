@@ -7,6 +7,16 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems;
 
 public class ClientsSubsystem:ISubsystem
 {
+    public void LoadDefaultFirstCatalogue()
+    {
+        //LoadFirstCatalogue("DefaultFiles/имя_справочника.txt");
+    }
+
+    public void LoadDefaultSecondCatalogue()
+    {
+        //LoadSecondCatalogue("DefaultFiles/имя_справочника.txt");
+    }
+    
     public void LoadFirstCatalogue(string filePath)
     {
     }

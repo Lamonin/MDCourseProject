@@ -77,6 +77,12 @@ public class SendRequestsCatalogue:Catalogue
 
     public readonly LRBTree<string, SendRequest> SendRequestsByService;
 
+    private static string FormatDate(string dateString)
+    {
+        var date = DateTime.Parse(dateString);
+        return $"{date.Day}.{date.Month}.{date.Year}";
+    }
+    
     public SendRequestsCatalogue()
     {
         SendRequestsTree = new LRBTree<DivisionNameAndArea, SendRequest>();
@@ -86,9 +92,7 @@ public class SendRequestsCatalogue:Catalogue
     
     public override void Add(string[] data)
     {
-        //Преобразование даты к единому формату
-        var date = DateTime.Parse(data[4]);
-        data[4] = $"{date.Day}.{date.Month}.{date.Year}";
+        data[4] = FormatDate(data[4]);
         
         var key = new DivisionNameAndArea(data[1], data[0]);
         var value = new SendRequest(key, data[2], data[3], data[4]);
@@ -103,6 +107,8 @@ public class SendRequestsCatalogue:Catalogue
 
     public override void Remove(string[] data)
     {
+        data[4] = FormatDate(data[4]);
+        
         var key = new DivisionNameAndArea(data[1], data[0]);
         var value = new SendRequest(key, data[2], data[3], data[4]);
 

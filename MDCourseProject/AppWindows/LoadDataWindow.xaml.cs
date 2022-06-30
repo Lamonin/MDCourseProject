@@ -21,10 +21,12 @@ public partial class LoadDataWindow : Window
     private void Button_LoadDefaultData(object sender, RoutedEventArgs e)
     {
         //Загрузка каталогов по умолчанию
-        MDSystem.staffSubsystem.LoadDefaultSecondCatalogue();
+        MDSystem.clientsSubsystem.LoadDefaultFirstCatalogue();
         MDSystem.staffSubsystem.LoadDefaultFirstCatalogue();
-        
         MDSystem.divisionsSubsystem.LoadDefaultFirstCatalogue();
+        
+        MDSystem.clientsSubsystem.LoadDefaultSecondCatalogue();
+        MDSystem.staffSubsystem.LoadDefaultSecondCatalogue();
         MDSystem.divisionsSubsystem.LoadDefaultSecondCatalogue();
         
         isJustClosing = true;
