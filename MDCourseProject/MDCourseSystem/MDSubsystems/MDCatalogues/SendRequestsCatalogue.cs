@@ -173,5 +173,10 @@ public class SendRequestsCatalogue:Catalogue
         return new SearchValuesSendRequestsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Район:", "Подразделение:"));
     }
 
+    public override string PrintData()
+    {
+        return null;
+    }
+
     public override string Name => "Отправленные заявки";
 }

@@ -111,6 +111,11 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             return new SearchValuesDocumentAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Тип документа:"));
         }
 
+        public override string PrintData()
+        {
+            return null;
+        }
+
         public override string Name => "Документы";
     }
 }

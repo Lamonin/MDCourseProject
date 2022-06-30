@@ -181,5 +181,10 @@ public class DivisionsCatalogue:Catalogue
         return new SearchValuesDivisionsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Название подразделения:", "Район:"));
     }
 
+    public override string PrintData()
+    {
+        return null;
+    }
+
     public override string Name => "Подразделения";
 }

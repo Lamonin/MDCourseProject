@@ -127,6 +127,11 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             return new SearchValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО:", "Должность:"));
         }
 
+        public override string PrintData()
+        {
+            return null;
+        }
+
         public override string Name => "Сотрудники";
         
         public DynamicHashTable<StaffNameAndOccupation, StaffInfo> StaffTable => _staffTable;

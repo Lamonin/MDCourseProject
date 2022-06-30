@@ -95,6 +95,7 @@ namespace MDCourseProject
         private void Button_OpenDebugWindow(object sender, RoutedEventArgs e)
         {
             MDDebugConsole.ShowWindow();
+            MDDebugConsole.WriteLine(MDSystem.Subsystem.Catalogue.PrintData());
         }
 
         private void Button_OpenAddValuesWindow(object sender, RoutedEventArgs e)

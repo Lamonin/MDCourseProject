@@ -45,5 +45,6 @@ public abstract class Catalogue
     public abstract DataAnalyser BuildAddValuesWindow(Grid mainGrid);
     public abstract DataAnalyser BuildRemoveValuesWindow(Grid mainGrid);
     public abstract DataAnalyser BuildSearchValuesWindow(Grid mainGrid);
+    public abstract string PrintData();
     public abstract string Name { get; }
 }
