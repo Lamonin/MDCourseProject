@@ -67,7 +67,42 @@ public class ReportCheck: ICheck
                                       && textBoxes[0].Text != string.Empty;
         var noSyntaxErrorInDistrict = textBoxes[1].Text.All(sym => char.IsLetterOrDigit(sym) || sym is '-' or '/' or '.' or ',' or ' ')
                                       && textBoxes[1].Text != string.Empty;
-        return noSyntaxErrorInDistrict && noSyntaxErrorInDocument;
+        return noSyntaxErrorInDocument && noSyntaxErrorInDistrict;
+    }
+
+    public bool CheckInOtherCatalogue(TextBox[] textBoxes, out string[] text)
+    {
+        text = Array.Empty<string>();
+        return true;
+    }
+}
+
+public class SearchCheckInStaff: ICheck
+{
+
+    public bool CheckSyntax(TextBox[] textBoxes)
+    {
+        var noSyntaxErrorInName = textBoxes[0].Text.Split().Length == 3 && textBoxes[0].Text != string.Empty 
+                                                                        && textBoxes[0].Text.Split().All(str => str.Length == 1 || str.Substring(1,str.Length - 1).All(char.IsLower))
+                                                                        && textBoxes[0].Text.Split().Select(str => str.All(sym => char.IsLetter(sym) || sym == '-') && char.IsUpper(str[0])).All(checkFio => checkFio);
+        var noSyntaxErrorInOccupation = textBoxes[1].Text.All(sym => char.IsLetter(sym) || sym is ' ' or '-') && textBoxes[1].Text != string.Empty;
+        return noSyntaxErrorInName && noSyntaxErrorInOccupation;
+    }
+
+    public bool CheckInOtherCatalogue(TextBox[] textBoxes, out string[] text)
+    {
+        text = Array.Empty<string>();
+        return true;
+    }
+}
+
+public class SearchCheckInDocument: ICheck
+{
+    public bool CheckSyntax(TextBox[] textBoxes)
+    {
+        var noSyntaxErrorInDocument = textBoxes[0].Text.All(sym => char.IsLetterOrDigit(sym) || sym is '-' or ' ')
+                                      && textBoxes[0].Text != string.Empty;
+        return noSyntaxErrorInDocument;
     }
 
     public bool CheckInOtherCatalogue(TextBox[] textBoxes, out string[] text)
@@ -83,16 +118,16 @@ public static class CheckCorrectnessOfData
         var checkSyntax = checkSystem.CheckSyntax(textBoxes);
         if(!checkSyntax)
         {
-            MessageBox.Show("Некорректные данные!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("Некорректные данные!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
         var checkExistence = checkSystem.CheckInOtherCatalogue(textBoxes, out var error);
         if(!checkExistence)
         {
             if (error[0] != null)
-                MessageBox.Show(error[0], "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(error[0], "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             if(error[1] != null)
-                MessageBox.Show(error[1], "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(error[1], "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
         return true;
@@ -129,7 +164,7 @@ public class SearchValuesStaffAnalyser: DataAnalyser
     public override bool IsCorrectInputData()
     {
         // TODO Поменять логику поиска в справочнике
-        return CheckCorrectnessOfData.Check(new CheckStaffCatalogue(), _textBoxes);
+        return CheckCorrectnessOfData.Check(new SearchCheckInStaff(), _textBoxes);
     }
 }
 
@@ -165,7 +200,7 @@ public class SearchValuesDocumentAnalyser: DataAnalyser
     
     public override bool IsCorrectInputData()
     {
-        return CheckCorrectnessOfData.Check(new CheckDocumentCatalogue(), _textBoxes);
+        return CheckCorrectnessOfData.Check(new SearchCheckInDocument(), _textBoxes);
     }
 }
 

@@ -27,7 +27,18 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         public FullName(string fullname)
         {
             var fInfo = fullname.Split();
-            (_surname, _name, _patronymic) = (fInfo[0], fInfo[1], fInfo[2]);
+            switch (fInfo.Length)
+            {
+                case 1:
+                    (_surname, _name, _patronymic) = (fInfo[0], String.Empty, String.Empty);
+                    break;
+                case 2:
+                    (_surname, _name, _patronymic) = (fInfo[0], fInfo[1], String.Empty);
+                    break;
+                case 3:
+                    (_surname, _name, _patronymic) = (fInfo[0], fInfo[1], fInfo[2]);
+                    break;
+            }
         }
             
         public int CompareTo(FullName other)
