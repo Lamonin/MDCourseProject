@@ -183,7 +183,7 @@ public class DivisionsCatalogue:Catalogue
 
     public override string PrintData()
     {
-        return string.Empty;
+        return "Статическая хэш-таблица по Подразделениям:\n" + DivisionsTable.ToStringWithStatuses();
     }
 
     public override string Name => "Подразделения";

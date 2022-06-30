@@ -175,7 +175,7 @@ public class SendRequestsCatalogue:Catalogue
 
     public override string PrintData()
     {
-        return string.Empty;
+        return "Левостороннее красно-черное дерево по Отправленным заявкам:\n" + SendRequestsTree.PrintTree();
     }
 
     public override string Name => "Отправленные заявки";

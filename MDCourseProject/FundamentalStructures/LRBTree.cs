@@ -295,6 +295,24 @@ namespace FundamentalStructures
             _root = null;
         }
         
+        private void print_Tree(RBNode p, int level, ref string output)
+        {
+            if(p != null)
+            {
+                print_Tree(p.right,level + 1, ref output);
+                for(int i = 0;i< level;i++) output += "    ";
+                output += p.key + (p.Color ? "-К\n":"-Ч\n");
+                print_Tree(p.left,level + 1, ref output);
+            }
+        }
+        
+        public string PrintTree()
+        {
+            string output = String.Empty;
+            if (_root != null) print_Tree(_root, 0, ref output);
+            return output;
+        }
+        
         private void _treeBlackHeight(RBNode node, int h)
         {
             if (node != null && !_isRed(node)) h++;
