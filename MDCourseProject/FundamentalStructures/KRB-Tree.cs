@@ -137,6 +137,7 @@ namespace FundamentalStructures
             else  return root;
         }
 
+        //TODO Лучше сделать bool, а не выводить
         public void FindLeaf(leaf root, TKey key)
         {
             if (GetLeaf(root, key) == null)

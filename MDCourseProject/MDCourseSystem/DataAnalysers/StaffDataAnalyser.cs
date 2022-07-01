@@ -77,25 +77,6 @@ public class ReportCheck: ICheck
     }
 }
 
-public class SearchCheckInStaff: ICheck
-{
-
-    public bool CheckSyntax(TextBox[] textBoxes)
-    {
-        var noSyntaxErrorInName = textBoxes[0].Text.Split().Length == 3 && textBoxes[0].Text != string.Empty 
-                                                                        && textBoxes[0].Text.Split().All(str => str.Length == 1 || str.Substring(1,str.Length - 1).All(char.IsLower))
-                                                                        && textBoxes[0].Text.Split().Select(str => str.All(sym => char.IsLetter(sym) || sym == '-') && char.IsUpper(str[0])).All(checkFio => checkFio);
-        var noSyntaxErrorInOccupation = textBoxes[1].Text.All(sym => char.IsLetter(sym) || sym is ' ' or '-') && textBoxes[1].Text != string.Empty;
-        return noSyntaxErrorInName && noSyntaxErrorInOccupation;
-    }
-
-    public bool CheckInOtherCatalogue(TextBox[] textBoxes, out string[] text)
-    {
-        text = Array.Empty<string>();
-        return true;
-    }
-}
-
 public class SearchCheckInDocument: ICheck
 {
     public bool CheckSyntax(TextBox[] textBoxes)
@@ -144,27 +125,6 @@ public class AddValuesStaffAnalyser:DataAnalyser
     public override bool IsCorrectInputData()
     {
         return CheckCorrectnessOfData.Check(new CheckStaffCatalogue(), _textBoxes);
-    }
-}
-
-public class RemoveValuesStaffAnalyser: DataAnalyser
-{
-    public RemoveValuesStaffAnalyser(TextBox[] textBoxes): base(textBoxes){}
-
-    public override bool IsCorrectInputData()
-    {
-        return CheckCorrectnessOfData.Check(new CheckStaffCatalogue(), _textBoxes);
-    }
-}
-
-public class SearchValuesStaffAnalyser: DataAnalyser
-{
-    public SearchValuesStaffAnalyser(TextBox[] textBoxes): base(textBoxes){}
-
-    public override bool IsCorrectInputData()
-    {
-        // TODO Поменять логику поиска в справочнике
-        return CheckCorrectnessOfData.Check(new SearchCheckInStaff(), _textBoxes);
     }
 }
 
