@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -78,7 +79,29 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
                             {delete.Document.ToString(), delete.Occupation.ToString(), delete.DivisionName.ToString()});
                     }
             }
-            //TODO удалить в справочниках "Отправленные заявки"
+            /*var staffInApplicationCatalogue = new Staff(staffInfo.FullName.Name, staffInfo.FullName.Surname, staffInfo.FullName.Patronymic, staffInfo.Occupation.ToString());
+            if (MDSystem.clientsSubsystem._applications._tree != null)
+            {
+                var resultFromApplication = MDSystem.clientsSubsystem._applications._tree
+                    .GetLeaf(MDSystem.clientsSubsystem._applications._tree.m_root, staffInApplicationCatalogue) != null ?
+                    MDSystem.clientsSubsystem._applications._tree
+                        .GetLeaf(MDSystem.clientsSubsystem._applications._tree.m_root, staffInApplicationCatalogue).valList : null;
+                if (resultFromApplication != null)
+                {
+                    var pointer = resultFromApplication.head;
+                    while (pointer != null)
+                    {
+                        var tmp = pointer.pNext;
+                        MDSystem.clientsSubsystem._applications.Remove(new[]
+                        {
+                            pointer.pData.staff.StaffName, pointer.pData.staff.StaffSurname,
+                            pointer.pData.staff.StaffPatronymic, pointer.pData.staff.StaffOccupation, pointer.pData.ClientName, pointer.pData.ClientSurname,
+                            pointer.pData.ClientPatronymic, pointer.pData.ClientTelephone, pointer.pData.Date.ToString(CultureInfo.InvariantCulture)
+                        });
+                        pointer = tmp;
+                    }
+                }
+            }*/
         }
 
         public override void Find(DataGrid mainDataGrid, string[] data)
@@ -124,12 +147,12 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override DataAnalyser BuildRemoveValuesWindow(Grid mainGrid)
         {
-            return new RemoveValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО:", "Должность:", "Район:"));
+            return new DataAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО:", "Должность:", "Район:"));
         }
 
         public override DataAnalyser BuildSearchValuesWindow(Grid mainGrid)
         {
-            return new SearchValuesStaffAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО:", "Должность:"));
+            return new DataAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "ФИО:", "Должность:"));
         }
 
         public override string PrintData()

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.AppWindows.WindowsBuilder;
@@ -31,13 +32,25 @@ public class StaffSubsystem:ISubsystem
         LoadSecondCatalogue("DefaultFiles/Document.txt");
     }
      public void LoadFirstCatalogue(string filePath)
-    {
-        _staffCatalogue.Load(filePath);
+     {
+         var path = filePath.Split('/', '\\');
+         if(path[path.Length - 1].StartsWith("Staff") && path[path.Length - 1].EndsWith(".txt"))
+             _staffCatalogue.Load(filePath);
+         else
+         {
+             MessageBox.Show("Название файла для справочника \" Сотрудники \" некорректен! Файл должен начинаться со слова <Staff>!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+         }
     }
 
     public void LoadSecondCatalogue(string filePath)
     {
-        _documentCatalogue.Load(filePath);
+        var path = filePath.Split('/', '\\');
+        if(path[path.Length - 1].StartsWith("Document") && path[path.Length - 1].EndsWith(".txt"))
+            _documentCatalogue.Load(filePath);
+        else
+        {
+            MessageBox.Show("Название файла для справочника \" Документы \" некорректен!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     public bool MakeReport(string[] data)
@@ -68,7 +81,6 @@ public class StaffSubsystem:ISubsystem
                             report.Add(staff.FullName);
                         }
                     }
-                    else return false;
                 }
                 report.Sort();
                 var output = new StreamWriter(saveReportDialogWindow.FileName);
