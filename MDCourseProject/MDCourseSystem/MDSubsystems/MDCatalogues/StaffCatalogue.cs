@@ -79,29 +79,25 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
                             {delete.Document.ToString(), delete.Occupation.ToString(), delete.DivisionName.ToString()});
                     }
             }
-            /*var staffInApplicationCatalogue = new Staff(staffInfo.FullName.Name, staffInfo.FullName.Surname, staffInfo.FullName.Patronymic, staffInfo.Occupation.ToString());
-            if (MDSystem.clientsSubsystem._applications._tree != null)
+            var staffInApplicationCatalogue = new Staff(staffInfo.FullName.Name, staffInfo.FullName.Surname, staffInfo.FullName.Patronymic, staffInfo.Occupation.ToString());
+            if (MDSystem.clientsSubsystem._applications._tree != null && MDSystem.clientsSubsystem._applications._tree.IsKeyExist(staffInApplicationCatalogue))
             {
-                var resultFromApplication = MDSystem.clientsSubsystem._applications._tree
-                    .GetLeaf(MDSystem.clientsSubsystem._applications._tree.m_root, staffInApplicationCatalogue) != null ?
-                    MDSystem.clientsSubsystem._applications._tree
-                        .GetLeaf(MDSystem.clientsSubsystem._applications._tree.m_root, staffInApplicationCatalogue).valList : null;
-                if (resultFromApplication != null)
+                var applicationInfo = MDSystem.clientsSubsystem._applications._tree
+                    .GetLeaf(MDSystem.clientsSubsystem._applications._tree.m_root, staffInApplicationCatalogue).valList;
+                if (applicationInfo != null)
                 {
-                    var pointer = resultFromApplication.head;
+                    var pointer = applicationInfo.head;
                     while (pointer != null)
                     {
                         var tmp = pointer.pNext;
-                        MDSystem.clientsSubsystem._applications.Remove(new[]
-                        {
-                            pointer.pData.staff.StaffName, pointer.pData.staff.StaffSurname,
+                        MDSystem.clientsSubsystem._applications.Remove(new []{pointer.pData.staff.StaffName, pointer.pData.staff.StaffSurname, 
                             pointer.pData.staff.StaffPatronymic, pointer.pData.staff.StaffOccupation, pointer.pData.ClientName, pointer.pData.ClientSurname,
                             pointer.pData.ClientPatronymic, pointer.pData.ClientTelephone, pointer.pData.Date.ToString(CultureInfo.InvariantCulture)
-                        });
+                        } );
                         pointer = tmp;
                     }
                 }
-            }*/
+            }
         }
 
         public override void Find(DataGrid mainDataGrid, string[] data)

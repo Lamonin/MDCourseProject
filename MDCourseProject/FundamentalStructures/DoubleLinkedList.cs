@@ -58,7 +58,9 @@ namespace FundamentalStructures
                return _value.ToString();
            }
        } 
+       
        private ListNode _head;
+       
        private static bool IsEmpty(ListNode node)
        {
            return node == null;
@@ -127,7 +129,6 @@ namespace FundamentalStructures
        
        public void ChangeHead(ListNode node)
        {
-           _head = null;
            _head = node;
        }
 

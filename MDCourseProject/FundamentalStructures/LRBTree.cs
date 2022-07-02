@@ -313,6 +313,7 @@ namespace FundamentalStructures
             return output;
         }
         
+        //TODO Можно убрать методы считающие черные высоты
         private void _treeBlackHeight(RBNode node, int h)
         {
             if (node != null && !_isRed(node)) h++;

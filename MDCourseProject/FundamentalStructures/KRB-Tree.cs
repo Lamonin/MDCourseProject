@@ -18,14 +18,14 @@ namespace FundamentalStructures
 
                     public Node(TValue data, Node prev = null, Node next = null)
                     {
-                        this.pData = data;
-                        this.pNext = next;
-                        this.pPrev = prev;
+                        pData = data;
+                        pNext = next;
+                        pPrev = prev;
                     }
                 }
 
                 public Node head;
-                Node last;
+                public Node last;
 
                 public list()
                 {
@@ -115,8 +115,8 @@ namespace FundamentalStructures
             }
             public leaf(leaf Lf)
             {
-                this.key = Lf.key;
-                this.IsRed = Lf.IsRed;
+                key = Lf.key;
+                IsRed = Lf.IsRed;
             }
         }
 
@@ -131,17 +131,21 @@ namespace FundamentalStructures
 
         public leaf GetLeaf(leaf root,TKey key)
         {
-            if (isEqual(root,Tnil)) return null;
-            if (root.key.CompareTo(key) > 0) return GetLeaf(root.Rleaf, key);
-            else if (root.key.CompareTo(key) < 0) return GetLeaf(root.Lleaf, key);
-            else  return root;
+            if(root != null)
+            {
+                if (isEqual(root, Tnil)) return null; // Никогда не заходит в это условие
+                if (root.key.CompareTo(key) > 0) return GetLeaf(root.Rleaf, key);
+                if (root.key.CompareTo(key) < 0) return GetLeaf(root.Lleaf, key);
+                return root;
+            }
+            return null;
         }
-        //
         public bool IsKeyExist(TKey key)
         {
-            return (GetLeaf(m_root, key) == null);
+            return GetLeaf(m_root, key) != null;
         }
-        public void LeftRotate(leaf lf)
+        
+        private void LeftRotate(leaf lf)
         {
             leaf lf_p = lf.Rleaf;
             lf.Rleaf = lf_p.Lleaf;
@@ -156,7 +160,7 @@ namespace FundamentalStructures
             lf.parent = lf_p;
         }
         
-        public void RightRotate(leaf lf)
+        private void RightRotate(leaf lf)
         {
             leaf lf_p = lf.Lleaf;
             lf.Lleaf = lf_p.Rleaf;
@@ -171,7 +175,7 @@ namespace FundamentalStructures
             lf.parent = lf_p;
         }
 
-        public void RBInsertFixup(leaf InsertLeaf)
+        private void RBInsertFixup(leaf InsertLeaf)
         {
             while (InsertLeaf.parent.IsRed == true)
             {
@@ -276,7 +280,7 @@ namespace FundamentalStructures
             }
         }
 
-        public void RBTransplant(leaf DelLeaf, leaf DelLeaf_Child)
+        private void RBTransplant(leaf DelLeaf, leaf DelLeaf_Child)
         {
             if (isEqual(DelLeaf.parent,Tnil)) m_root = DelLeaf_Child;
             else if (isEqual(DelLeaf,DelLeaf.parent.Lleaf)) DelLeaf.parent.Lleaf = DelLeaf_Child;
@@ -284,7 +288,7 @@ namespace FundamentalStructures
             DelLeaf_Child.parent = DelLeaf.parent;
         }
 
-        public void RBDelFixUp(leaf FixLeaf)
+        private void RBDelFixUp(leaf FixLeaf)
         {
             leaf SecondChildFixLeafParrent;
             while (!isEqual(FixLeaf,m_root) && FixLeaf.IsRed == false)

@@ -11,12 +11,12 @@ namespace FundamentalStructures
        public class RRBTree<TKey, TValue> where TKey : IComparable<TKey> where TValue : IComparable<TValue>
        {
            /// <summary>
-           /// Черный узел
+           /// Черный цвет узла
            /// </summary>
            private static bool BLACK = false;
        
            /// <summary>
-           /// Красный узел
+           /// Красный цвет узла
            /// </summary>
            private static bool RED = true;
    
@@ -25,18 +25,39 @@ namespace FundamentalStructures
            /// </summary>
            protected class TreeNode
            {
+               /// <summary>
+               /// Левый потомок узла
+               /// </summary>
                public TreeNode LBranch;
+               /// <summary>
+               /// Правый потомок узла
+               /// </summary>
                public TreeNode RBranch;
+               /// <summary>
+               /// Ключ узла
+               /// </summary>
                public TKey Key;
+               /// <summary>
+               /// Список значений узла
+               /// </summary>
                private DoubleLinkedList<TValue> values;
+               /// <summary>
+               /// Цвет узла
+               /// </summary>
                public bool Color;
    
+               /// <summary>
+               /// Создает красный узел по умолчанию
+               /// </summary>
                public TreeNode()
                {
                    (LBranch, RBranch, values) = (null, null, null);
                    Color = RED;
                }
    
+               /// <summary>
+               /// Создает красный узел с ключом key и со значением value
+               /// </summary>
                public TreeNode(TKey key, TValue value)
                {
                    Color = RED;
@@ -45,23 +66,47 @@ namespace FundamentalStructures
                    Key = key;
                    (LBranch, RBranch) = (null, null);
                }
-   
+               /// <summary>
+               /// Добавляет в список значение value
+               /// </summary>
                public void AddNodeToList(TValue value) => values.Add(value);
-   
+               
+               /// <summary>
+               /// Удаляет из спиcка значение value
+               /// </summary>
                public void Remove(TValue value) => values.Remove(value);
 
+               /// <summary>
+               /// Проверяет на наличие в списке значение value
+               /// </summary>
                public bool Find(TValue value)
                {
                    return values.Find(value);
                }
+               
+               /// <summary>
+               /// Проверяет, является ли узел красным
+               /// </summary>
                public bool IsRed() => Color == RED;
    
+               /// <summary>
+               /// Возвращает голову списка
+               /// </summary>
                public DoubleLinkedList<TValue>.ListNode GetHead() => values.GetHead();
    
+               /// <summary>
+               /// Возвращает список значений узла
+               /// </summary>
                public DoubleLinkedList<TValue> GetList() => values;
    
+               /// <summary>
+               /// Меняет голову списка значений на node
+               /// </summary>
                public void Change(DoubleLinkedList<TValue>.ListNode node) => values.ChangeHead(node);
    
+               /// <summary>
+               /// Считает количество элементов в списке
+               /// </summary>
                public int CountValues() => values.Count();
            }
    
@@ -374,17 +419,7 @@ namespace FundamentalStructures
                    }
                if (!IsEmpty(_root)) _root.Color = BLACK;
            }
-
-           public void RemoveKey(TKey key)
-           {
-               var deleteNode = FindKeyHelper(_root, key);
-               if (deleteNode != null)
-               {
-                   var flag = true;
-                   DeleteAndBalance(ref _root, ref deleteNode, ref flag);
-               }
-               if (!IsEmpty(_root)) _root.Color = BLACK;
-           }
+           
            public bool ContainKey(TKey key)
            {
                var node = FindKeyHelper(_root, key);
