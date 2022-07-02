@@ -136,7 +136,7 @@ namespace FundamentalStructures
             else if (root.key.CompareTo(key) < 0) return GetLeaf(root.Lleaf, key);
             else  return root;
         }
-        
+        //
         public bool IsKeyExist(TKey key)
         {
             return (GetLeaf(m_root, key) == null);
