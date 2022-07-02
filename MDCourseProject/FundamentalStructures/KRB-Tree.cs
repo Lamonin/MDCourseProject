@@ -136,17 +136,10 @@ namespace FundamentalStructures
             else if (root.key.CompareTo(key) < 0) return GetLeaf(root.Lleaf, key);
             else  return root;
         }
-
-        public void FindLeaf(leaf root, TKey key)
+        
+        public bool IsKeyExist(TKey key)
         {
-            if (GetLeaf(root, key) == null)
-            {
-                Console.WriteLine("Внимание! В вашем дереве нет такого ключа: ", key);
-            }
-            else
-            {
-                Console.WriteLine("Ключ ", key," был успешно найден в вашем дереве!");
-            }
+            return (GetLeaf(m_root, key) == null);
         }
         public void LeftRotate(leaf lf)
         {

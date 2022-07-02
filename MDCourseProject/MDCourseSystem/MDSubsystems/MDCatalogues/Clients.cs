@@ -96,7 +96,7 @@ public class Clients:Catalogue
     {
         _clientTable = new DynamicHashTable<ClientFullNameAndTelephone, Client>();
         CliestsInfo = new List<Client>();
-        
+        ClientAgeTree = new RB_Tree<int, Client>();
         _clientTable.FirstHashFunc = key =>
         {
            /* string stroke = key.ToString();
@@ -206,6 +206,7 @@ public class Clients:Catalogue
     public override string PrintData()
     {
         return String.Empty;
+        //  сделать отладку
     }
 
     public override string Name => "Клиенты";
