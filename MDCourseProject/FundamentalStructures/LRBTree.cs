@@ -300,7 +300,7 @@ namespace FundamentalStructures
             if(p != null)
             {
                 print_Tree(p.right,level + 1, ref output);
-                for(int i = 0;i< level;i++) output += "    ";
+                for(int i = 0;i< level;i++) output += "      ";
                 output += p.key + (p.Color ? "-К\n":"-Ч\n");
                 print_Tree(p.left,level + 1, ref output);
             }

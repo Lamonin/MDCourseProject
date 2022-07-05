@@ -119,6 +119,18 @@ public class DivisionsCatalogue:Catalogue
                     MDSystem.divisionsSubsystem.SendRequestsCatalogue.Remove(new []{key.Area, key.Name, s.Client, s.Service, s.Date});
                 }
             }
+
+            if (DivisionsByName.Contains(data[0])) return;
+            
+            var divisionName = new DivisionName(data[0]);
+            if (MDSystem.staffSubsystem.DocumentCatalogue.DivisionName.ContainKey(divisionName))
+            {
+                var documentInfos = MDSystem.staffSubsystem.DocumentCatalogue.DivisionName.GetValue(divisionName);
+                foreach (var document in documentInfos)
+                {
+                    MDSystem.staffSubsystem.DocumentCatalogue.Remove(new []{document.Document.ToString(), document.Occupation.ToString(), document.DivisionName.ToString()});
+                }
+            }
         }
     }
 
