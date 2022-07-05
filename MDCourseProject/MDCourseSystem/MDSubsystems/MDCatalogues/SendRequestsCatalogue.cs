@@ -96,7 +96,7 @@ public class SendRequestsCatalogue:Catalogue
         
         var key = new DivisionNameAndArea(data[1], data[0]);
         var value = new SendRequest(key, data[2], data[3], data[4]);
-                
+        
         SendRequestsTree.Add(key, value);
         MDDebugConsole.WriteLine(key.ToString());
 

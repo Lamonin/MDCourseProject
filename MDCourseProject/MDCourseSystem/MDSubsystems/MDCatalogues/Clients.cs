@@ -104,7 +104,7 @@ public class Clients:Catalogue
             {
                 key += (int) i;
             }*/
-           return key.GetHashCode() % _clientTable.GetCapacity();
+           return Math.Abs(key.GetHashCode()) % _clientTable.GetCapacity();
         };
 
         _clientTable.SecondHashFunc = key =>
@@ -122,7 +122,7 @@ public class Clients:Catalogue
                 key += (int) i;
             }
             return key % _clientTable.GetCapacity();*/
-            return key.GetHashCode() % _clientTable.GetCapacity();
+            return Math.Abs(key.GetHashCode()) % _clientTable.GetCapacity();
         };
         //придумать хеш функции
     }

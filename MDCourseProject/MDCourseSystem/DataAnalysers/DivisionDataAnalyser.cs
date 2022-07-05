@@ -59,6 +59,10 @@ public class AddValuesSendRequestsAnalyser: DataAnalyser
             isError = isError || time > DateTime.Today; //Заявка не может быть отправлена позже текущей даты
         else
             isError = true;
+        
+        //Проверка существования такого клиента
+        var fullName = _textBoxes[2].Text.Split(',')[0].Split();
+        isError = isError || !MDSystem.clientsSubsystem._clients.ClientsTable.ContainsKey(new ClientFullNameAndTelephone(fullName[0], fullName[1], fullName[2], _textBoxes[2].Text.Split(',')[1]));
 
         if (isError)
         {
