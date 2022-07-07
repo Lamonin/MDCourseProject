@@ -3,6 +3,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Collections.Generic;
+using System.Windows;
 using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.AppWindows.WindowsBuilder;
 using MDCourseProject.MDCourseSystem.MDCatalogues;
@@ -27,11 +28,21 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
 
         public void LoadFirstCatalogue(string filePath)
         {
+            if (!filePath.EndsWith("Division.txt"))
+            {
+                MessageBox.Show("Некорректный файл для справочника Подразделения", "Ошибка!", MessageBoxButton.OK);
+                throw new Exception("Incorrect file!");
+            }
             DivisionsCatalogue.Load(filePath);
         }
 
         public void LoadSecondCatalogue(string filePath)
         {
+            if (!filePath.EndsWith("SendRequest.txt"))
+            {
+                MessageBox.Show("Некорректный файл для справочника Отправленные заявки", "Ошибка!", MessageBoxButton.OK);
+                throw new Exception("Incorrect file!");
+            }
             SendRequestsCatalogue.Load(filePath);
         }
 
