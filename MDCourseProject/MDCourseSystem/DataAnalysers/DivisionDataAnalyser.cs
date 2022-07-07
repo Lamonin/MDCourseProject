@@ -82,13 +82,12 @@ public class ReportDivisionsAnalyser : DataAnalyser
         foreach (var t in _textBoxes) t.Text = t.Text.Trim();
         
         //Проверяем введенную дату на корректность
-        bool isError = !DateTime.TryParse(_textBoxes[1].Text, out var time1);
-        isError = isError || !DateTime.TryParse(_textBoxes[2].Text, out var time2);
+        bool isError = !DateTime.TryParse(_textBoxes[2].Text, out var time1);
+        isError = isError || !DateTime.TryParse(_textBoxes[3].Text, out var time2);
         
         isError = isError || _textBoxes[0].Text.Length < 2;
         isError = isError || _textBoxes[1].Text.Length < 2;
-        isError = isError || _textBoxes[2].Text.Length < 2;
-        
+
         if (isError)
         {
             MessageBox.Show("Некорректная дата!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);

@@ -51,7 +51,7 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             var saveReportDialog = new SaveFileDialog
             {
                 Title = "Выберите место для сохранения отчета по подсистеме Подразделения",
-                FileName ="Отчет: Заявки подразделения",
+                FileName ="Отчет Заявки подразделения",
                 Filter = "Text files (*.txt)|*.txt",
             };
         
@@ -61,19 +61,36 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
 
                 var dateFrom = DateTime.Parse(data[2]);
                 var dateTo = DateTime.Parse(data[3]);
+
+                // 0 - Тип подразделения
+                // 1 - Район
+                // 2 - Дата от
+                // 3 - Дата до
                 
-                if (SendRequestsCatalogue.SendRequestsTree.TryGetValuesList(new DivisionNameAndArea(data[0], data[1]), out var list))
+                if (DivisionsCatalogue.DivisionsByArea.TryGetValuesList(data[1], out var areaList))
                 {
-                    foreach (var send in list)
+                    foreach (var divisionByArea in areaList)
                     {
-                        var sendDate = DateTime.Parse(send.Date);
-                        if (sendDate.CompareTo(dateFrom)>=0 && sendDate.CompareTo(dateTo)<=0)
-                        {
-                            reportResults.Add(send);
+                        if (divisionByArea.Type != data[0]) continue;
+                        
+                        if (
+                            SendRequestsCatalogue.SendRequestsTree.TryGetValuesList(
+                                key: new DivisionNameAndArea(divisionByArea.Name, divisionByArea.Area),
+                                list: out var sendList
+                            )
+                        ) {
+                            foreach (var send in sendList)
+                            {
+                                var sendDate = DateTime.Parse(send.Date);
+                                if (sendDate.CompareTo(dateFrom)>=0 && sendDate.CompareTo(dateTo)<=0)
+                                {
+                                    reportResults.Add(send);
+                                }
+                            }
                         }
                     }
                 }
-
+                
                 var writer = new StreamWriter(saveReportDialog.FileName);
                 
                 foreach (var result in reportResults)
@@ -101,7 +118,7 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             var tBoxes = CommonWindowGenerator.CreateInputBetweenField(mainGrid, "Дата:", 4);
             var tList = new TextBox[]
             {
-                CommonWindowGenerator.CreateInputField(mainGrid, "Название подразделения:", 0),
+                CommonWindowGenerator.CreateInputField(mainGrid, "Тип подразделения:", 0),
                 CommonWindowGenerator.CreateInputField(mainGrid, "Район:", 2),
                 tBoxes[0], //Дата от которой
                 tBoxes[1] //Дата до которой
@@ -128,12 +145,12 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
 
         public void LoadDefaultFirstCatalogue()
         {
-            LoadFirstCatalogue("DefaultFiles/divisions_default.txt");
+            LoadFirstCatalogue("DefaultFiles/default_Division.txt");
         }
 
         public void LoadDefaultSecondCatalogue()
         {
-            LoadSecondCatalogue("DefaultFiles/sendrequests_default.txt");
+            LoadSecondCatalogue("DefaultFiles/default_SendRequest.txt");
         }
     }
 }
