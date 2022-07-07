@@ -12,12 +12,12 @@ namespace FundamentalStructures
             public RBNode left;
             public RBNode right;
             
-            public DoubleLinkedList<TValue> list;
+            public DoubleCircularLinkedList<TValue> list;
 
             public RBNode(TKey key, TValue val)
             {
                 this.key = key;
-                list = new DoubleLinkedList<TValue>(){val};
+                list = new DoubleCircularLinkedList<TValue>(){val};
                 left = right = null;
             }
             
@@ -264,7 +264,7 @@ namespace FundamentalStructures
             }
         }
 
-        public bool TryGetValuesList(TKey key, out DoubleLinkedList<TValue> list)
+        public bool TryGetValuesList(TKey key, out DoubleCircularLinkedList<TValue> list)
         {
             list = default;
             if (!Contains(key)) return false;

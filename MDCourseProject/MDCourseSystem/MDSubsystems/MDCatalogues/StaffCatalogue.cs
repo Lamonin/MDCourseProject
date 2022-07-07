@@ -29,15 +29,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
                 var doublePart = mult - Math.Truncate(mult);
                 return (int)(_staffTable.GetCapacity() * doublePart);
             };
-            _staffTable.SecondHashFunc = key =>
-            {
-                key *= key;
-                var keyCountDigit = Count.CountDigit(key);
-                var howManyDigit = Count.CountDigit(_staffTable.GetCapacity());
-                key /= keyCountDigit == 1 ?  (int)Math.Pow(10, keyCountDigit / 2) : (int)Math.Pow(10, keyCountDigit / howManyDigit);
-                key %= (int)Math.Pow(10, howManyDigit);
-                return ++key;
-            };
+            _staffTable.SecondHashFunc = key => (2 * key + 1) % _staffTable.GetCapacity();
         }
         public override void Add(string[] data)
         {

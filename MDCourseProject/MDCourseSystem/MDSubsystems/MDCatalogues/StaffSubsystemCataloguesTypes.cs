@@ -1,28 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 
 namespace MDCourseProject.MDCourseSystem.MDCatalogues
 {
-    public static class Count
-    {
-        public static int CountDigit(int num)
-        {
-            var count = 0;
-            while (num > 0)
-            {
-                ++count;
-                num /= 10;
-            }
-            return count;
-        }
-    }
-    
     public class FullName:IComparable<FullName>
     {
-        private readonly string _surname;
-        private readonly string _name;
-        private readonly string _patronymic;
 
         public FullName(string fullname)
         {
@@ -30,41 +12,40 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             switch (fInfo.Length)
             {
                 case 1:
-                    (_surname, _name, _patronymic) = (fInfo[0], String.Empty, String.Empty);
+                    (Surname, Name, Patronymic) = (fInfo[0], string.Empty, string.Empty);
                     break;
                 case 2:
-                    (_surname, _name, _patronymic) = (fInfo[0], fInfo[1], String.Empty);
+                    (Surname, Name, Patronymic) = (fInfo[0], fInfo[1], string.Empty);
                     break;
                 case 3:
-                    (_surname, _name, _patronymic) = (fInfo[0], fInfo[1], fInfo[2]);
+                    (Surname, Name, Patronymic) = (fInfo[0], fInfo[1], fInfo[2]);
                     break;
             }
         }
             
         public int CompareTo(FullName other)
         {
-            var cmpSurname = string.Compare(_surname, other._surname, StringComparison.OrdinalIgnoreCase);
+            var cmpSurname = string.Compare(Surname, other.Surname, StringComparison.OrdinalIgnoreCase);
             if (cmpSurname != 0) return cmpSurname;
-            var cmpName = string.Compare(_name, other._name, StringComparison.OrdinalIgnoreCase);
-            return cmpName != 0 ? cmpName : string.Compare(_patronymic, other._patronymic, StringComparison.OrdinalIgnoreCase);
+            var cmpName = string.Compare(Name, other.Name, StringComparison.OrdinalIgnoreCase);
+            return cmpName != 0 ? cmpName : string.Compare(Patronymic, other.Patronymic, StringComparison.OrdinalIgnoreCase);
         }
 
-        public override string ToString() => string.Join(" ", _surname, _name, _patronymic);
+        public override string ToString() => string.Join(" ", Surname, Name, Patronymic);
 
         public override int GetHashCode()
         {
-            var codeSurname = Encoding.Unicode.GetBytes(_surname.ToLower());
-            var codeName = Encoding.Unicode.GetBytes(_name.ToLower());
-            var codePatronymic = Encoding.Unicode.GetBytes(_patronymic.ToLower());
-            var hash = codeSurname.Aggregate(0, (curr, elem) => curr + elem);
-            hash += codeName.Aggregate(0, (curr, elem) => curr + elem);
-            hash += codePatronymic.Aggregate(0, (curr, elem) => curr + elem);
+            var hash = Surname.ToLower().Aggregate(0, (curr, elem) => curr + elem);
+            hash += Name.ToLower().Aggregate(0, (curr, elem) => curr + elem);
+            hash += Patronymic.ToLower().Aggregate(0, (curr, elem) => curr + elem);
             return hash;
         }
 
-        public string Surname => _surname;
-        public string Name => _name;
-        public string Patronymic => _patronymic;
+        public string Surname { get; }
+
+        public string Name { get; }
+
+        public string Patronymic { get; }
     }
 
     public class Occupation:IComparable<Occupation>
@@ -82,8 +63,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override int GetHashCode()
         {
-            var codeOccupation = Encoding.Unicode .GetBytes(_occupation.ToLower());
-            return codeOccupation.Aggregate(0, (curr, elem) => curr + elem);
+            return _occupation.ToLower().Aggregate(0, (current, sym) => current + sym);
         }
     }
 
@@ -147,11 +127,11 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override string ToString() => string.Join(" ", FullName, Occupation, District);
 
-        public FullName FullName { get; set; }
+        public FullName FullName { get; }
 
-        public Occupation Occupation { get; set; }
+        public Occupation Occupation { get; }
 
-        public District District { get; set; }
+        public District District { get; }
     }
 
     public class StaffNameAndOccupation:IComparable<StaffNameAndOccupation>
@@ -215,10 +195,10 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override string ToString() => string.Join(" ", Document, Occupation, DivisionName);
 
-        public Document Document { get; set; }
+        public Document Document { get;}
 
-        public Occupation Occupation { get; set; }
+        public Occupation Occupation { get;}
 
-        public DivisionName DivisionName { get; set; }
+        public DivisionName DivisionName { get;}
     }
 }

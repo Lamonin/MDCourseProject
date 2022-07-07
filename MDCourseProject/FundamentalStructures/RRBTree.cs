@@ -13,13 +13,13 @@ namespace FundamentalStructures
            /// <summary>
            /// Черный цвет узла
            /// </summary>
-           private static bool BLACK = false;
-       
+           private const bool BLACK = false;
+
            /// <summary>
            /// Красный цвет узла
            /// </summary>
-           private static bool RED = true;
-   
+           private const bool RED = true;
+
            /// <summary>
            /// Узел дерева
            /// </summary>
@@ -29,18 +29,22 @@ namespace FundamentalStructures
                /// Левый потомок узла
                /// </summary>
                public TreeNode LBranch;
+               
                /// <summary>
                /// Правый потомок узла
                /// </summary>
                public TreeNode RBranch;
+               
                /// <summary>
                /// Ключ узла
                /// </summary>
                public TKey Key;
+               
                /// <summary>
                /// Список значений узла
                /// </summary>
-               private DoubleLinkedList<TValue> values;
+               private DoubleCircularLinkedList<TValue> values;
+               
                /// <summary>
                /// Цвет узла
                /// </summary>
@@ -61,11 +65,12 @@ namespace FundamentalStructures
                public TreeNode(TKey key, TValue value)
                {
                    Color = RED;
-                   values = new DoubleLinkedList<TValue>();
+                   values = new DoubleCircularLinkedList<TValue>();
                    values.Add(value);
                    Key = key;
                    (LBranch, RBranch) = (null, null);
                }
+               
                /// <summary>
                /// Добавляет в список значение value
                /// </summary>
@@ -92,17 +97,17 @@ namespace FundamentalStructures
                /// <summary>
                /// Возвращает голову списка
                /// </summary>
-               public DoubleLinkedList<TValue>.ListNode GetHead() => values.GetHead();
+               public DoubleCircularLinkedList<TValue>.ListNode GetHead() => values.GetHead();
    
                /// <summary>
                /// Возвращает список значений узла
                /// </summary>
-               public DoubleLinkedList<TValue> GetList() => values;
+               public DoubleCircularLinkedList<TValue> GetList() => values;
    
                /// <summary>
                /// Меняет голову списка значений на node
                /// </summary>
-               public void Change(DoubleLinkedList<TValue>.ListNode node) => values.ChangeHead(node);
+               public void Change(DoubleCircularLinkedList<TValue>.ListNode node) => values.ChangeHead(node);
    
                /// <summary>
                /// Считает количество элементов в списке
@@ -115,10 +120,19 @@ namespace FundamentalStructures
            /// </summary>
            private TreeNode _root;
    
+           /// <summary>
+           /// Проверяет, является ли узел node null
+           /// </summary>
            private bool IsEmpty(TreeNode node) => node == null;
    
+           /// <summary>
+           /// Проверяет, является ли узел node красным
+           /// </summary>
            private bool IsRed(TreeNode node) => !IsEmpty(node) && node.IsRed();
    
+           /// <summary>
+           /// Поворачивает узел node налево
+           /// </summary>
            private void LeftRotate(ref TreeNode node)
            {
                var tmp = node.RBranch;
@@ -126,7 +140,10 @@ namespace FundamentalStructures
                tmp.LBranch = node;
                node = tmp;
            }
-   
+           
+           /// <summary>
+           /// Поворачивает узел node направо
+           /// </summary>
            private void RightRotate(ref TreeNode node)
            {
                var tmp = node.LBranch;
@@ -135,6 +152,9 @@ namespace FundamentalStructures
                node = tmp;
            }
            
+           /// <summary>
+           /// Находит в поддереве с корнем node узел по ключу key
+           /// </summary>
            private TreeNode FindKeyHelper(TreeNode node, TKey key)
            {
                if (IsEmpty(node)) return null;
@@ -149,12 +169,18 @@ namespace FundamentalStructures
                }
            }
    
+           /// <summary>
+           /// Находит минимальное значение у поддерева с корнем node
+           /// </summary>
            private TreeNode FindMin(TreeNode node)
            {
                if (IsEmpty(node)) return null;
                return IsEmpty(node.LBranch) ? node : FindMin(node.LBranch);
            }
-   
+           
+           /// <summary>
+           /// Меняет ключ и значение у узлов node и минимального значения в поддереве, в котором node.RBranch является корнем
+           /// </summary>
            private TreeNode Transplant1(ref TreeNode node)
            {
                var nodeMin = FindMin(node.RBranch);
@@ -167,6 +193,9 @@ namespace FundamentalStructures
                return nodeMin;
            }
    
+           /// <summary>
+           /// Меняет ключ и значение у узлов node и node.RBranch
+           /// </summary>
            private TreeNode Transplant2(ref TreeNode node)
            {
                var listNode = node.GetHead();
@@ -178,6 +207,9 @@ namespace FundamentalStructures
                return node.RBranch;
            }
    
+           /// <summary>
+           /// Меняет ключ и значение у узлов node и node.LBranch
+           /// </summary>
            private TreeNode Transplant3(ref TreeNode node)
            {
                var listNode = node.GetHead();
@@ -189,6 +221,13 @@ namespace FundamentalStructures
                return node.LBranch;
            }
    
+           /// <summary>
+           /// Балансирует поддерево по первому случаю при удалении
+           /// </summary>
+           /// <param name="node">Корень поддерева</param>
+           /// <param name="check">Дочерний узел поддерева, для которого проверяется, нужна ли балансировка</param>
+           /// <param name="rotate">Отвечает за поворот в поддереве</param>>
+           /// <param name="direction">Отвечает за направление удаления</param>
            private void DeleteBalance1(ref TreeNode node, TreeNode check, ref bool rotate, bool direction)
            {
                if (IsRed(check))
@@ -201,11 +240,18 @@ namespace FundamentalStructures
                }
            }
    
+           /// <summary>
+           /// Балансирует поддерево по второму случаю при удалении
+           /// </summary>
+           /// <param name="node">Корень поддерева</param>
+           /// <param name="check">Дочерний узел поддерева, для которого проверяется, нужна ли балансировка</param>>
+           /// <param name="needToBalance">Отвечает за остановку балансировки</param>>
+           /// <param name="ret">Если условия для балансировки второго случая выполняются, то переход на проверку для случаев 1, 2, 3, 4</param>
            private void DeleteBalance2(TreeNode node, TreeNode check, ref bool needToBalance, ref bool ret)
            {
-               ret = !IsRed(check) && !IsRed(check.RBranch) && !IsRed(check.LBranch);
-               if (ret)
+               if (!IsRed(check) && !IsRed(check.RBranch) && !IsRed(check.LBranch))
                {
+                   ret = true;
                    check.Color = RED;
                    if (IsRed(node))
                    {
@@ -214,7 +260,11 @@ namespace FundamentalStructures
                    }
                }
            }
-   
+           
+           /// <summary>
+           /// Балансирует поддерево по третьему случаю при удалении
+           /// </summary>
+           /// <param name="node">Корень поддерева</param>
            private void DeleteBalance3(ref TreeNode node, bool direction)
            {
                if (direction)
@@ -236,7 +286,12 @@ namespace FundamentalStructures
                }
                
            }
-   
+           
+           /// <summary>
+           /// Балансирует поддерево по четвертому случаю при удалении
+           /// </summary>
+           /// <param name="node">Корень поддерева</param>
+           /// <param name="direction">Отвечает за направление удаления</param>
            private void DeleteBalance4(ref TreeNode node, bool direction)
            {
                if (direction)
@@ -255,9 +310,16 @@ namespace FundamentalStructures
                }
            }
    
+           /// <summary>
+           /// Балансировка, выполняющая балансировки для случаев 2, 3, 4, при удалении в поддереве
+           /// </summary>
+           /// <param name="node1">Корень поддерева</param>
+           /// <param name="node2">Дочерний узел узла node1 </param>
+           /// <param name="needToBalance">Отвечает за остановку балансировки</param>
+           /// <param name="direction">Отвечает за направление удаления</param>
            private void DeleteBalanceHelper(ref TreeNode node1, ref TreeNode node2, ref bool needToBalance, bool direction)
            {
-               var ret = true;
+               var ret = false;
                DeleteBalance2(node1, node2, ref needToBalance, ref ret);
                if (ret) return;
                DeleteBalance3(ref node2, direction);
@@ -265,6 +327,11 @@ namespace FundamentalStructures
                needToBalance = false;
            }
            
+           /// <summary>
+           /// Балансировка левой части поддерева
+           /// </summary>
+           /// <param name="node">Корень поддерева</param>
+           /// <param name="needToBalance">Отвечает за остановку балансировки</param>
            private void DeleteBalanceLeft(ref TreeNode node, ref bool needToBalance)
            {
                var rotate = false;
@@ -275,6 +342,11 @@ namespace FundamentalStructures
                    DeleteBalanceHelper(ref node, ref node.LBranch, ref needToBalance, true);
            }
    
+           /// <summary>
+           /// Балансировка правой части поддерева
+           /// </summary>
+           /// <param name="node">Корень поддерева</param>
+           /// <param name="needToBalance">Отвечает за остановку балансировки</param>
            private void DeleteBalanceRight(ref TreeNode node, ref bool needToBalance)
            {
                var rotate = false;
@@ -286,6 +358,12 @@ namespace FundamentalStructures
                
            }
    
+           /// <summary>
+           /// Балансировка поддерева
+           /// </summary>
+           /// <param name="node">Корень поддерва</param>
+           /// <param name="needToBalance">Отвечает за остановку балансировки</param>
+           /// <param name="direction">Отвечает за направление удаления</param>
            private void DeleteBalance(ref TreeNode node, ref bool needToBalance, bool direction)
            {
                if(needToBalance)
@@ -295,6 +373,12 @@ namespace FundamentalStructures
                        DeleteBalanceRight(ref node, ref needToBalance);
            }
            
+           /// <summary>
+           /// Удаляет в поддереве узел deleteNode
+           /// </summary>
+           /// <param name="node">Корень поддерва</param>
+           /// <param name="deleteNode">Удаляемый узел</param>
+           /// <param name="needToBalance">Отвечает за остановку балансировки</param>
            private void DeleteAndBalance(ref TreeNode node, ref TreeNode deleteNode, ref bool needToBalance)
            {
                var direction = true;
@@ -324,9 +408,7 @@ namespace FundamentalStructures
                    }
                }
                else if (node.Key.CompareTo(deleteNode.Key) == -1)
-               {
                    DeleteAndBalance(ref node.RBranch, ref deleteNode, ref needToBalance);
-               }
                else
                {
                    DeleteAndBalance(ref node.LBranch, ref deleteNode, ref needToBalance);
@@ -379,13 +461,13 @@ namespace FundamentalStructures
                AddBalance1(node);
                if (node.Key.CompareTo(add.Key) == -1)
                {
-                   AddAndBalance(ref node.RBranch,add,RED);
+                   AddAndBalance(ref node.RBranch, add, RED);
                    AddBalance2(ref node, colorOfInsert);
                }
                else
                {
-                   AddAndBalance(ref node.LBranch,add,BLACK);
-                   AddBalance3(ref node,colorOfInsert);
+                   AddAndBalance(ref node.LBranch, add, BLACK);
+                   AddBalance3(ref node, colorOfInsert);
                }
            }
            
@@ -396,6 +478,7 @@ namespace FundamentalStructures
    
            public void Add(TKey key, TValue value)
            {
+               //TODO Проверить будет ли работать при добавлении дупликата в справочнике "Документы" без проверки
                if (FindKeyHelper(_root, key) != null && FindKeyHelper(_root, key).Find(value)) return;
                if(FindKeyHelper(_root, key) != null) FindKeyHelper(_root, key).AddNodeToList(value);
                else
@@ -415,7 +498,7 @@ namespace FundamentalStructures
                    else
                    {
                        var flag = true;
-                       DeleteAndBalance( ref _root, ref deleteNode, ref flag);
+                       DeleteAndBalance(ref _root, ref deleteNode, ref flag);
                    }
                if (!IsEmpty(_root)) _root.Color = BLACK;
            }
@@ -428,7 +511,7 @@ namespace FundamentalStructures
 
            public bool Contains(TKey key, TValue value) => FindKeyHelper(_root, key) != null && FindKeyHelper(_root, key).Find(value);
 
-           public DoubleLinkedList<TValue> GetValue(TKey key)
+           public DoubleCircularLinkedList<TValue> GetValue(TKey key)
            {
                var find = FindKeyHelper(_root, key);
                return !IsEmpty(find) ? find.GetList() : null;

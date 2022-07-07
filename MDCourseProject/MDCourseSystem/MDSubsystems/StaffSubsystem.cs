@@ -77,9 +77,7 @@ public class StaffSubsystem:ISubsystem
                     {
                         var staffInfo = _staffCatalogue.WorkplaceTree.GetValue(searchWork);
                         foreach (var staff in staffInfo)
-                        {
                             report.Add(staff.FullName);
-                        }
                     }
                 }
                 report.Sort();

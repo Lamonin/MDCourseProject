@@ -4,20 +4,27 @@ using System.Collections.Generic;
 
 namespace FundamentalStructures
 {
-    public class DoubleLinkedList<TValue>:IEnumerable<TValue> where TValue: IComparable<TValue>
+    /// <summary>
+    /// Двухсвязный кольцевой список
+    /// </summary>
+    /// <typeparam name="TValue">Тип значаений узлов в списке</typeparam>
+    public class DoubleCircularLinkedList<TValue>:IEnumerable<TValue> where TValue: IComparable<TValue>
     {
        /// <summary>
        /// Узел двухсвязного кольцевого списка
        /// </summary>
        public class ListNode {
+           
            /// <summary>
            /// Ссылка на предыдущий элемент
            /// </summary>
            public ListNode Prev;
+           
            /// <summary>
            /// Ссылка на последующий элемент
            /// </summary>
            public ListNode Next;
+           
            /// <summary>
            /// Хранит значения узла
            /// </summary>
@@ -30,10 +37,10 @@ namespace FundamentalStructures
            {
                (Prev, Next) = (null, null);
            }
+           
            /// <summary>
            /// Создает узел со значением value
            /// </summary>
-           /// <param name="value"></param>
            public ListNode(TValue value)
            {
                (Prev, Next) = (this, this);
@@ -43,7 +50,6 @@ namespace FundamentalStructures
            /// <summary>
            /// Возвращает значения узла
            /// </summary>
-           /// <returns></returns>
            public TValue GetValue()
            {
                return _value;
@@ -59,16 +65,28 @@ namespace FundamentalStructures
            }
        } 
        
+       /// <summary>
+       /// Голова списка
+       /// </summary>
        private ListNode _head;
        
+       /// <summary>
+       /// Проверяет, является ли узел node null
+       /// </summary>
        private static bool IsEmpty(ListNode node)
        {
            return node == null;
        }
 
-       public DoubleLinkedList() => _head = null;
+       /// <summary>
+       /// Создает пустой список
+       /// </summary>
+       public DoubleCircularLinkedList() => _head = null;
 
-       // Добавляет в конец узел со значением value
+       
+       /// <summary>
+       /// Добавляет в конец списка узел со значением value 
+       /// </summary>
        public void Add(TValue value)
        {
            if (!IsEmpty(FindHelper(value))) return;
@@ -81,7 +99,9 @@ namespace FundamentalStructures
            }
        }
 
-       // Находит узел со значением key
+       /// <summary>
+       /// Находит узел со значением key
+       /// </summary>
        private ListNode FindHelper(TValue key)
        {
            if (IsEmpty(_head)) return null;
@@ -100,7 +120,9 @@ namespace FundamentalStructures
            return null;
        }
 
-       // Удаляет узел по значению elem
+       /// <summary>
+       /// Удаляет узел со значением elem
+       /// </summary>
        public void Remove(TValue elem)
        {
            if (IsEmpty(_head)) return;
@@ -122,19 +144,32 @@ namespace FundamentalStructures
            }
        }
        
+       /// <summary>
+       /// Проверяет, есть ли в списке значение value
+       /// </summary>
        public bool Find(TValue value)
        {
            return !IsEmpty(FindHelper(value));
        }
        
+       /// <summary>
+       /// Меняет голову спика на node
+       /// </summary>
        public void ChangeHead(ListNode node)
        {
            _head = node;
        }
 
+       /// <summary>
+       /// Возвращает голову списка
+       /// </summary>
        public ListNode GetHead() => _head;
 
-       public int Count()
+       
+        /// <summary>
+        ///  Считает кол-во элементов в списке
+        /// </summary>
+        public int Count()
        {
            var count = 0;
 
@@ -150,7 +185,11 @@ namespace FundamentalStructures
            _head.Prev.Next = _head;
            return count;
        }
-       
+        
+        /// <summary>
+        /// Переводит список в строку
+        /// </summary>
+        /// <returns></returns>
        public override string ToString()
        {
            var str = "";
@@ -163,15 +202,15 @@ namespace FundamentalStructures
            }
            return str;
        }
-       
-       private class DoubleLinkedListEnumerator:IEnumerator<TValue>
+        
+       private class DoubleCircularLinkedListEnumerator:IEnumerator<TValue>
        {
            private ListNode head;
            private ListNode currentNode;
            private int count;
            private int i;
            
-           public DoubleLinkedListEnumerator(ListNode head, int count)
+           public DoubleCircularLinkedListEnumerator(ListNode head, int count)
            {
                this.head = head;
                this.count = count;
@@ -200,7 +239,7 @@ namespace FundamentalStructures
 
        public IEnumerator<TValue> GetEnumerator()
        {
-           return new DoubleLinkedListEnumerator(_head, Count());
+           return new DoubleCircularLinkedListEnumerator(_head, Count());
        }
        
        IEnumerator IEnumerable.GetEnumerator()
