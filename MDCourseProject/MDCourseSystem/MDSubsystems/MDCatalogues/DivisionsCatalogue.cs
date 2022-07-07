@@ -168,6 +168,11 @@ public class DivisionsCatalogue:Catalogue
     {
         if (OpenSaveCatalogueDialog(Name, out var savePath))
         {
+            if (!savePath.EndsWith("Division.txt"))
+            {
+                savePath = savePath.Replace(".txt", "_Division.txt");
+            }
+
             var writer = new StreamWriter(savePath);
             writer.Flush();
             

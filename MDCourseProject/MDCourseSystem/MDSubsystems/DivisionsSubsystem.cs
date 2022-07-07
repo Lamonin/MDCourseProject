@@ -3,6 +3,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Collections.Generic;
+using System.Windows;
 using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.AppWindows.WindowsBuilder;
 using MDCourseProject.MDCourseSystem.MDCatalogues;
@@ -27,11 +28,21 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
 
         public void LoadFirstCatalogue(string filePath)
         {
+            if (!filePath.EndsWith("Division.txt"))
+            {
+                MessageBox.Show("Некорректный файл для справочника Подразделения", "Ошибка!", MessageBoxButton.OK);
+                throw new Exception("Incorrect file!");
+            }
             DivisionsCatalogue.Load(filePath);
         }
 
         public void LoadSecondCatalogue(string filePath)
         {
+            if (!filePath.EndsWith("SendRequest.txt"))
+            {
+                MessageBox.Show("Некорректный файл для справочника Отправленные заявки", "Ошибка!", MessageBoxButton.OK);
+                throw new Exception("Incorrect file!");
+            }
             SendRequestsCatalogue.Load(filePath);
         }
 
@@ -40,7 +51,7 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             var saveReportDialog = new SaveFileDialog
             {
                 Title = "Выберите место для сохранения отчета по подсистеме Подразделения",
-                FileName ="Отчет: Заявки по услуге",
+                FileName ="Отчет: Заявки подразделения",
                 Filter = "Text files (*.txt)|*.txt",
             };
         
@@ -48,15 +59,15 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             {
                 var reportResults = new List<SendRequest>();
 
-                if (DivisionsCatalogue.DivisionsByArea.Contains(data[3]) && SendRequestsCatalogue.SendRequestsByService.TryGetValuesList(data[0], out var list))
+                var dateFrom = DateTime.Parse(data[2]);
+                var dateTo = DateTime.Parse(data[3]);
+                
+                if (SendRequestsCatalogue.SendRequestsTree.TryGetValuesList(new DivisionNameAndArea(data[0], data[1]), out var list))
                 {
-                    var dateFrom = DateTime.Parse(data[1]);
-                    var dateTo = DateTime.Parse(data[2]);
-                    
                     foreach (var send in list)
                     {
                         var sendDate = DateTime.Parse(send.Date);
-                        if (sendDate.CompareTo(dateFrom)>=0 && sendDate.CompareTo(dateTo)<=0 && string.Compare(send.Division.Area, data[3], StringComparison.OrdinalIgnoreCase)==0)
+                        if (sendDate.CompareTo(dateFrom)>=0 && sendDate.CompareTo(dateTo)<=0)
                         {
                             reportResults.Add(send);
                         }
@@ -87,13 +98,13 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             mainGrid.RowDefinitions.Clear();
             CommonWindowGenerator.GenerateRowsInGrid(mainGrid, 3);
 
-            var tBoxes = CommonWindowGenerator.CreateInputBetweenField(mainGrid, "Дата:", 2);
+            var tBoxes = CommonWindowGenerator.CreateInputBetweenField(mainGrid, "Дата:", 4);
             var tList = new TextBox[]
             {
-                CommonWindowGenerator.CreateInputField(mainGrid, "Услуга:", 0),
+                CommonWindowGenerator.CreateInputField(mainGrid, "Название подразделения:", 0),
+                CommonWindowGenerator.CreateInputField(mainGrid, "Район:", 2),
                 tBoxes[0], //Дата от которой
-                tBoxes[1], //Дата до которой
-                CommonWindowGenerator.CreateInputField(mainGrid, "Район:", 4)
+                tBoxes[1] //Дата до которой
             };
             return new ReportDivisionsAnalyser(tList);
         }

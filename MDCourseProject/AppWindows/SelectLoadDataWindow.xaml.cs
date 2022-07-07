@@ -27,6 +27,15 @@ public partial class SelectLoadDataWindow : Window
 
     private void Button_Continue(object sender, RoutedEventArgs e)
     {
+        foreach (var path in filePaths)
+        {
+            if (String.IsNullOrEmpty(path))
+            {
+                MessageBox.Show("Должны быть указаны пути ко всем справочникам!!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+        }
+        
         try
         {
             MDSystem.clientsSubsystem.LoadFirstCatalogue(filePaths[0]);
