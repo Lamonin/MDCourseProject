@@ -30,7 +30,7 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
         {
             if (!filePath.EndsWith("Division.txt"))
             {
-                MessageBox.Show("Некорректный файл для справочника Подразделения", "Ошибка!", MessageBoxButton.OK);
+                MessageBox.Show("Некорректный файл для справочника Подразделения!", "Ошибка!", MessageBoxButton.OK);
                 throw new Exception("Incorrect file!");
             }
             DivisionsCatalogue.Load(filePath);
@@ -40,7 +40,7 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
         {
             if (!filePath.EndsWith("SendRequest.txt"))
             {
-                MessageBox.Show("Некорректный файл для справочника Отправленные заявки", "Ошибка!", MessageBoxButton.OK);
+                MessageBox.Show("Некорректный файл для справочника Отправленные заявки!", "Ошибка!", MessageBoxButton.OK);
                 throw new Exception("Incorrect file!");
             }
             SendRequestsCatalogue.Load(filePath);
@@ -128,12 +128,12 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
 
         public void LoadDefaultFirstCatalogue()
         {
-            LoadFirstCatalogue("DefaultFiles/divisions_default.txt");
+            LoadFirstCatalogue("DefaultFiles/default_Division.txt");
         }
 
         public void LoadDefaultSecondCatalogue()
         {
-            LoadSecondCatalogue("DefaultFiles/sendrequests_default.txt");
+            LoadSecondCatalogue("DefaultFiles/default_SendRequest.txt");
         }
     }
 }

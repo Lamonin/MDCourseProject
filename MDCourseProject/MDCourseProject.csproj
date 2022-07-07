@@ -140,13 +140,13 @@
         <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="DefaultFiles\divisions_default.txt">
+      <Content Include="DefaultFiles\default_Division.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Include="DefaultFiles\Document.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-      <Content Include="DefaultFiles\sendrequests_default.txt">
+      <Content Include="DefaultFiles\default_SendRequest.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Include="DefaultFiles\Staff.txt">
