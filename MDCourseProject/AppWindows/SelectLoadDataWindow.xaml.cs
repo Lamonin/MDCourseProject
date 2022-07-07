@@ -31,7 +31,7 @@ public partial class SelectLoadDataWindow : Window
         {
             if (String.IsNullOrEmpty(path))
             {
-                MessageBox.Show("Должны быть указаны пути ко всем справочникам!!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Должны быть указаны пути ко всем справочникам!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
         }
