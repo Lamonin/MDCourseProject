@@ -46,6 +46,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
     
     private KeyValuePair<TKey, TValue>[] _valuesTable;
     private byte[] _statusesTable;
+    private string[] _secondHF;
     
     private readonly HashEnumerator _hashEnumerator;
 
@@ -103,6 +104,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         
         _valuesTable = new KeyValuePair<TKey, TValue>[_capacity];
         _statusesTable = new byte[_capacity];
+        _secondHF = new string[_capacity];
 
         for (int i = 0; i < tempStatusesTable.Length; i++)
         {
@@ -121,6 +123,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
 
         _valuesTable = new KeyValuePair<TKey, TValue>[_capacity];
         _statusesTable = new byte[_capacity];
+        _secondHF = new string[_capacity];
 
         FirstHashFunc = FirstHashFunction;
         SecondHashFunc = SecondHashFunction;
@@ -143,6 +146,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         {
             if (_statusesTable[i] != STATUS_PLACED)
             {
+                _secondHF[i] = GetSecondHFValues(key);
                 _valuesTable[i] = new KeyValuePair<TKey, TValue>(key, value);
                 _statusesTable[i] = STATUS_PLACED;
                 break;
@@ -202,6 +206,28 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         return false;
     }
 
+    private string GetSecondHFValues(TKey key)
+    {
+        var secondHF = "";
+        int hashCode = key.GetHashCode();
+        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
+        foreach (var index in _hashEnumerator)
+        {
+            if (_statusesTable[index] == STATUS_EMPTY)
+            {
+                if(index != _firstHashFunc(hashCode))
+                    secondHF += index;
+                break;
+            }
+            if (_statusesTable[index] == STATUS_REMOVED)
+            {
+                secondHF += "|" + index + "| ";
+                continue;
+            }
+            secondHF += index + " ";
+        }
+        return secondHF;
+    }
     public bool ContainsKey(TKey key)
     {
         int hashCode = key.GetHashCode();
@@ -263,7 +289,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
             if (_statusesTable[i] == 0)
                 output += $"{i}: EMPTY\n";
             else
-                output += $"{i}: Key: {_valuesTable[i].Key}; Value: {_valuesTable[i].Value}; Status: {_statusesTable[i]}; FirstHF: {FirstHashFunc(_valuesTable[i].Key.GetHashCode())}; SecondHF: {SecondHashFunc(_valuesTable[i].Key.GetHashCode())}\n";
+                output += $"{i}: Key: {_valuesTable[i].Key}; Value: {_valuesTable[i].Value}; Status: {_statusesTable[i]}; FirstHF: {FirstHashFunc(_valuesTable[i].Key.GetHashCode())}; SecondHF: {_secondHF[i]}\n";
         }
 
         return output;
