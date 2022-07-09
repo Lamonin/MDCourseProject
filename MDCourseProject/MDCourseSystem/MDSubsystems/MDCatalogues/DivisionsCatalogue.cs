@@ -28,7 +28,6 @@ public class DivisionsCatalogue:Catalogue
     {
         var key = new DivisionNameAndArea(data[0], data[1]);
         
-        MDDebugConsole.WriteLine($"Добавление в таблицу по ключу: {key.ToString()}; Первичная ХФ: {DivisionsTable.FirstHashFunc(key.GetHashCode())}; Вторичная ХФ: {DivisionsTable.SecondHashFunc(key.GetHashCode())}");
         DivisionsTable.Add(key, data[2]);
 
         var division = new Division(data[0], data[1], data[2]);
@@ -67,7 +66,12 @@ public class DivisionsCatalogue:Catalogue
                 var documentInfos = MDSystem.staffSubsystem.DocumentCatalogue.DivisionName.GetValue(divisionName);
                 foreach (var document in documentInfos)
                 {
-                    MDSystem.staffSubsystem.DocumentCatalogue.Remove(new []{document.Document.ToString(), document.Occupation.ToString(), document.DivisionName.ToString()});
+                    MDSystem.staffSubsystem.DocumentCatalogue.Remove(new []
+                    {
+                        document.Document.ToString(),
+                        document.Occupation.ToString(),
+                        document.DivisionName.ToString()
+                    });
                 }
             }
         }

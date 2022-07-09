@@ -133,9 +133,6 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
             {
                 if (value < 0) value = 0;
                 _catalogueIndex = value;
-
-                //Этот вывод в консоль так... для красоты)
-                MDDebugConsole.WriteLine(_catalogueIndex == 0 ? "Выбран справочник Подразделения" : "Выбран справочник Отправленные заявки");
             }
         }
 

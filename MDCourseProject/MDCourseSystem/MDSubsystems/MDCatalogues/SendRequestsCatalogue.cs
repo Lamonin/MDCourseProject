@@ -36,7 +36,6 @@ public class SendRequestsCatalogue:Catalogue
         var value = new SendRequest(key, data[2], data[3], data[4]);
         
         SendRequestsTree.Add(key, value);
-        MDDebugConsole.WriteLine(key.ToString());
 
         var sendRequest = new SendRequest(key, data[2], data[3], data[4]);
         _sendRequestsData.Add(sendRequest);
