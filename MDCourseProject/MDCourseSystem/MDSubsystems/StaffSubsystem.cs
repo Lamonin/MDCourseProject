@@ -38,7 +38,7 @@ public class StaffSubsystem:ISubsystem
              _staffCatalogue.Load(filePath);
          else
          {
-             MessageBox.Show("Название файла для справочника \" Сотрудники \" некорректен! Файл должен начинаться со слова <Staff>!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+             MessageBox.Show("Название файла для справочника \" Сотрудники \" некорректно! Файл должен начинаться со слова <Staff>!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
          }
     }
 
@@ -49,7 +49,7 @@ public class StaffSubsystem:ISubsystem
             _documentCatalogue.Load(filePath);
         else
         {
-            MessageBox.Show("Название файла для справочника \" Документы \" некорректен!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show("Название файла для справочника \" Документы \" некорректно!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 

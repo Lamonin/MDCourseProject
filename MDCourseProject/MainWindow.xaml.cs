@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using MDCourseProject.AppWindows;
 using MDCourseProject.MDCourseSystem;
-using MDCourseProject.MDCourseSystem.MDCatalogues;
 using Application = System.Windows.Application;
 
 namespace MDCourseProject
@@ -29,6 +28,7 @@ namespace MDCourseProject
 
             var loadDataWindow = new LoadDataWindow();
             loadDataWindow.ShowDialog();
+            Loaded += (sender, args) => UpdateMainDataGridValues();
         }
 
         public void UpdateMainDataGridValues()

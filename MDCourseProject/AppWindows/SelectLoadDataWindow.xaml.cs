@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -27,13 +28,10 @@ public partial class SelectLoadDataWindow : Window
 
     private void Button_Continue(object sender, RoutedEventArgs e)
     {
-        foreach (var path in filePaths)
+        if (filePaths.Any(string.IsNullOrWhiteSpace))
         {
-            if (String.IsNullOrEmpty(path))
-            {
-                MessageBox.Show("Должны быть указаны пути ко всем справочникам!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            MessageBox.Show("Должны быть указаны пути ко всем справочникам!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
         }
         
         try
