@@ -81,6 +81,7 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
 
         _valuesTable = new KeyValuePair<TKey, TValue>[_capacity];
         _statusesTable = new byte[_capacity];
+        _secondHFValues = new string[_capacity];
 
         FirstHashFunc = FirstHashFunction;
         SecondHashFunc = SecondHashFunction;
@@ -106,6 +107,7 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
             {
                 _valuesTable[i] = new KeyValuePair<TKey, TValue>(key, value);
                 _statusesTable[i] = STATUS_PLACED;
+                _secondHFValues[i] = GetSecondHashValues(key);
                 
                 isAdded = true;
                 break;
@@ -215,6 +217,35 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
         return output;
     }
 
+    private string[] _secondHFValues;
+    private string GetSecondHashValues(TKey key)
+    {
+        var output = string.Empty;
+
+        var hashCode = key.GetHashCode();
+        var firstHFResult = FirstHashFunc(hashCode);
+        
+        _hashEnumerator.SetForNewHash(_capacity, firstHFResult, SecondHashFunc(hashCode));
+        foreach (var index in _hashEnumerator)
+        {
+            if (_statusesTable[index] == STATUS_EMPTY)
+            {
+                if (index != firstHFResult)
+                {
+                    output += index.ToString();
+                }
+                break;
+            }
+            output += index + ", ";
+        }
+        
+        if (string.IsNullOrWhiteSpace(output))
+        {
+            output = "–";
+        }
+        return output;
+    }
+
     public string ToStringWithStatuses()
     {
         string output = "";
@@ -222,7 +253,11 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
         for (int i = 0; i < _capacity; i++)
         {
             if (_statusesTable[i] != 0) //Модифицировал, чтобы не выводило миллион записей
-                output += $"{i+1}) Key: {_valuesTable[i].Key}; Value: {_valuesTable[i].Value}; Status: {_statusesTable[i]}; FirstHF: {FirstHashFunc(_valuesTable[i].Key.GetHashCode())}; SecondHF: {SecondHashFunc(_valuesTable[i].Key.GetHashCode())}\n";
+                output += $"\t{i}) Key: {_valuesTable[i].Key};"
+                          + $" Value: {_valuesTable[i].Value};"
+                          + $" Status: {_statusesTable[i]};"
+                          + $" FirstHF: {FirstHashFunc(_valuesTable[i].Key.GetHashCode())};"
+                          + $" SecondHF: {_secondHFValues[i]}\n";
         }
 
         return output;
