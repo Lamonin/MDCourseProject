@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.MDCourseSystem.MDCatalogues;
@@ -15,23 +17,37 @@ public class ClientsSubsystem:ISubsystem
         _applications = new Applications();
         _clients = new Clients();
     }
+    
 
     public void LoadDefaultFirstCatalogue()
     {
-        //LoadFirstCatalogue("DefaultFiles/имя_справочника.txt");
+        
+        LoadFirstCatalogue("DefaultFiles/default_clients.txt");
     }
 
     public void LoadDefaultSecondCatalogue()
     {
-        //LoadSecondCatalogue("DefaultFiles/имя_справочника.txt");
+        LoadSecondCatalogue("DefaultFiles/default_applications.txt");
     }
     
     public void LoadFirstCatalogue(string filePath)
     {
+        if (!filePath.EndsWith("clients.txt"))
+        {
+            MessageBox.Show("Некорректный файл для справочника Отправленные заявки!", "Ошибка!", MessageBoxButton.OK);
+            throw new Exception("Incorrect file!");
+        }
+        _clients.Load(filePath);
     }
 
     public void LoadSecondCatalogue(string filePath)
     {
+        if (!filePath.EndsWith("applications.txt"))
+        {
+            MessageBox.Show("Некорректный файл для справочника Отправленные заявки!", "Ошибка!", MessageBoxButton.OK);
+            throw new Exception("Incorrect file!");
+        }
+        _applications.Load(filePath);
     }
 
     public bool MakeReport(string[] data)

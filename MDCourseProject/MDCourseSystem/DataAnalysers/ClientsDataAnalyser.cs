@@ -22,7 +22,7 @@ public class AddValuesApplicationAnalyser:DataAnalyser
     public AddValuesApplicationAnalyser(TextBox[] textBoxes) : base(textBoxes)
     {
     }
-    
+
     public override bool IsCorrectInputData()
     {
         bool isError = false;

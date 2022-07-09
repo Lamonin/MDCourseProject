@@ -134,8 +134,8 @@ namespace FundamentalStructures
             if(root != null)
             {
                 if (isEqual(root, Tnil)) return null; // Никогда не заходит в это условие
-                if (root.key.CompareTo(key) > 0) return GetLeaf(root.Rleaf, key);
-                if (root.key.CompareTo(key) < 0) return GetLeaf(root.Lleaf, key);
+                if (root.key.CompareTo(key) < 0) return GetLeaf(root.Rleaf, key);
+                if (root.key.CompareTo(key) > 0) return GetLeaf(root.Lleaf, key);
                 return root;
             }
             return null;

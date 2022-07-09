@@ -56,14 +56,15 @@ public class Application : IComparable<Application>
 
     public string ClientTelephone  { get; set; }
     
-    public DateTime Date { get; set; }
+    //public DateTime Date { get; set; }
+    public string Date { get; set; }
     
     public override string ToString()
     {
         return $"{staff} {ClientName} {ClientSurname} {ClientPatronymic} {ClientTelephone} {Date}";
     }
 
-    public Application(Staff staff, string clientName, string clientSurname, string clientPatronymic, string clientTelephone, DateTime date)
+    public Application(Staff staff, string clientName, string clientSurname, string clientPatronymic, string clientTelephone, string date)
     {
         this.staff = staff;
         ClientName = clientName;
@@ -103,7 +104,7 @@ public class Applications:Catalogue
     public override void Add(string[] data)
     {
         var key = new Staff(data[0],data[1],data[2],data[3]);
-        var ApplicationInfo = new Application(key, data[4], data[5], data[6], data[7], DateTime.Parse(data[8]));
+        var ApplicationInfo = new Application(key, data[4], data[5], data[6], data[7], data[8]);
         tree.RBAddLeaf(key,ApplicationInfo);
         ApplicationsInfo.Add(ApplicationInfo);
     }
@@ -111,9 +112,39 @@ public class Applications:Catalogue
     public override void Remove(string[] data)
     {
         var key = new Staff(data[0],data[1],data[2],data[3]);
-        var ApplicationInfo = new Application(key, data[4], data[5], data[6], data[7], DateTime.Parse(data[8]));
+        var ApplicationInfo = new Application(key, data[4], data[5], data[6], data[7], data[8]);
         tree.RBDelete(key,ApplicationInfo);
         ApplicationsInfo.RemoveAll(application => application.CompareTo(ApplicationInfo) == 0);
+    }
+    
+    public void RemoveByClient(string[] data)
+    {
+        bool deleted = true;
+        while (deleted)
+        {
+           foreach(var i in ApplicationsInfo)
+           {
+               if (i.ClientName == data[0] && i.ClientSurname == data[1] && i.ClientPatronymic == data[2] &&
+                   i.ClientTelephone == data[3])
+               {
+                   string[] remove = new string[9];
+                   remove[0] = i.staff.StaffName;
+                   remove[1] = i.staff.StaffSurname;
+                   remove[2] = i.staff.StaffPatronymic;
+                   remove[3] = i.staff.StaffOccupation;
+                   remove[4] = i.ClientName;
+                   remove[5] = i.ClientSurname;
+                   remove[6] = i.ClientPatronymic;
+                   remove[7] = i.ClientTelephone;
+                   remove[8] = i.Date;
+                   Remove(remove);
+                   deleted = true;
+                   break;
+               }
+               else deleted = false;
+           } 
+        }
+        
     }
 
     public override void Find(DataGrid mainDataGrid, string[] data)
