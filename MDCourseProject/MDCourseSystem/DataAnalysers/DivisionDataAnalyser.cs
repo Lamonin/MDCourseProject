@@ -19,6 +19,17 @@ public class AddValuesDivisionAnalyser: DataAnalyser
         bool isError = _textBoxes[0].Text.Length < 2; //Длина названия подразделения меньше двух
         isError = isError || _textBoxes[1].Text.Length < 2; //Длина названия района меньше двух
         isError = isError || _textBoxes[2].Text.Length < 2; //Длина тип подразделения меньше двух
+
+        if (MDSystem.divisionsSubsystem.DivisionsCatalogue.DivisionsTable.ContainsKey(
+                new DivisionNameAndArea(
+                    name: _textBoxes[0].Text,
+                    area: _textBoxes[1].Text)
+                )
+        )
+        {
+            MessageBox.Show("В районе уже есть подразделение с таким названием!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
         
         if (isError)
         {
@@ -60,9 +71,20 @@ public class AddValuesSendRequestsAnalyser: DataAnalyser
         else
             isError = true;
         
-        //Проверка существования такого клиента
+        //Проверка на существования такого клиента
         var fullName = _textBoxes[2].Text.Split(',')[0].Split();
-        isError = isError || !MDSystem.clientsSubsystem._clients.ClientsTable.ContainsKey(new ClientFullNameAndTelephone(fullName[0], fullName[1], fullName[2], _textBoxes[2].Text.Split(',')[1]));
+        if (!MDSystem.clientsSubsystem._clients.ClientsTable.ContainsKey(
+                new ClientFullNameAndTelephone(
+                    name: fullName[0],
+                    surname: fullName[1],
+                    patronymic: fullName[2], 
+                    telephone: _textBoxes[2].Text.Split(',')[1].Trim()
+                )
+            )
+        ) {
+            MessageBox.Show("Такого клиента нет в справочнике Клиенты!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
 
         if (isError)
         {
