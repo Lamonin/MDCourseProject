@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows.Controls;
 using FundamentalStructures;
@@ -7,66 +6,6 @@ using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.AppWindows.WindowsBuilder;
 
 namespace MDCourseProject.MDCourseSystem.MDCatalogues;
-
-public struct Division:IComparable<Division>
-{
-    public Division(string name, string area, string type)
-    {
-        Name = name;
-        Area = area;
-        Type = type;
-    }
-        
-    public int CompareTo(Division other)
-    {
-        var compareRes = string.Compare(Name, other.Name, StringComparison.OrdinalIgnoreCase);
-        if (compareRes != 0) return compareRes;
-            
-        compareRes = string.Compare(Area, other.Area, StringComparison.OrdinalIgnoreCase);
-        if (compareRes != 0) return compareRes;
-            
-        return string.Compare(Type, other.Type, StringComparison.OrdinalIgnoreCase);
-    }
-        
-    public override string ToString()
-    {
-        return $"{Name} ({Area})";
-    }
-        
-    public string Name {get; set;}
-    public string Area {get; set;}
-    public string Type {get; set;}
-}
-
-public readonly struct DivisionNameAndArea:IComparable<DivisionNameAndArea>
-{ 
-    public DivisionNameAndArea(string name, string area)
-    {
-        Name = name;
-        Area = area;
-    }
-
-    public int CompareTo(DivisionNameAndArea other)
-    {
-        var nameComparison = string.Compare(Name, other.Name, StringComparison.OrdinalIgnoreCase);
-        if (nameComparison != 0) return nameComparison;
-            
-        return string.Compare(Area, other.Area, StringComparison.OrdinalIgnoreCase);
-    }
-
-    public override int GetHashCode()
-    {
-        return Name.GetHashCode() + Area.GetHashCode();
-    }
-
-    public override string ToString()
-    {
-        return Name + " (" + Area + ")";
-    }
-
-    public readonly string Name;
-    public readonly string Area;
-}
 
 public class DivisionsCatalogue:Catalogue
 {

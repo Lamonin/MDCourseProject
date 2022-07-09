@@ -117,6 +117,7 @@
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\Clients.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\DivisionsCatalogue.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\Catalogue.cs" />
+        <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\DivisionsSubsystemCataloguesTypes.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\DocumentCatalogue.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\SendRequestsCatalogue.cs" />
         <Compile Include="MDCourseSystem\MDSubsystems\MDCatalogues\StaffCatalogue.cs" />

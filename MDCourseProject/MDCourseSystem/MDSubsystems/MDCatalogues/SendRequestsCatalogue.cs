@@ -8,68 +8,6 @@ using MDCourseProject.AppWindows.WindowsBuilder;
 
 namespace MDCourseProject.MDCourseSystem.MDCatalogues;
 
-public class SendRequest:IComparable<SendRequest>
-{
-    public readonly DivisionNameAndArea Division;
-    public SendRequest(DivisionNameAndArea division, string client, string service, string date)
-    {
-        Division = division;
-        DivisionName = Division.ToString();
-        Client = client;
-        Service = service;
-        Date = date;
-    }
-
-    public int CompareTo(SendRequest other)
-    {
-        var compareRes = Division.CompareTo(other.Division);
-        if (compareRes != 0) return compareRes; 
-            
-        compareRes = string.Compare(Client, other.Client, StringComparison.OrdinalIgnoreCase);
-        if (compareRes != 0) return compareRes;
-            
-        compareRes = string.Compare(Service, other.Service, StringComparison.OrdinalIgnoreCase);
-        if (compareRes != 0) return compareRes;
-            
-        return string.Compare(Date, other.Date, StringComparison.OrdinalIgnoreCase);
-    }
-
-    public override string ToString()
-    {
-        return string.Join(", ", DivisionName, Client, Service, Date);
-    }
-
-    public string DivisionName { get; set; }
-    public string Client { get; set; }
-    public string Service { get; set; }
-    public string Date { get; set; }
-}
-
-public readonly struct SendRequestClientServiceAndDate:IComparable<SendRequestClientServiceAndDate>
-{
-    public SendRequestClientServiceAndDate(string client, string service, string date)
-    {
-        Client = client;
-        Service = service;
-        Date = date;
-    }
-
-    public int CompareTo(SendRequestClientServiceAndDate other)
-    {
-        var compareRes = string.Compare(Client, other.Client, StringComparison.Ordinal);
-        if (compareRes != 0) return compareRes;
-
-        compareRes = string.Compare(Service, other.Service, StringComparison.Ordinal);
-        if (compareRes != 0) return compareRes;
-            
-        return string.Compare(Date, other.Date, StringComparison.Ordinal);
-    }
-        
-    public readonly string Client;
-    public readonly string Service;
-    public readonly string Date;
-}
-
 public class SendRequestsCatalogue:Catalogue
 {
     public readonly LRBTree<DivisionNameAndArea, SendRequest> SendRequestsTree;
