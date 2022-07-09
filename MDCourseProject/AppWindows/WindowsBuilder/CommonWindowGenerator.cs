@@ -73,7 +73,7 @@ public static class CommonWindowGenerator
 
         var tBoxFrom = new TextBox
         {
-            TextWrapping = TextWrapping.Wrap,
+            TextWrapping = TextWrapping.NoWrap,
             BorderBrush = new SolidColorBrush(Colors.Black),
             BorderThickness = new Thickness(1),
             Padding = new Thickness(4),
@@ -83,7 +83,7 @@ public static class CommonWindowGenerator
         
         var tBoxTo = new TextBox
         {
-            TextWrapping = TextWrapping.Wrap,
+            TextWrapping = TextWrapping.NoWrap,
             BorderBrush = new SolidColorBrush(Colors.Black),
             BorderThickness = new Thickness(1),
             Padding = new Thickness(4),
