@@ -195,19 +195,19 @@ public class Applications:Catalogue
 
     public override DataAnalyser BuildAddValuesWindow(Grid mainGrid)
     {
-        return new AddValuesApplicationAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Имя сотрудника","Фамилия сотрудника","Отчество сотрудника",
+        return new AddValuesApplicationAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Фамилия сотрудника","Имя сотрудника","Отчество сотрудника",
             "Должность сотрудника","Имя клиента","Фамилия клиента", "Отчество клиента","Телефон клиента", "Дата"));
     }
 
     public override DataAnalyser BuildRemoveValuesWindow(Grid mainGrid)
     {
-        return new DataAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Имя сотрудника","Фамилия сотрудника","Отчество сотрудника",
+        return new DataAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Фамилия сотрудника","Имя сотрудника","Отчество сотрудника",
             "Должность сотрудника","Имя клиента","Фамилия клиента", "Отчество клиента","Телефон клиента", "Дата"));
     }
 
     public override DataAnalyser BuildSearchValuesWindow(Grid mainGrid)
     {
-        return new DataAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Имя сотрудника","Фамилия сотрудника","Отчество сотрудника", "Должность сотрудника"));
+        return new DataAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Фамилия сотрудника","Имя сотрудника","Отчество сотрудника", "Должность сотрудника"));
     }
 
     public override string PrintData()

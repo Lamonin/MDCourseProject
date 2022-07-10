@@ -36,6 +36,9 @@ public class AddValuesApplicationAnalyser:DataAnalyser
         }
         
         isError = isError || !MDSystem.clientsSubsystem._clients.ClientsTable.ContainsKey(new ClientFullNameAndTelephone(_textBoxes[4].Text, _textBoxes[5].Text, _textBoxes[6].Text, _textBoxes[7].Text));
+        FullName name = new FullName(_textBoxes[0].Text+" "+_textBoxes[1].Text+" "+_textBoxes[2].Text);
+        Occupation occupation = new Occupation(_textBoxes[3].Text);
+        isError = isError && !MDSystem.staffSubsystem.StaffCatalogue.StaffTable.ContainsKey(new StaffNameAndOccupation(name,occupation));
         
         if (isError)
         {

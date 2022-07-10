@@ -149,12 +149,23 @@ public class Clients:Catalogue
         var ClientInfo = new Client(data[0], data[1], data[2], data[3], data[4], data[5]);
         var key = new ClientFullNameAndTelephone(data[0],data[1],data[2],data[3]);
         _clientTable.Remove(key,ClientInfo);
-        //CliestsInfo.Remove(ClientInfo);
         CliestsInfo.RemoveAll(Client => Client.CompareTo(ClientInfo) == 0);
         ClientAgeTree.RBDelete(DateTime.Today.Year - int.Parse(data[5].Split('.')[2]), ClientInfo);
 
         var client = (data[0] + " " + data[1] + " " + data[2] + " " + data[3]).Split();
         MDSystem.clientsSubsystem._applications.RemoveByClient(client);
+        var keyForDelInDivisionsSubsystem = new ClientFullNameAndTelephone(data[1],data[0],data[2],data[3]);
+        MDSystem.divisionsSubsystem.SendRequestsCatalogue.SendRequestsByClient.TryGetValuesList(keyForDelInDivisionsSubsystem, out var list);
+        foreach (var i in list)
+        {
+            string[] remove = new string[5];
+            remove[0] = i.Division.Area;
+            remove[1] = i.Division.Name;
+            remove[2] = i.Client;
+            remove[3] = i.Service;
+            remove[4] = i.Date;
+            MDSystem.divisionsSubsystem.SendRequestsCatalogue.Remove(remove);
+        }
     }
 
     public override void Find(DataGrid mainDataGrid, string[] data)
