@@ -145,7 +145,9 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override string PrintData()
         {
-            return "Хеш-таблица:\n" + _staffTable.ToStringWithStatuses();
+            return "Хеш-таблица:\n \n" + _staffTable.ToStringWithStatuses()
+                + "\nДерево (целостность \"Сотрудники\" - \"Документы\" по должности сотрудника):\n \n" + _occupationTree.PrintTree()
+                + "\nДерево (формирование отчета):\n \n" + _workplaceTree.PrintTree();
         }
 
         public override string Name => "Сотрудники";
