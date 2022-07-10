@@ -160,11 +160,16 @@ public class Applications:Catalogue
                 results.Add(node.pData);
                 node = node.pNext;
             } while (node != null);
-                
+            MDDebugConsole.WriteLine($"Клиент по ключу <{key.StaffName} {key.StaffSurname} {key.StaffPatronymic} {key.StaffOccupation}> был успешно найден!",true);
             PrintDataToGrid(mainDataGrid, results, new[] {"Сотрудник","Имя клиента","Фамилия клиента", "Отчество клиента","Телефон клиента", "Дата"});
         }
         else
+        {
+            MDDebugConsole.WriteLine($"Клиент по ключу <{key.StaffName} {key.StaffSurname} {key.StaffPatronymic} {key.StaffOccupation}> не был найден!",true);
             MessageBox.Show("Элемент не найден", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        
     }
 
     public override void PrintDataToGrid(DataGrid mainDataGrid)
@@ -212,7 +217,7 @@ public class Applications:Catalogue
 
     public override string PrintData()
     {
-        return String.Empty;
+        return "\nДерево (\"Клиенты\" - \"Обращения\" по ФИО сотрудника и его должности):\n \n" + tree.PrintTree();
     }
 
     public override string Name { get; }
