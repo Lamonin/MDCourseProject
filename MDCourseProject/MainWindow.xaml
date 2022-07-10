@@ -64,6 +64,7 @@
                               x:Name="MainDataGrid"
                               Margin="0 8 0 0"
                               IsReadOnly="True"
+                              SelectionUnit="Cell"
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"
                               CanUserReorderColumns="False"
