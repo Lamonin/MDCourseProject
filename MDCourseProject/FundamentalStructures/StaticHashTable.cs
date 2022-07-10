@@ -185,12 +185,20 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
 
     public bool TryGetValue(TKey key, out TValue value)
     {
+        return TryGetValue(key, out value, out _);
+    }
+    
+    public bool TryGetValue(TKey key, out TValue value, out int stepsToFind)
+    {
+        stepsToFind = 0;
+        
         int hashCode = key.GetHashCode();
             
         _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
         foreach (int i in _hashEnumerator)
         {
-            if (_statusesTable[i] == STATUS_EMPTY) break; 
+            stepsToFind += 1;
+            if (_statusesTable[i] == STATUS_EMPTY) break;
             
             if (_statusesTable[i] == STATUS_PLACED && _valuesTable[i].Key.CompareTo(key) == 0)
             {

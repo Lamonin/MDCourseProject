@@ -81,13 +81,14 @@ public class DivisionsCatalogue:Catalogue
 
     public override void Find(DataGrid mainDataGrid, string[] data)
     {
-        MDDebugConsole.WriteLine($"Поиск в справочнике {Name} значения: {data[0]};{data[1]}");
-        
         var searchResult = new List<Division>();
-        if (DivisionsTable.TryGetValue(new DivisionNameAndArea(data[0], data[1]), out var value))
+        if (DivisionsTable.TryGetValue(new DivisionNameAndArea(data[0], data[1]), out var value, out var steps))
         {
             searchResult.Add(new Division(data[0], data[1], value));
         }
+        
+        MDDebugConsole.Write($"Поиск в справочнике \"{Name}\" по ключу: <{data[0]}; {data[1]}> ", true);
+        MDDebugConsole.WriteLine($"{ (steps>0 ? $"успешен! Найдено за: {steps} шагов" : $"неудачен! Значения не было найдено за: {steps} шагов")}", false);
         PrintDataToGrid(mainDataGrid, searchResult, new []{"Подразделение", "Район", "Тип подразделения"});
     }
 

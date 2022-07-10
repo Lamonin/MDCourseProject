@@ -68,7 +68,13 @@ public class SendRequestsCatalogue:Catalogue
     {
         var searchResult = new List<SendRequest>();
         var key = new DivisionNameAndArea(data[1], data[0]);
-        if (SendRequestsTree.TryGetValuesList(key, out var list)) { searchResult.AddRange(list); }
+        if (SendRequestsTree.TryGetValuesList(key, out var list, out var steps))
+        {
+            searchResult.AddRange(list);
+        }
+
+        MDDebugConsole.Write($"Поиск в справочнике \"{Name}\" по ключу: <{data[0]}; {data[1]}> ", true);
+        MDDebugConsole.WriteLine($"{ (steps>0 ? $"успешен! Найдено за: {steps} шагов" : $"неудачен! Значения не было найдено за: {steps} шагов")}", false);
         PrintDataToGrid(mainDataGrid, searchResult, new []{"Подразделение", "Клиент", "Услуга", "Дата"});
     }
 

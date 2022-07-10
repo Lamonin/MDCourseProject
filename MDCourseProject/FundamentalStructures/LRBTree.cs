@@ -266,11 +266,27 @@ namespace FundamentalStructures
 
         public bool TryGetValuesList(TKey key, out DoubleCircularLinkedList<TValue> list)
         {
+            return TryGetValuesList(key, out list, out _);
+        }
+
+        public bool TryGetValuesList(TKey key, out DoubleCircularLinkedList<TValue> list, out int stepsToFind)
+        {
+            stepsToFind = 0;
             list = default;
-            if (!Contains(key)) return false;
+
+            var node = _root;
+            while (node != null)
+            {
+                stepsToFind += 1;
+                
+                int res = node.key.CompareTo(key);
+                if (res == 0) break;
+                node = res > 0 ? node.left : node.right;
+            }
+
+            if (node is null) return false;
             
-            list = _findNodeByKey(key).list;
-            
+            list = node.list;
             return true;
         }
 
