@@ -197,7 +197,7 @@ namespace FundamentalStructures
            var tmp = _head;
            while (!IsEmpty(tmp))
            {
-               str += tmp + " ";
+               str += "|" + tmp + "|";
                tmp = tmp.Next;
            }
            return str;

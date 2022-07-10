@@ -63,7 +63,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             var findKey = new Document(data[0]);
             var info = _documentTree.GetValue(findKey);
             if(info != null)
-                PrintDataToGrid(mainDataGrid, info, new []{"Тип документа", "Должность", "Подразделение"});
+                PrintDataToGrid(mainDataGrid, info, new []{"Тип документа", "Должность сотрудника", "Название подразделения"});
             else
             {
                 MessageBox.Show("Элемент не найден!", "Предупрежедние", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -72,7 +72,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override void PrintDataToGrid(DataGrid mainDataGrid)
         {
-            PrintDataToGrid(mainDataGrid, _documentInfo, new []{"Тип документа", "Должность", "Подразделение"});
+            PrintDataToGrid(mainDataGrid, _documentInfo, new []{"Тип документа", "Должность сотрудника", "Название подразделения"});
         }
 
         public override void Load(string filePath)
@@ -98,12 +98,12 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override DataAnalyser BuildAddValuesWindow(Grid mainGrid)
         {
-            return new AddValuesDocumentsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Тип документа:", "Должность:", "Подразделение:"));
+            return new AddValuesDocumentsAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Тип документа", "Должность сотрудника", "Название подразделения"));
         }
 
         public override DataAnalyser BuildRemoveValuesWindow(Grid mainGrid)
         {
-            return new RemoveValuesDocumentAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Тип документа:", "Должность:", "Подразделение:"));
+            return new RemoveValuesDocumentAnalyser(CommonWindowGenerator.CreateWindow(mainGrid, "Тип документа", "Должность сотрудника", "Название подразделения"));
         }
 
         public override DataAnalyser BuildSearchValuesWindow(Grid mainGrid)
@@ -113,7 +113,9 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override string PrintData()
         {
-            return "Дерево:\n" + _documentTree.PrintTree();
+            return "Дерево (поиск, добавление, удаление):\n \n" + _documentTree.PrintTree() 
+                    + "\n Дерево (целостность \" Документы \" - \" Сотрудники \" по должности сотрудника):\n \n" + _occupationTree.PrintTree() 
+                   + "\n Дерево (целостность \" Документы \" - \" Подразделения \" по названию подразделения):\n \n" + _divisionNameTree.PrintTree();
         }
 
         public override string Name => "Документы";
