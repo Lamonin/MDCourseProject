@@ -21,7 +21,10 @@ public class SendRequest : IComparable<SendRequest>
         var compareRes = Division.CompareTo(other.Division);
         if (compareRes != 0) return compareRes;
 
-        compareRes = string.Compare(Client, other.Client, StringComparison.OrdinalIgnoreCase);
+        var client = UsefulMethods.GetClientFullNameAndTelephoneFromString(Client);
+        var otherClient = UsefulMethods.GetClientFullNameAndTelephoneFromString(other.Client);
+
+        compareRes = client.CompareTo(otherClient);
         if (compareRes != 0) return compareRes;
 
         compareRes = string.Compare(Service, other.Service, StringComparison.OrdinalIgnoreCase);

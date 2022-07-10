@@ -85,6 +85,22 @@ public class AddValuesSendRequestsAnalyser: DataAnalyser
             MessageBox.Show("Такого клиента нет в справочнике Клиенты!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
+        
+        //Проверка на существование такой записи
+        var divisionNameAndArea = new DivisionNameAndArea(_textBoxes[1].Text, _textBoxes[0].Text);
+        if (MDSystem.divisionsSubsystem.SendRequestsCatalogue.SendRequestsTree.Contains(
+                key: divisionNameAndArea,
+                val: new SendRequest(
+                    division: divisionNameAndArea,
+                    client: _textBoxes[2].Text,
+                    service: _textBoxes[3].Text,
+                    date: _textBoxes[4].Text
+                )
+            )
+        ) {
+            MessageBox.Show("Такая заявка уже есть в справочнике!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
 
         if (isError)
         {
