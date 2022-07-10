@@ -59,6 +59,8 @@ public class DivisionsCatalogue:Catalogue
             }
 
             if (DivisionsByName.Contains(data[0])) return;
+            // Если подразделение было удалено окончательно,
+            // то удаляем связанные с ним документы в подсистеме Staff
             
             var divisionName = new DivisionName(data[0]);
             if (MDSystem.staffSubsystem.DocumentCatalogue.DivisionName.ContainKey(divisionName))

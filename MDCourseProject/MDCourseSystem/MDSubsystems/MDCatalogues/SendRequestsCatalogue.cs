@@ -13,7 +13,7 @@ public class SendRequestsCatalogue:Catalogue
     public readonly LRBTree<DivisionNameAndArea, SendRequest> SendRequestsTree;
     private readonly List<SendRequest> _sendRequestsData;
 
-    public readonly LRBTree<string, SendRequest> SendRequestsByService;
+    public readonly LRBTree<ClientFullNameAndTelephone, SendRequest> SendRequestsByClient;
 
     private static string FormatDate(string dateString)
     {
@@ -24,8 +24,8 @@ public class SendRequestsCatalogue:Catalogue
     public SendRequestsCatalogue()
     {
         SendRequestsTree = new LRBTree<DivisionNameAndArea, SendRequest>();
-        SendRequestsByService = new LRBTree<string, SendRequest>();
         _sendRequestsData = new List<SendRequest>();
+        SendRequestsByClient = new LRBTree<ClientFullNameAndTelephone, SendRequest>();
     }
     
     public override void Add(string[] data)
@@ -39,7 +39,11 @@ public class SendRequestsCatalogue:Catalogue
 
         var sendRequest = new SendRequest(key, data[2], data[3], data[4]);
         _sendRequestsData.Add(sendRequest);
-        SendRequestsByService.Add(data[3], sendRequest);
+
+        SendRequestsByClient.Add(
+            key: UsefulMethods.GetClientFullNameAndTelephoneFromString(data[2]),
+            val: sendRequest
+        );
     }
 
     public override void Remove(string[] data)
@@ -53,6 +57,11 @@ public class SendRequestsCatalogue:Catalogue
         
         var sendRequest = new SendRequest(key, data[2], data[3], data[4]);
         _sendRequestsData.RemoveAll(request => request.CompareTo(sendRequest)==0);
+        
+        SendRequestsByClient.Remove(
+            key: UsefulMethods.GetClientFullNameAndTelephoneFromString(data[2]),
+            val: sendRequest
+        );
     }
 
     public override void Find(DataGrid mainDataGrid, string[] data)
