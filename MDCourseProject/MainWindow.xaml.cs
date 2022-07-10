@@ -28,7 +28,7 @@ namespace MDCourseProject
 
             var loadDataWindow = new LoadDataWindow();
             loadDataWindow.ShowDialog();
-            Loaded += (sender, args) => UpdateMainDataGridValues();
+            Loaded += (_, _) => UpdateMainDataGridValues();
         }
 
         public void UpdateMainDataGridValues()

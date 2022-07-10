@@ -3,6 +3,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.AppWindows.WindowsBuilder;
@@ -50,8 +51,8 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
         {
             var saveReportDialog = new SaveFileDialog
             {
-                Title = "Выберите место для сохранения отчета по подсистеме Подразделения",
-                FileName ="Отчет Заявки подразделения",
+                Title = "Выберите место для сохранения отчета \"Заявки подразделения\"",
+                FileName ="Отчет \"Заявки подразделения\"",
                 Filter = "Text files (*.txt)|*.txt",
             };
         
@@ -93,12 +94,23 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
                 
                 var writer = new StreamWriter(saveReportDialog.FileName);
                 
-                foreach (var result in reportResults)
-                    writer.WriteLine(result.ToString());
-                
                 if (reportResults.Count == 0)
+                {
                     writer.WriteLine("Не было найдено ни одной записи удовлетворяющей условиям!");
-                
+                }
+                else
+                {
+                    reportResults.Sort((request, other) =>
+                    {
+                        var date1 = DateTime.Parse(request.Date);
+                        var date2 = DateTime.Parse(other.Date);
+                        return date1.CompareTo(date2);
+                    });
+                    
+                    foreach (var result in reportResults)
+                        writer.WriteLine(result.ToString());
+                }
+
                 writer.Close();
                     
                 //Открывает итоговый текстовый файл для просмотра
