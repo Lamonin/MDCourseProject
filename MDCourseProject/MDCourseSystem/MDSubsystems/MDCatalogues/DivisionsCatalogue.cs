@@ -27,8 +27,17 @@ public class DivisionsCatalogue:Catalogue
     public override void Add(string[] data)
     {
         var key = new DivisionNameAndArea(data[0], data[1]);
-        
-        DivisionsTable.Add(key, data[2]);
+        // Console.Out.WriteLine($"hash(<{key.Name}; {key.Area}>)");
+        Console.Out.WriteLine($"<{key.Name}; {key.Area}>" + " Числовое представление: " + key.GetHashCode() + " " + DivisionsTable.SecondHashFunc(key.GetHashCode()));
+        try
+        {
+            DivisionsTable.Add(key, data[2]);
+        }
+        catch
+        {
+            MessageBox.Show("В хеш-таблице Подразделения закончилось место!", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
 
         var division = new Division(data[0], data[1], data[2]);
         DivisionsByName.Add(data[0], division);

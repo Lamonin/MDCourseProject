@@ -134,24 +134,43 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
 
     public void Add(TKey key, TValue value)
     {
-        if (ContainsKey(key))
-        {
-            throw new Exception($"The value by key {key} is already exist!");
-        }
-        
         int hashCode = key.GetHashCode();
-            
+
+        int possibleIndex = -1;
         _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
         foreach (int i in _hashEnumerator)
         {
-            if (_statusesTable[i] != STATUS_PLACED)
+            if (_statusesTable[i] == STATUS_EMPTY)
             {
-                _secondHF[i] = GetSecondHFValues(key);
-                _valuesTable[i] = new KeyValuePair<TKey, TValue>(key, value);
-                _statusesTable[i] = STATUS_PLACED;
+                if (possibleIndex == -1)
+                {
+                    possibleIndex = i;
+                }
                 break;
             }
+            
+            if (_statusesTable[i] == STATUS_REMOVED && possibleIndex == -1)
+            {
+                possibleIndex = i;
+            }
+
+            if (_statusesTable[i] == STATUS_PLACED 
+                && _valuesTable[i].Key.CompareTo(key) == 0 
+                && _valuesTable[i].Value.CompareTo(value) == 0
+            )
+            {
+                throw new Exception($"The value by key {key} is already exist!");
+            }
         }
+
+        if (possibleIndex == -1)
+        {
+            throw new Exception("Failed to insert a value into the table!");
+        }
+        
+        _valuesTable[possibleIndex] = new KeyValuePair<TKey, TValue>(key, value);
+        _statusesTable[possibleIndex] = STATUS_PLACED;
+        _secondHF[possibleIndex] = GetSecondHFValues(key);
 
         Count += 1;
         if (Count > _maxCapacity) ResizeToBigger();

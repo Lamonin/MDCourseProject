@@ -50,12 +50,9 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
     {
         key = Math.Abs(key);
         
-        int mod = 10;
-        while (mod*10 < _capacity)
-        {
-            mod *= 10;
-        }
-
+        // Получает 10^(кол-во цифр в _capacity - 1)
+        int mod = (int) Math.Pow(10, (int) Math.Log10(_capacity));
+        
         int temp = 0;
         while (key != 0)
         {
@@ -69,7 +66,7 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
     private int SecondHashFunction(int key)
     {
         key = Math.Abs(key);
-        return 13 - key % 13;
+        return key % (_capacity - 1) + 1;
     }
     
     #endregion
@@ -92,32 +89,43 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
 
     public void Add(TKey key, TValue value)
     {
-        if (ContainsKey(key))
-        {
-            throw new Exception($"The value by key {key} is already exist!");
-        }
-        
-        bool isAdded = false;
         int hashCode = key.GetHashCode();
-            
+
+        int possibleIndex = -1;
         _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
         foreach (int i in _hashEnumerator)
         {
-            if (_statusesTable[i] != STATUS_PLACED)
+            if (_statusesTable[i] == STATUS_EMPTY)
             {
-                _valuesTable[i] = new KeyValuePair<TKey, TValue>(key, value);
-                _statusesTable[i] = STATUS_PLACED;
-                _secondHFValues[i] = GetSecondHashValues(key);
-                
-                isAdded = true;
+                if (possibleIndex == -1)
+                {
+                    possibleIndex = i;
+                }
                 break;
+            }
+            
+            if (_statusesTable[i] == STATUS_REMOVED && possibleIndex == -1)
+            {
+                possibleIndex = i;
+            }
+
+            if (_statusesTable[i] == STATUS_PLACED 
+                && _valuesTable[i].Key.CompareTo(key) == 0 
+                && _valuesTable[i].Value.CompareTo(value) == 0
+            )
+            {
+                throw new Exception($"The value by key {key} is already exist!");
             }
         }
 
-        if (!isAdded)
+        if (possibleIndex == -1)
         {
             throw new Exception("No place in the table!");
         }
+        
+        _valuesTable[possibleIndex] = new KeyValuePair<TKey, TValue>(key, value);
+        _statusesTable[possibleIndex] = STATUS_PLACED;
+        _secondHFValues[possibleIndex] = GetSecondHashValues(key);
 
         Count += 1;
     }
@@ -297,6 +305,7 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
                 {
                     if (_statusesTable[i] == STATUS_PLACED && _valuesTable[i].Key.CompareTo(key) == 0)
                     {
+                        //Изменяем значение существующего ключа
                         _valuesTable[i] = new KeyValuePair<TKey, TValue>(key, value);
                         break;
                     }
