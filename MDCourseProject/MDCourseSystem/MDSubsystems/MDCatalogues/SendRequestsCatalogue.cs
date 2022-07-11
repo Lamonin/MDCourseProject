@@ -73,7 +73,7 @@ public class SendRequestsCatalogue:Catalogue
             searchResult.AddRange(list);
         }
 
-        MDDebugConsole.Write($"Поиск в справочнике \"{Name}\" по ключу: <{data[0]}; {data[1]}> ", true);
+        MDDebugConsole.Write($"Поиск в справочнике {Name} по ключу: <{data[0]}; {data[1]}> ", true);
         MDDebugConsole.WriteLine($"{ (steps>0 ? $"успешен! Найдено за: {steps} шагов" : $"неудачен! Значения не было найдено за: {steps} шагов")}", false);
         PrintDataToGrid(mainDataGrid, searchResult, new []{"Подразделение", "Клиент", "Услуга", "Дата"});
     }

@@ -3,7 +3,6 @@ using System.IO;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using MDCourseProject.AppWindows.DataAnalysers;
 using MDCourseProject.AppWindows.WindowsBuilder;
@@ -51,8 +50,8 @@ namespace MDCourseProject.MDCourseSystem.MDSubsystems
         {
             var saveReportDialog = new SaveFileDialog
             {
-                Title = "Выберите место для сохранения отчета \"Заявки подразделения\"",
-                FileName ="Отчет \"Заявки подразделения\"",
+                Title = "Выберите место для сохранения отчета Заявки подразделени",
+                FileName ="Отчет Заявки подразделения",
                 Filter = "Text files (*.txt)|*.txt",
             };
         
