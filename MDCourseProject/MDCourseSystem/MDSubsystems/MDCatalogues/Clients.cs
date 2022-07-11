@@ -102,32 +102,25 @@ public class Clients:Catalogue
         ClientAgeTree = new RB_Tree<int, Client>();
         _clientTable.FirstHashFunc = key =>
         {
-           /* string stroke = key.ToString();
+            string stroke = key.ToString();
             foreach (var i in stroke)
             {
                 key += (int) i;
-            }*/
-           return Math.Abs(key.GetHashCode()) % _clientTable.GetCapacity();
+            }
+            return Math.Abs(key) % _clientTable.GetCapacity();
         };
 
         _clientTable.SecondHashFunc = key =>
         {
-            /*string stroke = key.ToString();
+            string stroke = key.ToString();
             foreach (var i in stroke)
             {
                 key += (int) i;
             }
 
-            key *= 13;
-            stroke = key.ToString();
-            foreach (var i in stroke)
-            {
-                key += (int) i;
-            }
-            return key % _clientTable.GetCapacity();*/
-            return Math.Abs(key.GetHashCode()) % _clientTable.GetCapacity();
+            key %= 13;
+            return key % _clientTable.GetCapacity();
         };
-        //придумать хеш функции
     }
 
     public override void Add(string[] data)
@@ -172,12 +165,17 @@ public class Clients:Catalogue
     {
         var key = new ClientFullNameAndTelephone(data[0],data[1],data[2],data[3]);
 
-        if ( _clientTable.TryGetValue(key, out var res))
+        if (_clientTable.TryGetValue(key, out var res, out var steps))
+        {
             PrintDataToGrid(mainDataGrid, new List<Client> {res}, new[] {"Имя", "Фамилия", "Отчество", "Телефон", "Пол", "Дата рождения"});
-
+            MDDebugConsole.WriteLine($"Клиент по ключу <{key.Name} {key.Surname} {key.Patronymic} {key.Telephone}> был успешно найден за {steps} шагов!",true);
+        }
         else
-            MessageBox.Show("Элемент не найден", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Information);
-
+        {
+          MessageBox.Show("Элемент не найден", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Information);
+          MDDebugConsole.WriteLine($"Клиент по ключу <{key.Name} {key.Surname} {key.Patronymic} {key.Telephone}> не существует в таблице!",true);
+        }
+        
     }
 
     public override void PrintDataToGrid(DataGrid mainDataGrid)
@@ -223,7 +221,9 @@ public class Clients:Catalogue
 
     public override string PrintData()
     {
-        return String.Empty;
+        return "Хеш-таблица:\n \n" + _clientTable.ToStringWithStatuses()
+                                   + "\nДерево (\"Клиенты\" - \"Клиенты\" по возрасту клиентов):\n \n" +
+                                   ClientAgeTree.PrintTree();
         //  сделать отладку
     }
 

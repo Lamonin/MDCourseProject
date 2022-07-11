@@ -48,3 +48,12 @@ public class AddValuesApplicationAnalyser:DataAnalyser
         return !isError;
     }
 }
+
+public class ReportClientsAnalyser : DataAnalyser
+{
+    public ReportClientsAnalyser(TextBox[] textBoxes) : base(textBoxes) { }
+    public override bool IsCorrectInputData()
+    {
+        return true;
+    }
+}

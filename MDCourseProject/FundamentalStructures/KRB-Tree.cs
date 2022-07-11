@@ -416,6 +416,24 @@ namespace FundamentalStructures
         {
             m_root = null;
         }
+        
+        private void print_Tree(leaf p, int level, ref string output)
+        {
+            if(p != null)
+            {
+                print_Tree(p.Rleaf,level + 1, ref output);
+                for(int i = 0;i< level;i++) output += "      ";
+                output += p.key + (p.IsRed ? "-К\n":"-Ч\n");
+                print_Tree(p.Lleaf,level + 1, ref output);
+            }
+        }
+        
+        public string PrintTree()
+        {
+            string output = String.Empty;
+            if (m_root != null) print_Tree(m_root, 0, ref output);
+            return output;
+        }
 
         public bool isEqual(leaf leaf1, leaf leaf2)
         {
