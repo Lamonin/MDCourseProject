@@ -102,16 +102,18 @@ public class Clients:Catalogue
         ClientAgeTree = new RB_Tree<int, Client>();
         _clientTable.FirstHashFunc = key =>
         {
+            key = Math.Abs(key);
             string stroke = key.ToString();
             foreach (var i in stroke)
             {
                 key += (int) i;
             }
-            return Math.Abs(key) % _clientTable.GetCapacity();
+            return key % _clientTable.GetCapacity();
         };
 
         _clientTable.SecondHashFunc = key =>
         {
+            key = Math.Abs(key);
             string stroke = key.ToString();
             foreach (var i in stroke)
             {
@@ -119,7 +121,7 @@ public class Clients:Catalogue
             }
 
             key %= 13;
-            return key % _clientTable.GetCapacity();
+            return key % _clientTable.GetCapacity() + 1;
         };
     }
 
