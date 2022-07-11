@@ -102,32 +102,25 @@ public class Clients:Catalogue
         ClientAgeTree = new RB_Tree<int, Client>();
         _clientTable.FirstHashFunc = key =>
         {
-           /* string stroke = key.ToString();
+            string stroke = key.ToString();
             foreach (var i in stroke)
             {
                 key += (int) i;
-            }*/
-           return Math.Abs(key.GetHashCode()) % _clientTable.GetCapacity();
+            }
+            return Math.Abs(key) % _clientTable.GetCapacity();
         };
 
         _clientTable.SecondHashFunc = key =>
         {
-            /*string stroke = key.ToString();
+            string stroke = key.ToString();
             foreach (var i in stroke)
             {
                 key += (int) i;
             }
 
-            key *= 13;
-            stroke = key.ToString();
-            foreach (var i in stroke)
-            {
-                key += (int) i;
-            }
-            return key % _clientTable.GetCapacity();*/
-            return Math.Abs(key.GetHashCode()) % _clientTable.GetCapacity();
+            key %= 13;
+            return key % _clientTable.GetCapacity();
         };
-        //придумать хеш функции
     }
 
     public override void Add(string[] data)
