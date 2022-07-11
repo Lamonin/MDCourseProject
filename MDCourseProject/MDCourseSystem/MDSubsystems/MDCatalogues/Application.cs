@@ -222,5 +222,10 @@ public class Applications:Catalogue
 
     public override string Name { get; }
 
+    public List<Application> GetApplicationInfo()
+    {
+        return ApplicationsInfo;
+    }
+
     public RB_Tree<Staff, Application> _tree => tree;
 }
