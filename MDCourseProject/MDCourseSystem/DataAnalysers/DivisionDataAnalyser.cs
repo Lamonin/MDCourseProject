@@ -75,8 +75,8 @@ public class AddValuesSendRequestsAnalyser: DataAnalyser
         var fullName = _textBoxes[2].Text.Split(',')[0].Split();
         if (!MDSystem.clientsSubsystem._clients.ClientsTable.ContainsKey(
                 new ClientFullNameAndTelephone(
-                    name: fullName[0],
-                    surname: fullName[1],
+                    name: fullName[1],
+                    surname: fullName[0],
                     patronymic: fullName[2], 
                     telephone: _textBoxes[2].Text.Split(',')[1].Trim()
                 )
