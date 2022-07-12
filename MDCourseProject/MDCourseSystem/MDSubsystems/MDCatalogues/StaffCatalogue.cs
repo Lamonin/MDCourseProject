@@ -13,42 +13,45 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
     
     public class StaffCatalogue:Catalogue
     {
-        private DynamicHashTable<StaffNameAndOccupation, StaffInfo> _staffTable;
-        private RRBTree<WorkPlace, StaffInfo> _workplaceTree;
-        private RRBTree<Occupation, StaffInfo> _occupationTree;
         private List<StaffInfo> _staffInfo;
+        
+        public DynamicHashTable<StaffNameAndOccupation, StaffInfo> StaffTable { get; }
+
+        public RRBTree<WorkPlace, StaffInfo> WorkplaceTree { get; }
+
+        public RRBTree<Occupation, StaffInfo> OccupationTree { get; }
         public StaffCatalogue()
         {
             _staffInfo = new List<StaffInfo>();
-            _occupationTree = new RRBTree<Occupation, StaffInfo>();
-            _workplaceTree = new RRBTree<WorkPlace, StaffInfo>();
-            _staffTable = new DynamicHashTable<StaffNameAndOccupation, StaffInfo>();
-            _staffTable.FirstHashFunc = key =>
+            OccupationTree = new RRBTree<Occupation, StaffInfo>();
+            WorkplaceTree = new RRBTree<WorkPlace, StaffInfo>();
+            StaffTable = new DynamicHashTable<StaffNameAndOccupation, StaffInfo>();
+            StaffTable.FirstHashFunc = key =>
             {
-                var mult = key * (Math.Sqrt(5) - 1) / 2;
+                var mult = key.GetHashCode() * (Math.Sqrt(5) - 1) / 2;
                 var doublePart = mult - Math.Truncate(mult);
-                return (int)(_staffTable.GetCapacity() * doublePart);
+                return (int)(StaffTable.GetCapacity() * doublePart);
             };
-            _staffTable.SecondHashFunc = key => (2 * key + 1) % _staffTable.GetCapacity();
+            StaffTable.SecondHashFunc = key => (2 * key.GetHashCode() + 1) % StaffTable.GetCapacity();
         }
         public override void Add(string[] data)
         {
             var staffInfo = new StaffInfo(new FullName(data[0]), new Occupation(data[1]), new District(data[2]));
             var keyToStaffTable = new StaffNameAndOccupation(staffInfo.FullName, staffInfo.Occupation);
-            if (_staffTable.Contains(keyToStaffTable, staffInfo))
+            if (StaffTable.Contains(keyToStaffTable, staffInfo))
             {
                 MessageBox.Show("Элемент существует", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            if (_staffTable.ContainsKey(keyToStaffTable))
+            if (StaffTable.ContainsKey(keyToStaffTable))
             {
                 MessageBox.Show($"Ключ {keyToStaffTable} неуникален", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             var keyToWorkPlaceTree = new WorkPlace(staffInfo.Occupation, staffInfo.District);
-            _occupationTree.Add(staffInfo.Occupation, staffInfo);
-            _workplaceTree.Add(keyToWorkPlaceTree, staffInfo);
-            _staffTable.Add(keyToStaffTable, staffInfo);
+            OccupationTree.Add(staffInfo.Occupation, staffInfo);
+            WorkplaceTree.Add(keyToWorkPlaceTree, staffInfo);
+            StaffTable.Add(keyToStaffTable, staffInfo);
             _staffInfo.Add(staffInfo);
         }
 
@@ -57,11 +60,11 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             var staffInfo = new StaffInfo(new FullName(data[0]), new Occupation(data[1]), new District(data[2]));
             var keyToStaffTable = new StaffNameAndOccupation(staffInfo.FullName, staffInfo.Occupation);
             var keyToWorkPlaceTree = new WorkPlace(staffInfo.Occupation, staffInfo.District);
-            _occupationTree.Delete(staffInfo.Occupation, staffInfo);
-            _workplaceTree.Delete(keyToWorkPlaceTree, staffInfo);
-            _staffTable.Remove(keyToStaffTable, staffInfo);
+            OccupationTree.Delete(staffInfo.Occupation, staffInfo);
+            WorkplaceTree.Delete(keyToWorkPlaceTree, staffInfo);
+            StaffTable.Remove(keyToStaffTable, staffInfo);
             _staffInfo.RemoveAll(staff => staff.CompareTo(staffInfo) == 0);
-            if(!_occupationTree.ContainKey(staffInfo.Occupation))
+            if(!OccupationTree.ContainKey(staffInfo.Occupation))
             {
                 var result = MDSystem.staffSubsystem.DocumentCatalogue.OccupationTree.GetValue(staffInfo.Occupation);
                 if(result != null)
@@ -71,7 +74,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
                             {delete.Document.ToString(), delete.Occupation.ToString(), delete.DivisionName.ToString()});
                     }
             }
-            var staffInApplicationCatalogue = new Staff(staffInfo.FullName.Name, staffInfo.FullName.Surname, staffInfo.FullName.Patronymic, staffInfo.Occupation.ToString());
+            var staffInApplicationCatalogue = new Staff(staffInfo.FullName.Surname,staffInfo.FullName.Name,  staffInfo.FullName.Patronymic, staffInfo.Occupation.ToString());
             if (MDSystem.clientsSubsystem._applications._tree != null && MDSystem.clientsSubsystem._applications._tree.IsKeyExist(staffInApplicationCatalogue))
             {
                 var applicationInfo = MDSystem.clientsSubsystem._applications._tree
@@ -95,9 +98,12 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         public override void Find(DataGrid mainDataGrid, string[] data)
         {
             var keyToStaffTable = new StaffNameAndOccupation(new FullName(data[0]), new Occupation(data[1]));
-            _staffTable.TryGetValue(keyToStaffTable, out var res);
+            StaffTable.TryGetValue(keyToStaffTable, out var res, out var steps);
             if (res != null)
+            {
+                MDDebugConsole.Write($"Ключ {keyToStaffTable} найден за {steps} операцию(-и) сравнений ");
                 PrintDataToGrid(mainDataGrid, new List<StaffInfo> {res}, new[] {"ФИО", "Должность", "Район"});
+            }
             else
                 MessageBox.Show("Элемент не найден", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Information);
         }
@@ -117,7 +123,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override void Save()
         {
-            if (OpenSaveCatalogueDialog(Name, out var filePath))
+            if (OpenSaveCatalogueDialog("Staff", out var filePath))
             {
                 var output = new StreamWriter(filePath);
                 output.Flush();
@@ -145,18 +151,12 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override string PrintData()
         {
-            return "Хеш-таблица:\n \n" + _staffTable.ToStringWithStatuses()
-                + "\nДерево (целостность \"Сотрудники\" - \"Документы\" по должности сотрудника):\n \n" + _occupationTree.PrintTree()
-                + "\nДерево (формирование отчета):\n \n" + _workplaceTree.PrintTree();
+            return "Хеш-таблица:\n \n" + StaffTable.ToStringWithStatuses()
+                + "\nДерево (целостность \"Сотрудники\" - \"Документы\" по должности сотрудника):\n \n" + OccupationTree.PrintTree()
+                + "\nДерево (формирование отчета):\n \n" + WorkplaceTree.PrintTree();
         }
 
         public override string Name => "Сотрудники";
-        
-        public DynamicHashTable<StaffNameAndOccupation, StaffInfo> StaffTable => _staffTable;
-        
-        public RRBTree<WorkPlace, StaffInfo> WorkplaceTree => _workplaceTree;
-        
-        public RRBTree<Occupation, StaffInfo> OccupationTree => _occupationTree;
         
     }
 }

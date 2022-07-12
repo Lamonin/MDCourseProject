@@ -155,17 +155,18 @@ namespace FundamentalStructures
            /// <summary>
            /// Находит в поддереве с корнем node узел по ключу key
            /// </summary>
-           private TreeNode FindKeyHelper(TreeNode node, TKey key)
+           private TreeNode FindKeyHelper(TreeNode node, TKey key, ref int step)
            {
                if (IsEmpty(node)) return null;
+               step += 1;
                switch (key.CompareTo(node.Key))
                {
                    case 0:
                        return node;
                    case -1:
-                       return FindKeyHelper(node.LBranch, key);
+                       return FindKeyHelper(node.LBranch, key, ref step);
                    default:
-                       return FindKeyHelper(node.RBranch, key);
+                       return FindKeyHelper(node.RBranch, key, ref step);
                }
            }
    
@@ -478,9 +479,8 @@ namespace FundamentalStructures
    
            public void Add(TKey key, TValue value)
            {
-               //TODO Проверить будет ли работать при добавлении дупликата в справочнике "Документы" без проверки
-               if (FindKeyHelper(_root, key) != null && FindKeyHelper(_root, key).Find(value)) return;
-               if(FindKeyHelper(_root, key) != null) FindKeyHelper(_root, key).AddNodeToList(value);
+               var _ = 0;
+               if(ContainKey(key)) FindKeyHelper(_root, key, ref _).AddNodeToList(value);
                else
                {
                    var node = new TreeNode(key, value);
@@ -491,7 +491,8 @@ namespace FundamentalStructures
    
            public void Delete(TKey key, TValue value)
            {
-               var deleteNode = FindKeyHelper(_root, key);
+               var _ = 0;
+               var deleteNode = FindKeyHelper(_root, key, ref _);
                if (deleteNode != null && deleteNode.Find(value))
                    if (deleteNode.CountValues() > 1)
                        deleteNode.Remove(value);
@@ -505,15 +506,22 @@ namespace FundamentalStructures
            
            public bool ContainKey(TKey key)
            {
-               var node = FindKeyHelper(_root, key);
+               var _ = 0;
+               var node = FindKeyHelper(_root, key, ref _);
                return !IsEmpty(node);
            }
 
-           public bool Contains(TKey key, TValue value) => FindKeyHelper(_root, key) != null && FindKeyHelper(_root, key).Find(value);
+           public bool Contains(TKey key, TValue value)
+           {
+               var _ = 0;
+               var node = FindKeyHelper(_root, key, ref _);
+               return !IsEmpty(node) && node.Find(value);
+           }
 
            public DoubleCircularLinkedList<TValue> GetValue(TKey key)
            {
-               var find = FindKeyHelper(_root, key);
+               var _ = 0;
+               var find = FindKeyHelper(_root, key, ref _);
                return !IsEmpty(find) ? find.GetList() : null;
            }
            
@@ -526,6 +534,14 @@ namespace FundamentalStructures
                    output += root.Key+ " (" + root.GetList() + ")" + (root.Color ? "-RED" : "-BLACK") + '\n' + '\n';
                    Print(root.LBranch, height+4, ref output);
                }
+           }
+
+           public DoubleCircularLinkedList<TValue> Find(TKey key, out int step)
+           {
+               var steps = 0;
+               var find = FindKeyHelper(_root, key, ref steps);
+               step = steps;
+               return !IsEmpty(find) ? find.GetList() : null;
            }
    
            public string PrintTree()
