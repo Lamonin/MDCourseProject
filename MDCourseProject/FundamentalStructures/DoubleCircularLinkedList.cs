@@ -105,18 +105,15 @@ namespace FundamentalStructures
        private ListNode FindHelper(TValue key)
        {
            if (IsEmpty(_head)) return null;
-           _head.Prev.Next = null;
            var curr = _head;
-           while (!IsEmpty(curr))
+           if (curr.Prev.GetValue().CompareTo(key) == 0)
+               return curr;
+           while (curr.Next != _head)
            {
                if (curr.GetValue().CompareTo(key) == 0)
-               {
-                   _head.Prev.Next = _head;
                    return curr;
-               }
                curr = curr.Next;
            }
-           _head.Prev.Next = _head;
            return null;
        }
 
@@ -189,8 +186,7 @@ namespace FundamentalStructures
         /// <summary>
         /// Переводит список в строку
         /// </summary>
-        /// <returns></returns>
-       public override string ToString()
+        public override string ToString()
        {
            var str = "";
            _head.Prev.Next = null;
@@ -200,6 +196,7 @@ namespace FundamentalStructures
                str += "|" + tmp + "|";
                tmp = tmp.Next;
            }
+           _head.Prev.Next = _head;
            return str;
        }
         

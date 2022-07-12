@@ -12,28 +12,27 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 {
     public class DocumentCatalogue:Catalogue
     {
-        private RRBTree<Document, DocumentInfo> _documentTree;
-        private RRBTree<DivisionName, DocumentInfo> _divisionNameTree;
-        private RRBTree<Occupation, DocumentInfo> _occupationTree;
         private List<DocumentInfo> _documentInfo;
 
-        public RRBTree<Document, DocumentInfo> DocumentTree => _documentTree;
-        public RRBTree<DivisionName, DocumentInfo> DivisionName => _divisionNameTree;
-        public RRBTree<Occupation, DocumentInfo> OccupationTree => _occupationTree;
+        public RRBTree<Document, DocumentInfo> DocumentTree { get; }
+
+        public RRBTree<DivisionName, DocumentInfo> DivisionName { get; }
+
+        public RRBTree<Occupation, DocumentInfo> OccupationTree { get; }
 
         public DocumentCatalogue()
         {
             _documentInfo = new List<DocumentInfo>();
-            _documentTree = new RRBTree<Document, DocumentInfo>();
-            _occupationTree = new RRBTree<Occupation, DocumentInfo>();
-            _divisionNameTree = new RRBTree<DivisionName, DocumentInfo>();
+            DocumentTree = new RRBTree<Document, DocumentInfo>();
+            OccupationTree = new RRBTree<Occupation, DocumentInfo>();
+            DivisionName = new RRBTree<DivisionName, DocumentInfo>();
         }
         
         public override void Add(string[] data)
         {
             var documentInfo = new DocumentInfo(new Document(data[0]), new Occupation(data[1]), new DivisionName(data[2]));
             var keyToDocumentTree = documentInfo.Document;
-            if (_documentTree.Contains(keyToDocumentTree, documentInfo))
+            if (DocumentTree.Contains(keyToDocumentTree, documentInfo))
             {
                 MessageBox.Show("Элемент существует", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -41,9 +40,9 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             var keyToDivision = documentInfo.DivisionName;
             var keyToOccupation = documentInfo.Occupation;
             _documentInfo.Add(documentInfo);
-            _documentTree.Add(keyToDocumentTree, documentInfo);
-            _occupationTree.Add(keyToOccupation, documentInfo);
-            _divisionNameTree.Add(keyToDivision, documentInfo);
+            DocumentTree.Add(keyToDocumentTree, documentInfo);
+            OccupationTree.Add(keyToOccupation, documentInfo);
+            DivisionName.Add(keyToDivision, documentInfo);
         }
 
         public override void Remove(string[] data)
@@ -52,18 +51,21 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             var keyToDocumentTree = new Document(data[0]);
             var keyToDivision = new DivisionName(data[2]);
             var keyToOccupation = new Occupation(data[1]);
-            _documentTree.Delete(keyToDocumentTree, documentInfo);
-            _occupationTree.Delete(keyToOccupation, documentInfo);
-            _divisionNameTree.Delete(keyToDivision, documentInfo);
+            DocumentTree.Delete(keyToDocumentTree, documentInfo);
+            OccupationTree.Delete(keyToOccupation, documentInfo);
+            DivisionName.Delete(keyToDivision, documentInfo);
             _documentInfo.RemoveAll(document => document.CompareTo(documentInfo) == 0);
         }
 
         public override void Find(DataGrid mainDataGrid, string[] data)
         {
             var findKey = new Document(data[0]);
-            var info = _documentTree.GetValue(findKey);
+            var info = DocumentTree.Find(findKey, out var step);
             if(info != null)
-                PrintDataToGrid(mainDataGrid, info, new []{"Тип документа", "Должность сотрудника", "Название подразделения"});
+            {
+                MDDebugConsole.WriteLine($"Ключ {findKey} найден за {step} операцию(-ии) сравнений");
+                PrintDataToGrid(mainDataGrid, info, new[] {"Тип документа", "Должность сотрудника", "Название подразделения"});
+            }
             else
             {
                 MessageBox.Show("Элемент не найден!", "Предупрежедние", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -85,7 +87,7 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override void Save()
         {
-            if (OpenSaveCatalogueDialog(Name, out var filePath))
+            if (OpenSaveCatalogueDialog("Document", out var filePath))
             {
                 var output = new StreamWriter(filePath);
                 output.Flush();
@@ -113,9 +115,9 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
 
         public override string PrintData()
         {
-            return "Дерево (поиск, добавление, удаление):\n \n" + _documentTree.PrintTree() 
-                    + "\n Дерево (целостность \" Документы \" - \" Сотрудники \" по должности сотрудника):\n \n" + _occupationTree.PrintTree() 
-                   + "\n Дерево (целостность \" Документы \" - \" Подразделения \" по названию подразделения):\n \n" + _divisionNameTree.PrintTree();
+            return "Дерево (поиск, добавление, удаление):\n \n" + DocumentTree.PrintTree() 
+                    + "\n Дерево (целостность \" Документы \" - \" Сотрудники \" по должности сотрудника):\n \n" + OccupationTree.PrintTree() 
+                   + "\n Дерево (целостность \" Документы \" - \" Подразделения \" по названию подразделения):\n \n" + DivisionName.PrintTree();
         }
 
         public override string Name => "Документы";

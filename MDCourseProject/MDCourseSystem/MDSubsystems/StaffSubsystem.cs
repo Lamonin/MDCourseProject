@@ -58,32 +58,33 @@ public class StaffSubsystem:ISubsystem
         var saveReportDialogWindow = new SaveFileDialog
         {
             Title = "Выберите место для сохранения отчета <Документы сотрудника>",
-            FileName = "Отчет Документы сотрудника ",
+            FileName = "Отчет Документы сотрудника",
             Filter = "Text files (*.txt)|*.txt"
         };
         
         if (saveReportDialogWindow.ShowDialog() == true)
         {
-            var report = new List<FullName>();
+            var report = new List<StaffInfo>();
             var searchKey = new Document(data[0]);
             if (_documentCatalogue.DocumentTree.ContainKey(searchKey))
             {
-                var documentInfo = _documentCatalogue.DocumentTree.GetValue(searchKey);
+                var documentInfo = _documentCatalogue.DocumentTree.Find(searchKey, out var step);
+                MDDebugConsole.WriteLine($"Ключ {searchKey} найден за {step} операцию(-и) сравнений");
                 var district = new District(data[1]);
                 foreach (var document in documentInfo)
                 {
                     var searchWork = new WorkPlace(document.Occupation, district);
                     if (_staffCatalogue.WorkplaceTree.ContainKey(searchWork))
                     {
-                        var staffInfo = _staffCatalogue.WorkplaceTree.GetValue(searchWork);
+                        var staffInfo = _staffCatalogue.WorkplaceTree.Find(searchWork, out var step1);
+                        MDDebugConsole.WriteLine($"Ключ {searchWork} найден за {step1} операцию(-и) сравнений");
                         foreach (var staff in staffInfo)
-                            report.Add(staff.FullName);
+                            report.Add(staff);
                     }
                 }
-                report.Sort();
                 var output = new StreamWriter(saveReportDialogWindow.FileName);
-                foreach (var staffFullName in report)
-                    output.WriteLine(staffFullName.ToString());
+                foreach (var staff in report)
+                    output.WriteLine(staff.ToString());
                 output.Close();
 
                 Process.Start(saveReportDialogWindow.FileName);
