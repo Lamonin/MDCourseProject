@@ -18,7 +18,7 @@ public class SendRequestsCatalogue:Catalogue
     private static string FormatDate(string dateString)
     {
         var date = DateTime.Parse(dateString);
-        return $"{date.Day}.{date.Month}.{date.Year}";
+        return $"{date.Day:D2}.{date.Month:D2}.{date.Year:D4}";
     }
     
     public SendRequestsCatalogue()
@@ -132,7 +132,17 @@ public class SendRequestsCatalogue:Catalogue
 
     public override string PrintData()
     {
-        return "Левостороннее красно-черное дерево по Отправленным заявкам:\n" + SendRequestsTree.PrintTree();
+        return "\nСтатическая хэш-таблица по Подразделениям:\n"
+               + MDSystem.divisionsSubsystem.DivisionsCatalogue.DivisionsTable.ToStringWithStatuses() 
+               + "\nЛевосторонее красно-черное дерево по Отправленным заявкам:\n" 
+               + MDSystem.divisionsSubsystem.SendRequestsCatalogue.SendRequestsTree.PrintTree()
+               + "\n============================================================\n"
+               + "\nЛевосторонее красно-черное дерево отправленных заявок Клиентов:\n" 
+               + MDSystem.divisionsSubsystem.SendRequestsCatalogue.SendRequestsByClient.PrintTree()
+               + "\nЛевосторонее красно-черное дерево подразделений по названиям:\n"
+               + MDSystem.divisionsSubsystem.DivisionsCatalogue.DivisionsByName.PrintTree()
+               + "\nЛевосторонее красно-черное дерево подразделений по районам:\n"
+               + MDSystem.divisionsSubsystem.DivisionsCatalogue.DivisionsByArea.PrintTree();
     }
 
     public override string Name => "Отправленные заявки";

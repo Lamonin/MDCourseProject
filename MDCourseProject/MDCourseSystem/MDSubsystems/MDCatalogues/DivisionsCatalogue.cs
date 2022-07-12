@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using FundamentalStructures;
 using MDCourseProject.AppWindows.DataAnalysers;
@@ -17,7 +19,7 @@ public class DivisionsCatalogue:Catalogue
 
     public DivisionsCatalogue()
     {
-        DivisionsTable = new StaticHashTable<DivisionNameAndArea, string>(1000);
+        DivisionsTable = new StaticHashTable<DivisionNameAndArea, string>(997);
         _divisionsData = new List<Division>();
         
         DivisionsByName = new LRBTree<string, Division>();
@@ -27,8 +29,6 @@ public class DivisionsCatalogue:Catalogue
     public override void Add(string[] data)
     {
         var key = new DivisionNameAndArea(data[0], data[1]);
-        // Console.Out.WriteLine($"hash(<{key.Name}; {key.Area}>)");
-        Console.Out.WriteLine($"<{key.Name}; {key.Area}>" + " Числовое представление: " + key.GetHashCode() + " " + DivisionsTable.SecondHashFunc(key.GetHashCode()));
         try
         {
             DivisionsTable.Add(key, data[2]);
@@ -155,7 +155,18 @@ public class DivisionsCatalogue:Catalogue
 
     public override string PrintData()
     {
-        return "Статическая хэш-таблица по Подразделениям:\n" + DivisionsTable.ToStringWithStatuses();
+        Console.Out.WriteLine(MDSystem.divisionsSubsystem.DivisionsCatalogue.DivisionsTable.ToStringWithStatuses());
+        return "\nСтатическая хэш-таблица по Подразделениям:\n"
+               + MDSystem.divisionsSubsystem.DivisionsCatalogue.DivisionsTable.ToStringWithStatuses() 
+               + "\nЛевосторонее красно-черное дерево по Отправленным заявкам:\n" 
+               + MDSystem.divisionsSubsystem.SendRequestsCatalogue.SendRequestsTree.PrintTree()
+               + "\n============================================================\n"
+               + "\nЛевосторонее красно-черное дерево отправленных заявок Клиентов:\n" 
+               + MDSystem.divisionsSubsystem.SendRequestsCatalogue.SendRequestsByClient.PrintTree()
+               + "\nЛевосторонее красно-черное дерево подразделений по названиям:\n"
+               + MDSystem.divisionsSubsystem.DivisionsCatalogue.DivisionsByName.PrintTree()
+               + "\nЛевосторонее красно-черное дерево подразделений по районам:\n"
+               + MDSystem.divisionsSubsystem.DivisionsCatalogue.DivisionsByArea.PrintTree();
     }
 
     public override string Name => "Подразделения";

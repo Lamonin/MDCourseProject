@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FundamentalStructures;
 
-public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : IComparable<TKey> where TValue : IComparable<TValue>
+public class StaticHashTable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>> where TKey : IComparable<TKey> where TValue : IComparable<TValue>
 {
     //HASH_TABLE_ENUMERATOR
     private struct HashTableEnumerator: IEnumerator<KeyValuePair<TKey, TValue>>
@@ -46,27 +46,27 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
 
     #region DEFAULT_HASH_FUNCTIONS
     
-    private int FirstHashFunction(int key)
+    private uint FirstHashFunction(TKey key)
     {
-        key = Math.Abs(key);
+        var numericKey = Math.Abs(key.GetHashCode());
         
         // Получает 10^(кол-во цифр в _capacity - 1)
         int mod = (int) Math.Pow(10, (int) Math.Log10(_capacity));
         
         int temp = 0;
-        while (key != 0)
+        while (numericKey != 0)
         {
-            temp += key % mod;
-            key /= mod;
+            temp += numericKey % mod;
+            numericKey /= mod;
         }
 
-        return temp % _capacity;
+        return (uint) (temp % _capacity);
     }
         
-    private int SecondHashFunction(int key)
+    private uint SecondHashFunction(TKey key)
     {
-        key = Math.Abs(key);
-        return key % (_capacity - 1) + 1;
+        var numericKey = Math.Abs(key.GetHashCode());
+        return (uint) (numericKey % (_capacity - 1) + 1);
     }
     
     #endregion
@@ -89,10 +89,8 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
 
     public void Add(TKey key, TValue value)
     {
-        int hashCode = key.GetHashCode();
-
         int possibleIndex = -1;
-        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
+        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunc(key), (int) SecondHashFunc(key));
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY)
@@ -132,9 +130,7 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
 
     public void Remove(TKey key, TValue value)
     {
-        int hashCode = key.GetHashCode();
-            
-        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
+        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunc(key), (int) SecondHashFunc(key));
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY) return; 
@@ -157,9 +153,7 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
 
     public bool Contains(TKey key, TValue value)
     {
-        int hashCode = key.GetHashCode();
-            
-        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
+        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunc(key), (int) SecondHashFunc(key));
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY) break; 
@@ -175,9 +169,7 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
 
     public bool ContainsKey(TKey key)
     {
-        int hashCode = key.GetHashCode();
-            
-        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
+        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunc(key), (int) SecondHashFunc(key));
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY) break; 
@@ -200,9 +192,7 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
     {
         stepsToFind = 0;
         
-        int hashCode = key.GetHashCode();
-            
-        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
+        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunc(key), (int) SecondHashFunc(key));
         foreach (int i in _hashEnumerator)
         {
             stepsToFind += 1;
@@ -238,10 +228,9 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
     {
         var output = string.Empty;
 
-        var hashCode = key.GetHashCode();
-        var firstHFResult = FirstHashFunc(hashCode);
+        var firstHFResult = (int) FirstHashFunc(key);
         
-        _hashEnumerator.SetForNewHash(_capacity, firstHFResult, SecondHashFunc(hashCode));
+        _hashEnumerator.SetForNewHash(_capacity, firstHFResult, (int) SecondHashFunc(key));
         foreach (var index in _hashEnumerator)
         {
             if (_statusesTable[index] == STATUS_EMPTY)
@@ -270,78 +259,32 @@ public class StaticHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumerab
         {
             if (_statusesTable[i] != 0) //Модифицировал, чтобы не выводило миллион записей
                 output += $"\t{i}) Key: {_valuesTable[i].Key};"
-                          + $" Value: {_valuesTable[i].Value};"
-                          + $" Status: {_statusesTable[i]};"
-                          + $" FirstHF: {FirstHashFunc(_valuesTable[i].Key.GetHashCode())};"
-                          + $" SecondHF: {_secondHFValues[i]}\n";
+                          + $"  Value: {_valuesTable[i].Value};"
+                          + $"  HashCode: {_valuesTable[i].Key.GetHashCode()};"
+                          + $"  Status: {_statusesTable[i]};"
+                          + $"  FirstHF: {FirstHashFunc(_valuesTable[i].Key)};"
+                          + $"  PureSecondHF({SecondHashFunc(_valuesTable[i].Key)});"
+                          + $"  SecondHF: {_secondHFValues[i]}\n";
         }
 
         return output;
     }
 
-    public TValue this[TKey key]
-    {
-        get
-        {
-            if (key is null)
-                throw new Exception("Try to get value by null key!");
-            
-            if (!TryGetValue(key, out var value))
-                throw new Exception($"The element by key {key} doesn't exist!");
-
-            return value;
-        }
-        set
-        {
-            if (key is null)
-                throw new Exception("Try to set value by null key!");
-            
-            int hashCode = key.GetHashCode();
-            _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(hashCode), SecondHashFunc(hashCode));
-
-            if (ContainsKey(key))
-            {
-                foreach (int i in _hashEnumerator)
-                {
-                    if (_statusesTable[i] == STATUS_PLACED && _valuesTable[i].Key.CompareTo(key) == 0)
-                    {
-                        //Изменяем значение существующего ключа
-                        _valuesTable[i] = new KeyValuePair<TKey, TValue>(key, value);
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                foreach (int i in _hashEnumerator)
-                {
-                    if (_statusesTable[i] != STATUS_PLACED)
-                    {
-                        //Значения нет в таблице, добавляем новое
-                        Add(key, value);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
     private readonly HashTableEnumerator _hashTableEnumerator;
     public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() { return _hashTableEnumerator; }
-
     IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
 
     public int Count { get; private set; }
 
-    private Func<int, int> _firstHashFunc;
-    public Func<int, int> FirstHashFunc
+    private Func<TKey, uint> _firstHashFunc;
+    public Func<TKey, uint> FirstHashFunc
     {
         get => _firstHashFunc;
         set => _firstHashFunc = value ?? throw new Exception("Unable to set first hash function to null!");
     }
 
-    private Func<int, int> _secondHashFunc;
-    public Func<int, int> SecondHashFunc
+    private Func<TKey, uint> _secondHashFunc;
+    public Func<TKey, uint> SecondHashFunc
     {
         get => _secondHashFunc;
         set => _secondHashFunc = value ?? throw new Exception("Unable to set second hash function to null!");
