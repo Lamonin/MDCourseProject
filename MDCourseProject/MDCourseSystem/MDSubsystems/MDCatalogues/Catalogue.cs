@@ -28,7 +28,7 @@ public abstract class Catalogue
     {
         var saveDialog = new SaveFileDialog
         {
-            Title = "Выберите место для сохранения справочника " + name,
+            Title = "Выберите место для сохранения справочника",
             FileName = name + "_Справочник",
             Filter = "Text files (*.txt)|*.txt",
         };
