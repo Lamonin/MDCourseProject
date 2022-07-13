@@ -30,9 +30,9 @@ namespace FundamentalStructures
         int Count { get; }
         
         /// <summary> Первичная хэш-функция </summary>
-        Func<TKey, int> FirstHashFunc { get; set; }
+        Func<TKey, uint> FirstHashFunc { get; set; }
         
         /// <summary> Вторичная хэш-функция </summary>
-        Func<TKey, int> SecondHashFunc { get; set; }
+        Func<TKey, uint> SecondHashFunc { get; set; }
     }
 }

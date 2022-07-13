@@ -150,11 +150,12 @@ namespace FundamentalStructures
        }
        
        /// <summary>
-       /// Меняет голову спика на node
+       /// Меняет голову списка на node
        /// </summary>
        public void ChangeHead(ListNode node)
        {
-           _head = node;
+           if(!IsEmpty(node))
+            _head = node;
        }
 
        /// <summary>

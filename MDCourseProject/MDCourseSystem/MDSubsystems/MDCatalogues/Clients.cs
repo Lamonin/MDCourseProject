@@ -106,9 +106,9 @@ public class Clients:Catalogue
             string stroke = key.ToString();
             foreach (var i in stroke)
             {
-                intValue += (int) i;
+                intValue +=  i;
             }
-            return intValue % _clientTable.GetCapacity();
+            return (uint)(intValue % _clientTable.GetCapacity());
         };
 
         _clientTable.SecondHashFunc = key =>
@@ -121,7 +121,7 @@ public class Clients:Catalogue
             }
 
             intValue %= 13;
-            return intValue % _clientTable.GetCapacity() + 1;
+            return (uint)(intValue % _clientTable.GetCapacity() + 1);
         };
     }
 

@@ -50,16 +50,16 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
     
     private readonly HashEnumerator _hashEnumerator;
 
-    private int FirstHashFunction(TKey key)
+    private uint FirstHashFunction(TKey key)
     {
         var mult = key.GetHashCode() * (Math.Sqrt(5) - 1) / 2;
         var doublePart = mult - Math.Truncate(mult);
-        return (int)(_capacity * doublePart);
+        return (uint)(_capacity * doublePart);
     }
         
-    private int SecondHashFunction(TKey  key)
+    private uint SecondHashFunction(TKey  key)
     {
-        return (2 * key.GetHashCode() + 1) % _capacity;
+        return (uint)((2 * key.GetHashCode() + 1) % _capacity);
     }
 
     private void ResizeToBigger()
@@ -118,7 +118,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
     {
         var secondHF = "";
         int possibleIndex = -1;
-        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(key), SecondHashFunc(key));
+        _hashEnumerator.SetForNewHash(_capacity, (int)FirstHashFunc(key), (int)SecondHashFunc(key));
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY)
@@ -164,7 +164,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
 
     public void Remove(TKey key, TValue value)
     {
-        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(key), SecondHashFunc(key));
+        _hashEnumerator.SetForNewHash(_capacity, (int)FirstHashFunc(key), (int)SecondHashFunc(key));
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY) return; 
@@ -194,7 +194,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
     public bool Contains(TKey key, TValue value)
     {
 
-        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(key), SecondHashFunc(key));;
+        _hashEnumerator.SetForNewHash(_capacity, (int)FirstHashFunc(key), (int)SecondHashFunc(key));;
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY) break; 
@@ -211,7 +211,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
     public bool ContainsKey(TKey key)
     {
 
-        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(key), SecondHashFunc(key));
+        _hashEnumerator.SetForNewHash(_capacity,(int)FirstHashFunc(key), (int)SecondHashFunc(key));
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY) break; 
@@ -235,7 +235,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         stepsToFind = 0;
         
             
-        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(key), SecondHashFunc(key));
+        _hashEnumerator.SetForNewHash(_capacity, (int)FirstHashFunc(key), (int)SecondHashFunc(key));
         foreach (int i in _hashEnumerator)
         {
             stepsToFind += 1;
@@ -298,7 +298,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
             if (key is null)
                 throw new Exception("Try to set value by null key!");
             
-            _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(key), SecondHashFunc(key));
+            _hashEnumerator.SetForNewHash(_capacity, (int)FirstHashFunc(key), (int)SecondHashFunc(key));
             
             if (ContainsKey(key))
             {
@@ -332,15 +332,15 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
 
     public int Count { get; private set; }
 
-    private Func<TKey, int> _firstHashFunc;
-    public Func<TKey, int> FirstHashFunc
+    private Func<TKey, uint> _firstHashFunc;
+    public Func<TKey, uint> FirstHashFunc
     {
         get => _firstHashFunc;
         set => _firstHashFunc = value ?? throw new Exception("Unable to set first hash function to null!");
     }
 
-    private Func<TKey, int> _secondHashFunc;
-    public Func<TKey, int> SecondHashFunc
+    private Func<TKey, uint> _secondHashFunc;
+    public Func<TKey, uint> SecondHashFunc
     {
         get => _secondHashFunc;
         set => _secondHashFunc = value ?? throw new Exception("Unable to set second hash function to null!");
