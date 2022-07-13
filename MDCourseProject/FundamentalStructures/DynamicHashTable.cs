@@ -50,37 +50,17 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
     
     private readonly HashEnumerator _hashEnumerator;
 
-    #region DEFAULT_HASH_FUNCTIONS
-    
     private int FirstHashFunction(TKey key)
     {
-        var intValue = key.GetHashCode();
-        intValue = Math.Abs(intValue);
-        
-        int mod = 10;
-        while (mod*10 < _capacity)
-        {
-            mod *= 10;
-        }
-
-        int temp = 0;
-        while (intValue != 0)
-        {
-            temp += intValue % mod;
-            intValue /= mod;
-        }
-
-        return temp % _capacity;
+        var mult = key.GetHashCode() * (Math.Sqrt(5) - 1) / 2;
+        var doublePart = mult - Math.Truncate(mult);
+        return (int)(_capacity * doublePart);
     }
         
     private int SecondHashFunction(TKey  key)
     {
-        var intValue = key.GetHashCode();
-        intValue = Math.Abs(intValue);
-        return 13 - intValue % 13;
+        return (2 * key.GetHashCode() + 1) % _capacity;
     }
-    
-    #endregion
 
     private void ResizeToBigger()
     {
@@ -136,13 +116,15 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
 
     public void Add(TKey key, TValue value)
     {
-
+        var secondHF = "";
         int possibleIndex = -1;
         _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(key), SecondHashFunc(key));
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY)
             {
+                if(secondHF != String.Empty)
+                    secondHF += i;
                 if (possibleIndex == -1)
                 {
                     possibleIndex = i;
@@ -152,7 +134,9 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
             
             if (_statusesTable[i] == STATUS_REMOVED && possibleIndex == -1)
             {
+                secondHF += "|" + i + "| ";
                 possibleIndex = i;
+                continue;
             }
 
             if (_statusesTable[i] == STATUS_PLACED 
@@ -162,6 +146,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
             {
                 throw new Exception($"The value by key {key} is already exist!");
             }
+            secondHF += i + " ";
         }
 
         if (possibleIndex == -1)
@@ -169,7 +154,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
             throw new Exception("Failed to insert a value into the table!");
         }
         
-        _secondHF[possibleIndex] = GetSecondHFValues(key);
+        _secondHF[possibleIndex] = secondHF;
         _valuesTable[possibleIndex] = new KeyValuePair<TKey, TValue>(key, value);
         _statusesTable[possibleIndex] = STATUS_PLACED;
 
@@ -179,7 +164,6 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
 
     public void Remove(TKey key, TValue value)
     {
-
         _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(key), SecondHashFunc(key));
         foreach (int i in _hashEnumerator)
         {
@@ -223,28 +207,7 @@ public class DynamicHashTable<TKey, TValue> : IHashTable<TKey, TValue>, IEnumera
         
         return false;
     }
-
-    private string GetSecondHFValues(TKey key)
-    {
-        var secondHF = "";
-        _hashEnumerator.SetForNewHash(_capacity, FirstHashFunc(key), SecondHashFunc(key));
-        foreach (var index in _hashEnumerator)
-        {
-            if (_statusesTable[index] == STATUS_EMPTY)
-            {
-                if(index != _firstHashFunc(key))
-                    secondHF += index;
-                break;
-            }
-            if (_statusesTable[index] == STATUS_REMOVED)
-            {
-                secondHF += "|" + index + "| ";
-                continue;
-            }
-            secondHF += index + " ";
-        }
-        return secondHF;
-    }
+    
     public bool ContainsKey(TKey key)
     {
 

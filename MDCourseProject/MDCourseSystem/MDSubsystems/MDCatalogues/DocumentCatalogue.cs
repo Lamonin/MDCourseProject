@@ -89,12 +89,20 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         {
             if (OpenSaveCatalogueDialog("Document", out var filePath))
             {
-                var output = new StreamWriter(filePath);
-                output.Flush();
-                
-                foreach(var document in _documentInfo)
-                    output.WriteLine(string.Join("|", document.Document, document.Occupation, document.DivisionName));
-                output.Close();
+                var file = filePath.Split('/', '\\');
+                if (file[file.Length - 1].EndsWith(".txt") && file[file.Length - 1].StartsWith("Document"))
+                {
+                    var output = new StreamWriter(filePath);
+                    output.Flush();
+
+                    foreach (var document in _documentInfo)
+                        output.WriteLine(string.Join("|", document.Document, document.Occupation, document.DivisionName));
+                    output.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Некорректное название файла для сохранения!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 

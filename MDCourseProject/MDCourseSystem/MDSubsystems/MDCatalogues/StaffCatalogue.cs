@@ -26,13 +26,6 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
             OccupationTree = new RRBTree<Occupation, StaffInfo>();
             WorkplaceTree = new RRBTree<WorkPlace, StaffInfo>();
             StaffTable = new DynamicHashTable<StaffNameAndOccupation, StaffInfo>();
-            StaffTable.FirstHashFunc = key =>
-            {
-                var mult = key.GetHashCode() * (Math.Sqrt(5) - 1) / 2;
-                var doublePart = mult - Math.Truncate(mult);
-                return (int)(StaffTable.GetCapacity() * doublePart);
-            };
-            StaffTable.SecondHashFunc = key => (2 * key.GetHashCode() + 1) % StaffTable.GetCapacity();
         }
         public override void Add(string[] data)
         {
@@ -125,12 +118,20 @@ namespace MDCourseProject.MDCourseSystem.MDCatalogues
         {
             if (OpenSaveCatalogueDialog("Staff", out var filePath))
             {
-                var output = new StreamWriter(filePath);
-                output.Flush();
-                
-                foreach(var staff in _staffInfo)
-                    output.WriteLine(string.Join("|", staff.FullName, staff.Occupation, staff.District));
-                output.Close();
+                var file = filePath.Split('/', '\\');
+                if (file[file.Length - 1].EndsWith(".txt") && file[file.Length - 1].StartsWith("Staff"))
+                {
+                    var output = new StreamWriter(filePath);
+                    output.Flush();
+
+                    foreach (var staff in _staffInfo)
+                        output.WriteLine(string.Join("|", staff.FullName, staff.Occupation, staff.District));
+                    output.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Некорректное название файла для сохранения!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
