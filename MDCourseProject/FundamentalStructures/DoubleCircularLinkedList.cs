@@ -29,14 +29,6 @@ namespace FundamentalStructures
            /// Хранит значения узла
            /// </summary>
            private TValue _value;
-
-           /// <summary>
-           /// Создает пустой узел
-           /// </summary>
-           public ListNode()
-           {
-               (Prev, Next) = (null, null);
-           }
            
            /// <summary>
            /// Создает узел со значением value

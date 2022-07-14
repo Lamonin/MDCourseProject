@@ -31,7 +31,7 @@ public class HashEnumerator : IEnumerator<int>, IEnumerable<int>
             
     public bool MoveNext()
     {
-        if (_index < _maxAttempts * 2)
+        if (Current != _firstHFResult)
         {
             Current = (_firstHFResult + _index * _secondHFResult) % _maxAttempts;
             _index++;
