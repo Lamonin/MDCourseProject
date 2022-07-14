@@ -1,38 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace FundamentalStructures;
 
-public class StaticHashTable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>> where TKey : IComparable<TKey> where TValue : IComparable<TValue>
+public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where TValue : IComparable<TValue>
 {
-    //HASH_TABLE_ENUMERATOR
-    private struct HashTableEnumerator: IEnumerator<KeyValuePair<TKey, TValue>>
-    {
-        private int _index = 0;
-        private readonly StaticHashTable<TKey, TValue> _hashTable;
-
-        public HashTableEnumerator(StaticHashTable<TKey, TValue> hashTable) => _hashTable = hashTable;
-
-        public bool MoveNext()
-        {
-            _index++;
-            while (_index < _hashTable._statusesTable.Length && _hashTable._statusesTable[_index] != STATUS_PLACED)
-                _index++;
-
-            if (_index == _hashTable._statusesTable.Length)
-                return false;
-                
-            return true;
-        }
-
-        public void Dispose() { }
-        public void Reset() => _index = 0;
-        public KeyValuePair<TKey, TValue> Current => _hashTable._valuesTable[_index];
-
-        object IEnumerator.Current => Current;
-    }
-    
     private const int STATUS_EMPTY = 0;
     private const int STATUS_PLACED = 1;
     private const int STATUS_REMOVED = 2;
@@ -71,26 +42,22 @@ public class StaticHashTable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TVal
     
     #endregion
 
-    public StaticHashTable(int maxCapacity)
+    public StaticHashTable(uint capacity)
     {
-        _capacity = maxCapacity;
+        _capacity = (int) capacity;
         Count = 0;
 
         _valuesTable = new KeyValuePair<TKey, TValue>[_capacity];
         _statusesTable = new byte[_capacity];
         _secondHFValues = new string[_capacity];
 
-        FirstHashFunc = FirstHashFunction;
-        SecondHashFunc = SecondHashFunction;
-        
         _hashEnumerator = new HashEnumerator();
-        _hashTableEnumerator = new HashTableEnumerator(this);
     }
 
     public void Add(TKey key, TValue value)
     {
         int possibleIndex = -1;
-        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunc(key), (int) SecondHashFunc(key));
+        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY)
@@ -130,7 +97,7 @@ public class StaticHashTable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TVal
 
     public void Remove(TKey key, TValue value)
     {
-        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunc(key), (int) SecondHashFunc(key));
+        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY) return; 
@@ -153,7 +120,7 @@ public class StaticHashTable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TVal
 
     public bool Contains(TKey key, TValue value)
     {
-        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunc(key), (int) SecondHashFunc(key));
+        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY) break; 
@@ -169,7 +136,7 @@ public class StaticHashTable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TVal
 
     public bool ContainsKey(TKey key)
     {
-        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunc(key), (int) SecondHashFunc(key));
+        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
         foreach (int i in _hashEnumerator)
         {
             if (_statusesTable[i] == STATUS_EMPTY) break; 
@@ -192,7 +159,7 @@ public class StaticHashTable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TVal
     {
         stepsToFind = 0;
         
-        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunc(key), (int) SecondHashFunc(key));
+        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
         foreach (int i in _hashEnumerator)
         {
             stepsToFind += 1;
@@ -213,13 +180,16 @@ public class StaticHashTable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TVal
     {
         string output = "";
         int index = 1;
-        
-        foreach (var pair in this)
+
+        for (int i = 0; i < _valuesTable.Length; i++)
         {
-            output += $"{index}] Key:{pair.Key}; Value: {pair.Value}\n";
-            index += 1;
+            if (_statusesTable[i] == STATUS_PLACED)
+            {
+                output += $"{index}] Key:{_valuesTable[i].Key}; Value: {_valuesTable[i].Value}\n";
+                index += 1;
+            }
         }
-        
+
         return output;
     }
 
@@ -228,9 +198,9 @@ public class StaticHashTable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TVal
     {
         var output = string.Empty;
 
-        var firstHFResult = (int) FirstHashFunc(key);
+        var firstHFResult = (int) FirstHashFunction(key);
         
-        _hashEnumerator.SetForNewHash(_capacity, firstHFResult, (int) SecondHashFunc(key));
+        _hashEnumerator.SetForNewHash(_capacity, firstHFResult, (int) SecondHashFunction(key));
         foreach (var index in _hashEnumerator)
         {
             if (_statusesTable[index] == STATUS_EMPTY)
@@ -262,31 +232,12 @@ public class StaticHashTable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TVal
                           + $"  Value: {_valuesTable[i].Value};"
                           + $"  HashCode: {_valuesTable[i].Key.GetHashCode()};"
                           + $"  Status: {_statusesTable[i]};"
-                          + $"  FirstHF: {FirstHashFunc(_valuesTable[i].Key)};"
-                          + $"  PureSecondHF({SecondHashFunc(_valuesTable[i].Key)});"
+                          + $"  FirstHF: {FirstHashFunction(_valuesTable[i].Key)};"
+                          + $"  PureSecondHF({SecondHashFunction(_valuesTable[i].Key)});"
                           + $"  SecondHF: {_secondHFValues[i]}\n";
         }
 
         return output;
     }
-
-    private readonly HashTableEnumerator _hashTableEnumerator;
-    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() { return _hashTableEnumerator; }
-    IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
-
     public int Count { get; private set; }
-
-    private Func<TKey, uint> _firstHashFunc;
-    public Func<TKey, uint> FirstHashFunc
-    {
-        get => _firstHashFunc;
-        set => _firstHashFunc = value ?? throw new Exception("Unable to set first hash function to null!");
-    }
-
-    private Func<TKey, uint> _secondHashFunc;
-    public Func<TKey, uint> SecondHashFunc
-    {
-        get => _secondHashFunc;
-        set => _secondHashFunc = value ?? throw new Exception("Unable to set second hash function to null!");
-    }
 }
