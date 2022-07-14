@@ -10,11 +10,11 @@ public class HashEnumerator : IEnumerator<int>, IEnumerable<int>
 {
     private int _index;
 
-    private int _maxAttempts;
+    private int _capacity;
     private int _firstHFResult;
     private int _secondHFResult;
 
-    public HashEnumerator() { _maxAttempts = 0; }
+    public HashEnumerator() { _capacity = 0; }
     
     public HashEnumerator(int maxAttempts, int firstHfResult, int secondHfResult)
     {
@@ -24,16 +24,16 @@ public class HashEnumerator : IEnumerator<int>, IEnumerable<int>
     public void SetForNewHash(int maxAttempts, int firstHfResult, int secondHfResult)
     {
         _index = 0;
-        _maxAttempts = maxAttempts;
+        _capacity = maxAttempts;
         _firstHFResult = firstHfResult;
         _secondHFResult = secondHfResult;
     }
             
     public bool MoveNext()
     {
-        if (Current != _firstHFResult)
+        if (_index < 2 || Current != _firstHFResult)
         {
-            Current = (_firstHFResult + _index * _secondHFResult) % _maxAttempts;
+            Current = (_firstHFResult + _index * _secondHFResult) % _capacity;
             _index++;
                     
             return true;

@@ -8,12 +8,12 @@ public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where 
     private const int STATUS_PLACED = 1;
     private const int STATUS_REMOVED = 2;
     
-    private readonly int _capacity;
+    public int Capacity { get; }
     
-    private KeyValuePair<TKey, TValue>[] _valuesTable;
-    private byte[] _statusesTable;
+    private KeyValuePair<TKey, TValue>[] valuesTable;
+    private byte[] statusesTable;
     
-    private readonly HashEnumerator _hashEnumerator;
+    private readonly HashEnumerator hashEnumerator;
 
     #region DEFAULT_HASH_FUNCTIONS
     
@@ -22,7 +22,7 @@ public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where 
         var numericKey = Math.Abs(key.GetHashCode());
         
         // Получает 10^(кол-во цифр в _capacity - 1)
-        int mod = (int) Math.Pow(10, (int) Math.Log10(_capacity));
+        int mod = (int) Math.Pow(10, (int) Math.Log10(Capacity));
         
         int temp = 0;
         while (numericKey != 0)
@@ -31,36 +31,36 @@ public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where 
             numericKey /= mod;
         }
 
-        return (uint) (temp % _capacity);
+        return (uint) (temp % Capacity);
     }
         
     private uint SecondHashFunction(TKey key)
     {
         var numericKey = Math.Abs(key.GetHashCode());
-        return (uint) (numericKey % (_capacity - 1) + 1);
+        return (uint) (numericKey % (Capacity - 1) + 1);
     }
     
     #endregion
 
     public StaticHashTable(uint capacity)
     {
-        _capacity = (int) capacity;
+        Capacity = (int) capacity;
         Count = 0;
 
-        _valuesTable = new KeyValuePair<TKey, TValue>[_capacity];
-        _statusesTable = new byte[_capacity];
-        _secondHFValues = new string[_capacity];
+        valuesTable = new KeyValuePair<TKey, TValue>[Capacity];
+        statusesTable = new byte[Capacity];
+        _secondHFValues = new string[Capacity];
 
-        _hashEnumerator = new HashEnumerator();
+        hashEnumerator = new HashEnumerator();
     }
 
     public void Add(TKey key, TValue value)
     {
         int possibleIndex = -1;
-        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
-        foreach (int i in _hashEnumerator)
+        hashEnumerator.SetForNewHash(Capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
+        foreach (int i in hashEnumerator)
         {
-            if (_statusesTable[i] == STATUS_EMPTY)
+            if (statusesTable[i] == STATUS_EMPTY)
             {
                 if (possibleIndex == -1)
                 {
@@ -69,14 +69,14 @@ public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where 
                 break;
             }
             
-            if (_statusesTable[i] == STATUS_REMOVED && possibleIndex == -1)
+            if (statusesTable[i] == STATUS_REMOVED && possibleIndex == -1)
             {
                 possibleIndex = i;
             }
 
-            if (_statusesTable[i] == STATUS_PLACED 
-                && _valuesTable[i].Key.CompareTo(key) == 0 
-                && _valuesTable[i].Value.CompareTo(value) == 0
+            if (statusesTable[i] == STATUS_PLACED 
+                && valuesTable[i].Key.CompareTo(key) == 0 
+                && valuesTable[i].Value.CompareTo(value) == 0
             )
             {
                 throw new Exception($"The value by key {key} is already exist!");
@@ -88,8 +88,8 @@ public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where 
             throw new Exception("No place in the table!");
         }
         
-        _valuesTable[possibleIndex] = new KeyValuePair<TKey, TValue>(key, value);
-        _statusesTable[possibleIndex] = STATUS_PLACED;
+        valuesTable[possibleIndex] = new KeyValuePair<TKey, TValue>(key, value);
+        statusesTable[possibleIndex] = STATUS_PLACED;
         _secondHFValues[possibleIndex] = GetSecondHashValues(key);
 
         Count += 1;
@@ -97,14 +97,14 @@ public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where 
 
     public void Remove(TKey key, TValue value)
     {
-        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
-        foreach (int i in _hashEnumerator)
+        hashEnumerator.SetForNewHash(Capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
+        foreach (int i in hashEnumerator)
         {
-            if (_statusesTable[i] == STATUS_EMPTY) return; 
+            if (statusesTable[i] == STATUS_EMPTY) return; 
             
-            if (_statusesTable[i] == STATUS_PLACED && _valuesTable[i].Key.CompareTo(key) == 0 && _valuesTable[i].Value.CompareTo(value) == 0)
+            if (statusesTable[i] == STATUS_PLACED && valuesTable[i].Key.CompareTo(key) == 0 && valuesTable[i].Value.CompareTo(value) == 0)
             {
-                _statusesTable[i] = STATUS_REMOVED;
+                statusesTable[i] = STATUS_REMOVED;
                 Count -= 1;
                 break;
             }
@@ -113,19 +113,19 @@ public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where 
 
     public void Clear()
     {
-        _valuesTable = new KeyValuePair<TKey, TValue>[_capacity];
-        _statusesTable = new byte[_capacity];
+        valuesTable = new KeyValuePair<TKey, TValue>[Capacity];
+        statusesTable = new byte[Capacity];
         Count = 0;
     }
 
     public bool Contains(TKey key, TValue value)
     {
-        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
-        foreach (int i in _hashEnumerator)
+        hashEnumerator.SetForNewHash(Capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
+        foreach (int i in hashEnumerator)
         {
-            if (_statusesTable[i] == STATUS_EMPTY) break; 
+            if (statusesTable[i] == STATUS_EMPTY) break; 
             
-            if (_statusesTable[i] == STATUS_PLACED &&_valuesTable[i].Key.CompareTo(key) == 0 && _valuesTable[i].Value.CompareTo(value) == 0)
+            if (statusesTable[i] == STATUS_PLACED &&valuesTable[i].Key.CompareTo(key) == 0 && valuesTable[i].Value.CompareTo(value) == 0)
             {
                 return true;
             }
@@ -136,12 +136,12 @@ public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where 
 
     public bool ContainsKey(TKey key)
     {
-        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
-        foreach (int i in _hashEnumerator)
+        hashEnumerator.SetForNewHash(Capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
+        foreach (int i in hashEnumerator)
         {
-            if (_statusesTable[i] == STATUS_EMPTY) break; 
+            if (statusesTable[i] == STATUS_EMPTY) break; 
             
-            if (_statusesTable[i] == STATUS_PLACED && _valuesTable[i].Key.CompareTo(key) == 0)
+            if (statusesTable[i] == STATUS_PLACED && valuesTable[i].Key.CompareTo(key) == 0)
             {
                 return true;
             }
@@ -159,15 +159,15 @@ public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where 
     {
         stepsToFind = 0;
         
-        _hashEnumerator.SetForNewHash(_capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
-        foreach (int i in _hashEnumerator)
+        hashEnumerator.SetForNewHash(Capacity, (int) FirstHashFunction(key), (int) SecondHashFunction(key));
+        foreach (int i in hashEnumerator)
         {
             stepsToFind += 1;
-            if (_statusesTable[i] == STATUS_EMPTY) break;
+            if (statusesTable[i] == STATUS_EMPTY) break;
             
-            if (_statusesTable[i] == STATUS_PLACED && _valuesTable[i].Key.CompareTo(key) == 0)
+            if (statusesTable[i] == STATUS_PLACED && valuesTable[i].Key.CompareTo(key) == 0)
             {
-                value = _valuesTable[i].Value;
+                value = valuesTable[i].Value;
                 return true;
             }
         }
@@ -181,11 +181,11 @@ public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where 
         string output = "";
         int index = 1;
 
-        for (int i = 0; i < _valuesTable.Length; i++)
+        for (int i = 0; i < valuesTable.Length; i++)
         {
-            if (_statusesTable[i] == STATUS_PLACED)
+            if (statusesTable[i] == STATUS_PLACED)
             {
-                output += $"{index}] Key:{_valuesTable[i].Key}; Value: {_valuesTable[i].Value}\n";
+                output += $"{index}] Key:{valuesTable[i].Key}; Value: {valuesTable[i].Value}\n";
                 index += 1;
             }
         }
@@ -200,10 +200,10 @@ public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where 
 
         var firstHFResult = (int) FirstHashFunction(key);
         
-        _hashEnumerator.SetForNewHash(_capacity, firstHFResult, (int) SecondHashFunction(key));
-        foreach (var index in _hashEnumerator)
+        hashEnumerator.SetForNewHash(Capacity, firstHFResult, (int) SecondHashFunction(key));
+        foreach (var index in hashEnumerator)
         {
-            if (_statusesTable[index] == STATUS_EMPTY)
+            if (statusesTable[index] == STATUS_EMPTY)
             {
                 if (index != firstHFResult)
                 {
@@ -225,15 +225,15 @@ public class StaticHashTable<TKey, TValue> where TKey : IComparable<TKey> where 
     {
         string output = "";
 
-        for (int i = 0; i < _capacity; i++)
+        for (int i = 0; i < Capacity; i++)
         {
-            if (_statusesTable[i] != 0) //Модифицировал, чтобы не выводило миллион записей
-                output += $"\t{i}) Key: {_valuesTable[i].Key};"
-                          + $"  Value: {_valuesTable[i].Value};"
-                          + $"  HashCode: {_valuesTable[i].Key.GetHashCode()};"
-                          + $"  Status: {_statusesTable[i]};"
-                          + $"  FirstHF: {FirstHashFunction(_valuesTable[i].Key)};"
-                          + $"  PureSecondHF({SecondHashFunction(_valuesTable[i].Key)});"
+            if (statusesTable[i] != 0) //Модифицировал, чтобы не выводило миллион записей
+                output += $"\t{i}) Key: {valuesTable[i].Key};"
+                          + $"  Value: {valuesTable[i].Value};"
+                          + $"  HashCode: {valuesTable[i].Key.GetHashCode()};"
+                          + $"  Status: {statusesTable[i]};"
+                          + $"  FirstHF: {FirstHashFunction(valuesTable[i].Key)};"
+                          + $"  PureSecondHF({SecondHashFunction(valuesTable[i].Key)});"
                           + $"  SecondHF: {_secondHFValues[i]}\n";
         }
 

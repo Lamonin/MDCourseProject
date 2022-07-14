@@ -40,7 +40,7 @@ public class ClientsSubsystem:ISubsystem
     {
         if (!filePath.EndsWith("clients.txt"))
         {
-            MessageBox.Show("Некорректный файл для справочника Отправленные заявки!", "Ошибка!", MessageBoxButton.OK);
+            MessageBox.Show("Некорректный файл для справочника Клиенты!", "Ошибка!", MessageBoxButton.OK);
             throw new Exception("Incorrect file!");
         }
         _clients.Load(filePath);
@@ -50,7 +50,7 @@ public class ClientsSubsystem:ISubsystem
     {
         if (!filePath.EndsWith("applications.txt"))
         {
-            MessageBox.Show("Некорректный файл для справочника Отправленные заявки!", "Ошибка!", MessageBoxButton.OK);
+            MessageBox.Show("Некорректный файл для справочника Обращения!", "Ошибка!", MessageBoxButton.OK);
             throw new Exception("Incorrect file!");
         }
         _applications.Load(filePath);

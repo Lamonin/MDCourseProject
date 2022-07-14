@@ -37,5 +37,6 @@ public static class MDSystem
         clientsSubsystem = new ClientsSubsystem();
         staffSubsystem = new StaffSubsystem();
         divisionsSubsystem = new DivisionsSubsystem();
+        MDDebugConsole.WriteLine("Исходный код доступен по ссылке: https://github.com/Lamonin/MDCourseProject");
     }
 }

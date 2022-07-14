@@ -26,7 +26,7 @@ namespace FundamentalStructures
             public bool Color = RED; //По умолчанию цвет нового узла - красный
         }
 
-        private LRBNode _root; //Корень дерева
+        private LRBNode root; //Корень дерева
 
         private static bool IsRed(LRBNode node) //Красный ли узел
         {
@@ -165,17 +165,6 @@ namespace FundamentalStructures
                 node = node.Left;
             return node;
         }
-        
-        private void PrintTreeHelper(LRBNode p, int level, ref string output)
-        {
-            if (p == null) return;
-            PrintTreeHelper(p.Right,level + 1, ref output);
-            for(int i = 0; i < level; i++) output += "      ";
-            output += p.Key + (p.Color ? "-К\n":"-Ч\n");
-            PrintTreeHelper(p.Left,level + 1, ref output);
-        }
-
-        public LRBTree() => _root = null;
 
         /*
         private static void _printSymLeftRight(RBNode node)
@@ -225,7 +214,7 @@ namespace FundamentalStructures
 
         private LRBNode FindNodeByKey(TKey key)
         {
-            var node = _root;
+            var node = root;
             while (node != null)
             {
                 int res = node.Key.CompareTo(key);
@@ -239,8 +228,8 @@ namespace FundamentalStructures
         /// <summary> Добавляет в дерево значение по указанному ключу </summary>
         public void Add(TKey key, TValue val)
         {
-            _root = AddHelper(_root, key, val);
-            if (IsRed(_root)) _root.Color = BLACK;
+            root = AddHelper(root, key, val);
+            if (IsRed(root)) root.Color = BLACK;
         }
 
         /// <summary> Удаляет из дерева указанный ключ </summary>
@@ -249,9 +238,9 @@ namespace FundamentalStructures
             //Если данного значения нет в дереве - выходим
             if (!Contains(key)) return; 
             
-            if (!IsRed(_root.Left) && !IsRed(_root.Right)) _root.Color = RED;
-            _root = DeleteHelper(_root, key);
-            if (_root != null) _root.Color = BLACK;
+            if (!IsRed(root.Left) && !IsRed(root.Right)) root.Color = RED;
+            root = DeleteHelper(root, key);
+            if (root != null) root.Color = BLACK;
         }
 
         /// <summary> Удаляет из дерева значение по указанному ключу </summary>
@@ -278,7 +267,7 @@ namespace FundamentalStructures
             stepsToFind = 0;
             list = default;
 
-            var node = _root;
+            var node = root;
             while (node != null)
             {
                 stepsToFind += 1;
@@ -310,12 +299,23 @@ namespace FundamentalStructures
         }
 
         /// <summary> Очистка дерева </summary>
-        public void Clear() => _root = null;
+        public void Clear() => root = null;
 
+        
+        
         public string PrintTree()
-        {
+        { 
+            void PrintTreeHelper(LRBNode p, int level, ref string output)
+            {
+                if (p == null) return;
+                PrintTreeHelper(p.Right,level + 1, ref output);
+                for(int i = 0; i < level; i++) output += "      ";
+                output += p.Key + (p.Color ? "-К\n":"-Ч\n");
+                PrintTreeHelper(p.Left,level + 1, ref output);
+            }
+            
             string output = String.Empty;
-            if (_root != null) PrintTreeHelper(_root, 0, ref output);
+            if (root != null) PrintTreeHelper(root, 0, ref output);
             return output;
         }
     }

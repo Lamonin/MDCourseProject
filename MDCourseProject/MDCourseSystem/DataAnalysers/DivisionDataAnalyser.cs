@@ -121,10 +121,8 @@ public class ReportDivisionsAnalyser : DataAnalyser
         
         //Проверяем введенную дату на корректность
         bool isError = !DateTime.TryParse(_textBoxes[2].Text, out var time1);
-        isError = isError || !DateTime.TryParse(_textBoxes[3].Text, out var time2);
-        
-        isError = isError || _textBoxes[0].Text.Length < 2;
-        isError = isError || _textBoxes[1].Text.Length < 2;
+        isError |= !DateTime.TryParse(_textBoxes[3].Text, out var time2);
+        isError = isError || time1.CompareTo(time2) > 0;
 
         if (isError)
         {
