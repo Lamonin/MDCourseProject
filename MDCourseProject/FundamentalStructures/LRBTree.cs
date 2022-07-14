@@ -28,13 +28,13 @@ namespace FundamentalStructures
 
         private LRBNode _root; //Корень дерева
 
-        private static bool _isRed(LRBNode node) //Красный ли узел
+        private static bool IsRed(LRBNode node) //Красный ли узел
         {
             if (node == null) return BLACK;
             return node.Color;
         }
 
-        private static LRBNode _rotateLeft(LRBNode node)
+        private static LRBNode RotateLeft(LRBNode node)
         {
             LRBNode temp = node.Right;
             node.Right = temp.Left;
@@ -44,7 +44,7 @@ namespace FundamentalStructures
             return temp;
         }
 
-        private static LRBNode _rotateRight(LRBNode node)
+        private static LRBNode RotateRight(LRBNode node)
         {
             LRBNode temp = node.Left;
             node.Left = temp.Right;
@@ -54,121 +54,125 @@ namespace FundamentalStructures
             return temp;
         }
 
-        private static void _flipColors(LRBNode node)
+        private static void FlipColors(LRBNode node)
         {
             node.Color = !node.Color;
             node.Left.Color = !node.Left.Color;
             node.Right.Color = !node.Right.Color;
         }
 
-        private static LRBNode _moveRedLeft(LRBNode node)
+        private static LRBNode MoveRedLeft(LRBNode node)
         {
-            _flipColors(node);
-            if (_isRed(node.Right.Left))
+            FlipColors(node);
+            if (IsRed(node.Right.Left))
             {
-                node.Right = _rotateRight(node.Right);
-                node = _rotateLeft(node);
-                _flipColors(node);
+                node.Right = RotateRight(node.Right);
+                node = RotateLeft(node);
+                FlipColors(node);
             }
 
             return node;
         }
         
-        private static LRBNode _moveRedRight(LRBNode node)
+        private static LRBNode MoveRedRight(LRBNode node)
         {
-            _flipColors(node);
-            if (_isRed(node.Left.Left))
+            FlipColors(node);
+            if (IsRed(node.Left.Left))
             {
-                node = _rotateRight(node);
-                _flipColors(node);
+                node = RotateRight(node);
+                FlipColors(node);
             }
 
             return node;
         }
         
-        private static LRBNode _balance(LRBNode node)
+        private static LRBNode Balance(LRBNode node)
         {
-            if (_isRed(node.Right) && !_isRed(node.Left)) node = _rotateLeft(node);
-            if (_isRed(node.Left) && _isRed(node.Left.Left)) node = _rotateRight(node);
-            if (_isRed(node.Left) && _isRed(node.Right)) _flipColors(node);
+            if (IsRed(node.Right) && !IsRed(node.Left)) node = RotateLeft(node);
+            if (IsRed(node.Left) && IsRed(node.Left.Left)) node = RotateRight(node);
+            if (IsRed(node.Left) && IsRed(node.Right)) FlipColors(node);
             
             return node;
         }
 
-        private static LRBNode _add(LRBNode node, TKey key, TValue val)
+        private static LRBNode AddHelper(LRBNode node, TKey key, TValue val)
         {
             if (node == null) return new LRBNode(key, val);
 
             int res = node.Key.CompareTo(key);
-
+            if (res == 0)
+            {
+                node.Add(val);
+                return node;
+            }
             if (res > 0)
-                node.Left = _add(node.Left, key, val);
+                node.Left = AddHelper(node.Left, key, val);
             else
-                node.Right = _add(node.Right, key, val);
+                node.Right = AddHelper(node.Right, key, val);
             
-            return _balance(node); //Балансировка дерева при вставке
+            return Balance(node); //Балансировка дерева при вставке
         }
 
         //Вспомогательная, удаление минимального в дереве
-        private static LRBNode _deleteMin(LRBNode node)
+        private static LRBNode DeleteMin(LRBNode node)
         {
             if (node.Left == null) return null;
 
-            if (!_isRed(node.Left) && !_isRed(node.Left.Left)) node = _moveRedLeft(node);
-            node.Left = _deleteMin(node.Left);
-            return _balance(node);
+            if (!IsRed(node.Left) && !IsRed(node.Left.Left)) node = MoveRedLeft(node);
+            node.Left = DeleteMin(node.Left);
+            return Balance(node);
         }
 
-        private static LRBNode _delete(LRBNode node, TKey key)
+        private static LRBNode DeleteHelper(LRBNode node, TKey key)
         {
             int res = node.Key.CompareTo(key);
 
             if (res > 0)
             {
-                if (!_isRed(node.Left) && !_isRed(node.Left.Left)) node = _moveRedLeft(node);
-                node.Left = _delete(node.Left, key);
+                if (!IsRed(node.Left) && !IsRed(node.Left.Left)) node = MoveRedLeft(node);
+                node.Left = DeleteHelper(node.Left, key);
             }
             else
             {
-                if (_isRed(node.Left)) node = _rotateRight(node);
+                if (IsRed(node.Left)) node = RotateRight(node);
 
                 //Этот элемент единственный узел дерева
                 res = node.Key.CompareTo(key);
                 if (res == 0 && node.Right == null)
                     return null;
 
-                if (!_isRed(node.Right) && !_isRed(node.Right.Left))
-                    node = _moveRedRight(node);
+                if (!IsRed(node.Right) && !IsRed(node.Right.Left))
+                    node = MoveRedRight(node);
                 
                 res = node.Key.CompareTo(key);
                 if (res == 0)
                 {
-                    var minNode = _findMin(node.Right);
+                    var minNode = FindMin(node.Right);
                     node.List = minNode.List;
                     node.Key = minNode.Key;
                     
-                    node.Right = _deleteMin(node.Right);
+                    node.Right = DeleteMin(node.Right);
                 }
-                else node.Right = _delete(node.Right, key);
+                else node.Right = DeleteHelper(node.Right, key);
             }
 
-            return _balance(node);
+            return Balance(node);
         }
         
-        private static LRBNode _findMin(LRBNode node) //Вспомогательная. Поиск узла с минимальным значением в дереве.
+        private static LRBNode FindMin(LRBNode node) //Вспомогательная. Поиск узла с минимальным значением в дереве.
         {
             while (node.Left != null)
                 node = node.Left;
             return node;
         }
         
-        private void print_Tree(LRBNode p, int level, ref string output)
+        private void PrintTreeHelper(LRBNode p, int level, ref string output)
         {
             if (p == null) return;
-            print_Tree(p.Right,level + 1, ref output);
+            PrintTreeHelper(p.Right,level + 1, ref output);
             for(int i = 0; i < level; i++) output += "      ";
             output += p.Key + (p.Color ? "-К\n":"-Ч\n");
-            print_Tree(p.Left,level + 1, ref output);
+            PrintTreeHelper(p.Left,level + 1, ref output);
         }
 
         public LRBTree() => _root = null;
@@ -219,7 +223,7 @@ namespace FundamentalStructures
         public void PrintRvrs() => _printRvrs(_root);
         */
 
-        private LRBNode _findNodeByKey(TKey key)
+        private LRBNode FindNodeByKey(TKey key)
         {
             var node = _root;
             while (node != null)
@@ -235,16 +239,8 @@ namespace FundamentalStructures
         /// <summary> Добавляет в дерево значение по указанному ключу </summary>
         public void Add(TKey key, TValue val)
         {
-            var node = _findNodeByKey(key);
-            if (node != null) //Key already exist
-            {
-                node.Add(val); //Just add val
-            }
-            else
-            {
-                _root = _add(_root, key, val);
-                if (_isRed(_root)) _root.Color = BLACK;
-            }
+            _root = AddHelper(_root, key, val);
+            if (IsRed(_root)) _root.Color = BLACK;
         }
 
         /// <summary> Удаляет из дерева указанный ключ </summary>
@@ -253,15 +249,15 @@ namespace FundamentalStructures
             //Если данного значения нет в дереве - выходим
             if (!Contains(key)) return; 
             
-            if (!_isRed(_root.Left) && !_isRed(_root.Right)) _root.Color = RED;
-            _root = _delete(_root, key);
+            if (!IsRed(_root.Left) && !IsRed(_root.Right)) _root.Color = RED;
+            _root = DeleteHelper(_root, key);
             if (_root != null) _root.Color = BLACK;
         }
 
         /// <summary> Удаляет из дерева значение по указанному ключу </summary>
         public void Remove(TKey key, TValue val)
         {
-            var node = _findNodeByKey(key);
+            var node = FindNodeByKey(key);
             if (node != null)
             {
                 node.Remove(val);
@@ -301,28 +297,25 @@ namespace FundamentalStructures
         /// <summary> Содержит ли дерево указанный ключ </summary>
         public bool Contains(TKey key)
         {
-            return _findNodeByKey(key) != null;
+            return FindNodeByKey(key) != null;
         }
         
         /// <summary> Содержит ли дерево значение по указанному ключу </summary>
         public bool Contains(TKey key, TValue val)
         {
-            var node = _findNodeByKey(key);
+            var node = FindNodeByKey(key);
             if (node == null) return false;
 
             return node.List.Find(val);
         }
 
         /// <summary> Очистка дерева </summary>
-        public void Clear()
-        {
-            _root = null;
-        }
+        public void Clear() => _root = null;
 
         public string PrintTree()
         {
             string output = String.Empty;
-            if (_root != null) print_Tree(_root, 0, ref output);
+            if (_root != null) PrintTreeHelper(_root, 0, ref output);
             return output;
         }
     }
